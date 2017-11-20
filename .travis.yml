@@ -1,0 +1,19 @@
+anguage: android
+dist: trusty
+
+android:
+  components:
+    - tools
+    - platform-tools
+    - tools
+
+    - build-tools-26.0.1
+    - android-26
+  licenses:
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
