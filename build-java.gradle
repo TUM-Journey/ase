@@ -1,0 +1,17 @@
+apply from: "$rootDir/build-configs.gradle"
+apply from: "$rootDir/build-deps.gradle"
+
+apply plugin: 'java'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+}
+
+sourceCompatibility = configs.compiler.sourceCompatibility
+targetCompatibility = configs.compiler.targetCompatibility
+
+clean {
+    delete fileTree('.') { include '**/*.log' }
+}

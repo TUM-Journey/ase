@@ -1,0 +1,19 @@
+ext {
+    versions = [
+            android: [
+                    constraintLayout: '1.0.2'
+            ],
+            plugins: [
+                    androidTools: '3.0.0',
+            ]
+    ]
+
+    deps = [
+            android: [
+                    constraintLayout: "com.android.support.constraint:constraint-layout:${versions.android.constraintLayout}"
+            ],
+            plugins: [
+                    androidTools: "com.android.tools.build:gradle:${versions.plugins.androidTools}"
+            ]
+    ]
+}
