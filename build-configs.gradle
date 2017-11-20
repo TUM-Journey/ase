@@ -1,0 +1,16 @@
+ext {
+    configs = [
+            compiler: [
+                    sourceCompatibility:  '1.8',
+                    targetCompatibility:  '1.8'
+            ],
+            android: [
+                    compileSdkVersion: 26,
+                    buildToolsVersion: "26.0.2",
+                    minSdkVersion: 26,
+                    targetSdkVersion: 26,
+                    minifyEnabled: false,
+                    lintEnabled: false
+            ]
+    ]
+}

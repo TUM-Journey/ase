@@ -1,0 +1,51 @@
+buildscript {
+    apply from: "$rootDir/build-configs.gradle"
+
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath deps.plugins.androidTools
+    }
+}
+
+apply plugin: 'com.android.application'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+    google()
+}
+
+android {
+    buildToolsVersion configs.android.buildToolsVersion
+    compileSdkVersion configs.android.compileSdkVersion
+
+    defaultConfig {
+        applicationId "de.tum.kleo"
+        minSdkVersion configs.android.minSdkVersion
+        targetSdkVersion configs.android.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled configs.android.minifyEnabled
+        }
+
+        debug {
+            minifyEnabled false
+        }
+    }
+
+    lintOptions {
+        tasks.lint.enabled = configs.android.lintEnabled
+    }
+}
+
+dependencies {
+    implementation deps.android.constraintLayout
+}

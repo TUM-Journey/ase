@@ -1,4 +1,4 @@
-anguage: android
+language: android
 dist: trusty
 
 android:
@@ -7,11 +7,10 @@ android:
     - platform-tools
     - tools
 
-    - build-tools-26.0.1
+    - build-tools-26.0.2
     - android-26
   licenses:
-    - 'android-sdk-license-.+'
-    - 'google-gdk-license-.+'
+    - '.+'
 
 notifications:
   email:

@@ -1,0 +1,5 @@
+apply from: 'build-configs.gradle'
+apply from: 'build-deps.gradle'
+
+group 'de.tum.ase.kleo'
+version '0.1-SNAPSHOT'
