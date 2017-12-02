@@ -39,19 +39,27 @@ public class Course {
     @JoinColumn(name="course_id", referencedColumnName="course_id")
     private SortedSet<Session> sessions;
 
-    public Course(String id, String name, String description, LocalDate begins, LocalDate ends, SortedSet<Session> sessions) {
+    public Course(String id, String name, String description, SortedSet<Session> sessions) {
         this.id = notBlank(id);
         this.name = notBlank(name);
         this.description = description;
         this.sessions = notNull(sessions);
     }
 
-    public Course(String name, String description, LocalDate begins, LocalDate ends, SortedSet<Session> sessions) {
-        this(UUID.randomUUID().toString(), name, description, begins, ends, sessions);
+    public Course(String id, String name, String description) {
+        this(id, name, description, emptySortedSet());
     }
 
-    public Course(String name, LocalDate begins, LocalDate ends) {
-        this(name, null, begins, ends, emptySortedSet());
+    public Course(String name, String description, SortedSet<Session> sessions) {
+        this(UUID.randomUUID().toString(), name, description, sessions);
+    }
+
+    public Course(String name, String description) {
+        this(name, description, emptySortedSet());
+    }
+
+    public Course(String name) {
+        this(name, null, emptySortedSet());
     }
 
     public void name(String name) {

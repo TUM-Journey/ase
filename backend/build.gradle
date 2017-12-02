@@ -57,8 +57,8 @@ swaggerSources {
         }
     }
 }
-//compileJava.dependsOn swaggerSources.kleo.code
-//sourceSets.main.java.srcDirs += file("$buildDir/swagger-code-kleo/src/main/java")
+compileJava.dependsOn swaggerSources.kleo.code
+sourceSets.main.java.srcDirs += file("$buildDir/swagger-code-kleo/src/main/java")
 
 clean {
     delete fileTree('.') { include '**/*.log' }
