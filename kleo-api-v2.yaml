@@ -1,0 +1,510 @@
+swagger: '2.0'
+info:
+  version: "2.0.0"
+  title: Kleo Attendence API
+
+schemes:
+  - http
+produces:
+  - "application/vnd.tum.aes.kleo.v2+json"
+
+paths:
+  /courses:
+    get:
+      operationId: getCourses
+      responses:
+        200:
+          description: A list of entities
+          schema:
+            type: array
+            minItems: 0
+            items:
+              $ref: '#/definitions/CourseDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+    post:
+      operationId: addCourse
+      parameters:
+      - in: body
+        name: course
+        schema:
+          $ref: '#/definitions/CourseDTO'
+      responses:
+        201:
+          description: An entity created
+          schema:
+            $ref: '#/definitions/CourseDTO'
+        400:
+          description: Problem with the request, such as a missing, invalid or type mismatched parameter
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /courses/{courseId}:
+    get:
+      operationId: getCourse
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: An entity requested
+          schema:
+            $ref: '#/definitions/CourseDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+    put:
+      operationId: updateCourse
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: string
+        - in: body
+          name: course
+          schema:
+            $ref: '#/definitions/CourseDTO'
+      responses:
+        200:
+          description: A updated entity
+          schema:
+            $ref: '#/definitions/CourseDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+    delete:
+      operationId: "deleteCourse"
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: Entity has been deleted sucessufly
+        404:
+          description: Entity not found
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /courses/{courseId}/tutors/:
+    get:
+      operationId: getCourseTutors
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: A list of tutor users
+          schema:
+            type: array
+            minItems: 0
+            items:
+              $ref: '#/definitions/UserDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /courses/{courseId}/tutors/{userId}:
+    post:
+      operationId: addCourseTutor
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: string
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Tutor has been added successfully
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+    delete:
+      operationId: "deleteCourseTutor"
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: string
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: Tutor has been removed from the course
+        404:
+          description: Entity not found
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /courses/{courseId}/sessions:
+    get:
+      operationId: getCourseSessions
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: A list of entities
+          schema:
+            type: array
+            minItems: 0
+            items:
+              $ref: '#/definitions/SessionDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+    post:
+      operationId: addCourseSession
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        type: string
+      - in: body
+        name: session
+        schema:
+          $ref: '#/definitions/SessionDTO'
+      responses:
+        201:
+          description: An entity created
+          schema:
+            $ref: '#/definitions/SessionDTO'
+        400:
+          description: Problem with the request, such as a missing, invalid or type mismatched parameter
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /courses/{courseId}/session/{sessionId}:
+    get:
+      operationId: getCourseSession
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: string
+        - name: sessionId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: A list of entities
+          schema:
+            $ref: '#/definitions/SessionDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+    put:
+      operationId: updateCourseSession
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: string
+        - name: sessionId
+          in: path
+          required: true
+          type: string
+        - in: body
+          name: session
+          schema:
+            $ref: '#/definitions/SessionDTO'
+      responses:
+        200:
+          description: A updated entity
+          schema:
+            $ref: '#/definitions/SessionDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+    delete:
+      operationId: "deleteCourseSession"
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: string
+        - name: sessionId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: Entity has been deleted sucessufly
+        404:
+          description: Entity not found
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /courses/{courseId}/session/{sessionId}/attendances:
+    get:
+      operationId: getCourseSessionAttendances
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: string
+        - name: sessionId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: A list of entities
+          schema:
+            type: array
+            minItems: 0
+            items:
+              $ref: '#/definitions/AttendanceDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /users/:
+    get:
+      operationId: getUsers
+      responses:
+        200:
+          description: A list of entities
+          schema:
+            type: array
+            minItems: 0
+            items:
+              $ref: '#/definitions/UserDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /users/{userId}:
+    get:
+      operationId: getUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: An entity requested
+          schema:
+            $ref: '#/definitions/UserDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /users/{userId}/attendances:
+    get:
+      operationId: getUserAttendances
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+        - name: courseId
+          in: query
+          description: Filter attendances by courseId
+          required: false
+          type: string
+      responses:
+        200:
+          description: A list of tutor users
+          schema:
+            type: array
+            minItems: 0
+            items:
+              $ref: '#/definitions/AttendanceDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /courses/{courseId}/session/{sessionId}/passes:
+    get:
+      operationId: getCourseSessionPasses
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: string
+        - name: sessionId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: A list of entities
+          schema:
+            type: array
+            minItems: 0
+            items:
+              $ref: '#/definitions/PassDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /courses/{courseId}/session/{sessionId}/passes/{userId}:
+    post:
+      operationId: signupForCourseSession
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: string
+        - name: sessionId
+          in: path
+          required: true
+          type: string
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Register for a session
+          schema:
+            $ref: '#/definitions/PassDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+    delete:
+      operationId: unsignupForCourseSession
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: string
+        - name: sessionId
+          in: path
+          required: true
+          type: string
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: Deregister from a session
+        404:
+          description: Entity not found
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+
+produces:
+  - "application/vnd.tum.aes.kleo.v2+json"
+
+definitions:
+  CourseDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+      description:
+        type: string
+      begins:
+        type: string
+        format: date
+      ends:
+        type: string
+        format: date
+  SessionDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      location:
+        type: string
+      note:
+        type: string
+      begins:
+        type: string
+        format: date-time
+      ends:
+        type: string
+        format: date-time
+  UserDTO:
+    type: object
+    properties:
+      id:
+        type: string
+      email:
+        type: string
+      studentId:
+        type: string
+      name:
+        type: string
+  PassDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: NFC/RFID/QR content
+      user:
+        $ref: '#/definitions/UserDTO'
+  AttendanceDTO:
+    type: object
+    properties:
+      passId:
+        type: string
+        format: uuid
+        description: NFC/RFID/QR content
+      user: # Not used for /users/{userId}/attendances
+        $ref: '#/definitions/UserDTO'
+      session: # Not used for /courses/{courseId}/session/{sessionId}/attendances
+        $ref: '#/definitions/SessionDTO'
+      timestamp:
+        type: string
+        format: date-time
+  ErrorDTO:
+    type: object
+    description: Describes a failure occured
+    properties:
+      timestamp:
+        type: string
+        format: date
+      status:
+        type: integer
+      error:
+        type: string
+      exception:
+        type: string
+        description: A java exception class name
+      message:
+        type: string
+      path:
+        type: string
