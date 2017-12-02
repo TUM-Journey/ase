@@ -27,22 +27,23 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Value("${security.jwt.signingKey}")
     private String jwtSigningKey;
 
-    @Value("${security.clientId}")
-    private String clientId;
-
-    @Value("${security.scopes}")
-    private String[] scopes;
-
     @Value("${security.accessTokenValidity:3600}")
     private int accessTokenValidity;
 
+    @Value("${security.oauth2.clientId}")
+    private String oauth2ClientId;
+    @Value("${security.oauth2.grandType}")
+    private String oauth2GrandType;
+    @Value("${security.oauth2.scopes}")
+    private String[] oauth2Scopes;
+
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+    public void configure(AuthorizationServerSecurityConfigurer oauthServer) {
         oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
     }
 
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints.tokenStore(tokenStore())
                 .accessTokenConverter(accessTokenConverter())
                 .authenticationManager(authenticationManager);
@@ -51,10 +52,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient(clientId)
-                .authorizedGrantTypes("password")
-                .authorities("ROLE_TRUSTED_CLIENT")
-                .scopes(scopes)
+                .withClient(oauth2ClientId)
+                .authorizedGrantTypes(oauth2GrandType)
+                .scopes(oauth2Scopes)
                 .accessTokenValiditySeconds(accessTokenValidity);
     }
 

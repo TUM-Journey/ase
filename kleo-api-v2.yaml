@@ -1,17 +1,38 @@
 swagger: '2.0'
 info:
   version: "2.0.0"
-  title: Kleo Attendence API
+  title: Kleo Classes and Passes Management API
+  description: The API provides endpoints for managing users, courses, sessions and passes.
 
 schemes:
   - http
 produces:
   - "application/vnd.tum.aes.kleo.v2+json"
 
+securityDefinitions:
+  OAuth2Password:
+    type: oauth2
+    flow: password
+    tokenUrl: "oauth/token"
+    scopes:
+      management: "Endpoints for managing users, courses, sessions and passes"
+
+tags:
+- name: "courses"
+- name: "users"
+- name: "sessions"
+- name: "tutors"
+- name: "passes"
+- name: "attendances"
+
 paths:
   /courses:
     get:
+      tags:
+        - courses
       operationId: getCourses
+      security:
+        - OAuth2Password: [management]
       responses:
         200:
           description: A list of entities
@@ -25,7 +46,11 @@ paths:
           schema:
             $ref: '#/definitions/ErrorDTO'
     post:
+      tags:
+        - courses
       operationId: addCourse
+      security:
+        - OAuth2Password: [management]
       parameters:
       - in: body
         name: course
@@ -46,7 +71,11 @@ paths:
             $ref: '#/definitions/ErrorDTO'
   /courses/{courseId}:
     get:
+      tags:
+        - courses
       operationId: getCourse
+      security:
+        - OAuth2Password: [management]
       parameters:
         - name: courseId
           in: path
@@ -62,7 +91,11 @@ paths:
           schema:
             $ref: '#/definitions/ErrorDTO'
     put:
+      tags:
+        - courses
       operationId: updateCourse
+      security:
+        - OAuth2Password: [management]
       parameters:
         - name: courseId
           in: path
@@ -82,7 +115,11 @@ paths:
           schema:
             $ref: '#/definitions/ErrorDTO'
     delete:
+      tags:
+        - courses
       operationId: "deleteCourse"
+      security:
+        - OAuth2Password: [management]
       parameters:
         - name: courseId
           in: path
@@ -99,7 +136,11 @@ paths:
             $ref: '#/definitions/ErrorDTO'
   /courses/{courseId}/tutors/:
     get:
+      tags:
+        - tutors
       operationId: getCourseTutors
+      security:
+        - OAuth2Password: [management]
       parameters:
         - name: courseId
           in: path
@@ -119,7 +160,11 @@ paths:
             $ref: '#/definitions/ErrorDTO'
   /courses/{courseId}/tutors/{userId}:
     post:
+      tags:
+        - tutors
       operationId: addCourseTutor
+      security:
+        - OAuth2Password: [management]
       parameters:
         - name: courseId
           in: path
@@ -137,7 +182,11 @@ paths:
           schema:
             $ref: '#/definitions/ErrorDTO'
     delete:
+      tags:
+        - tutors
       operationId: "deleteCourseTutor"
+      security:
+        - OAuth2Password: [management]
       parameters:
         - name: courseId
           in: path
@@ -158,7 +207,11 @@ paths:
             $ref: '#/definitions/ErrorDTO'
   /courses/{courseId}/sessions:
     get:
+      tags:
+        - sessions
       operationId: getCourseSessions
+      security:
+        - OAuth2Password: [management]
       parameters:
         - name: courseId
           in: path
@@ -177,7 +230,11 @@ paths:
           schema:
             $ref: '#/definitions/ErrorDTO'
     post:
+      tags:
+        - sessions
       operationId: addCourseSession
+      security:
+        - OAuth2Password: [management]
       parameters:
       - name: courseId
         in: path
@@ -202,7 +259,11 @@ paths:
             $ref: '#/definitions/ErrorDTO'
   /courses/{courseId}/session/{sessionId}:
     get:
+      tags:
+        - sessions
       operationId: getCourseSession
+      security:
+        - OAuth2Password: [management]
       parameters:
         - name: courseId
           in: path
@@ -222,7 +283,11 @@ paths:
           schema:
             $ref: '#/definitions/ErrorDTO'
     put:
+      tags:
+        - sessions
       operationId: updateCourseSession
+      security:
+        - OAuth2Password: [management]
       parameters:
         - name: courseId
           in: path
@@ -246,7 +311,11 @@ paths:
           schema:
             $ref: '#/definitions/ErrorDTO'
     delete:
+      tags:
+        - sessions
       operationId: "deleteCourseSession"
+      security:
+        - OAuth2Password: [management]
       parameters:
         - name: courseId
           in: path
@@ -267,7 +336,11 @@ paths:
             $ref: '#/definitions/ErrorDTO'
   /courses/{courseId}/session/{sessionId}/attendances:
     get:
+      tags:
+        - attendances
       operationId: getCourseSessionAttendances
+      security:
+        - OAuth2Password: [management]
       parameters:
         - name: courseId
           in: path
@@ -291,7 +364,11 @@ paths:
             $ref: '#/definitions/ErrorDTO'
   /users/:
     get:
+      tags:
+        - users
       operationId: getUsers
+      security:
+        - OAuth2Password: [management]
       responses:
         200:
           description: A list of entities
@@ -306,7 +383,11 @@ paths:
             $ref: '#/definitions/ErrorDTO'
   /users/{userId}:
     get:
+      tags:
+        - users
       operationId: getUser
+      security:
+        - OAuth2Password: [management]
       parameters:
         - name: userId
           in: path
@@ -323,7 +404,11 @@ paths:
             $ref: '#/definitions/ErrorDTO'
   /users/{userId}/attendances:
     get:
+      tags:
+        - attendances
       operationId: getUserAttendances
+      security:
+        - OAuth2Password: [management]
       parameters:
         - name: userId
           in: path
@@ -348,7 +433,11 @@ paths:
             $ref: '#/definitions/ErrorDTO'
   /courses/{courseId}/session/{sessionId}/passes:
     get:
+      tags:
+        - passes
       operationId: getCourseSessionPasses
+      security:
+        - OAuth2Password: [management]
       parameters:
         - name: courseId
           in: path
@@ -372,7 +461,11 @@ paths:
             $ref: '#/definitions/ErrorDTO'
   /courses/{courseId}/session/{sessionId}/passes/{userId}:
     post:
+      tags:
+        - passes
       operationId: signupForCourseSession
+      security:
+        - OAuth2Password: [management]
       parameters:
         - name: courseId
           in: path
@@ -396,7 +489,11 @@ paths:
           schema:
             $ref: '#/definitions/ErrorDTO'
     delete:
+      tags:
+        - passes
       operationId: unsignupForCourseSession
+      security:
+        - OAuth2Password: [management]
       parameters:
         - name: courseId
           in: path
@@ -419,9 +516,6 @@ paths:
           description: Internal server error, please contact support
           schema:
             $ref: '#/definitions/ErrorDTO'
-
-produces:
-  - "application/vnd.tum.aes.kleo.v2+json"
 
 definitions:
   CourseDTO:

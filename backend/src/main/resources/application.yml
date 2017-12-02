@@ -7,15 +7,16 @@ logging:
     org.springframework: INFO
 
 security:
+  realm: kleo-backend
+  accessTokenValidity: 3600
+
   oauth2:
     resource:
       filter-order: 3
 
-
-  realm: kleo-backend
-  clientId: kleo-client
-  scopes: all
-  accessTokenValidity: 3600
+    clientId: kleo-client
+    grandType: password
+    scopes: management
 
   jwt:
     signingKey: EZ4cyYpeHucVpWZjvRq5d6LaLjZfcjhkpg5nNBwn
