@@ -12,6 +12,9 @@ allprojects {
         mavenCentral()
         google()
         jcenter()
+        maven {
+            url 'https://jitpack.io'
+        }
     }
 
     buildscript {
@@ -23,6 +26,9 @@ allprojects {
             mavenCentral()
             google()
             jcenter()
+            maven {
+                url "https://plugins.gradle.org/m2/"
+            }
         }
     }
 }

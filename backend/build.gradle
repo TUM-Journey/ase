@@ -1,14 +1,18 @@
 buildscript {
     dependencies {
         classpath plgs.defs.backend.springBoot
+        classpath plgs.defs.backend.swaggerCodegen
     }
 }
 
 apply from: "$rootDir/build-configs.gradle"
 apply from: "$rootDir/build-deps.gradle"
 
+def OPENAPI_SOURCE = "$rootDir/kleo-api-v2.yaml"
+
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'org.hidetake.swagger.generator'
 
 sourceCompatibility = configs.compiler.sourceCompatibility
 targetCompatibility = configs.compiler.targetCompatibility
@@ -32,10 +36,29 @@ dependencies {
 
     compile deps.defs.backend.htmlUnit
 
+    compile deps.defs.backend.swaggerSpringfox
+    swaggerCodegen deps.defs.backend.swaggerCodegenCli
+
     testCompile deps.defs.backend.junit
     testCompile deps.defs.backend.assertj
     testCompile deps.defs.backend.mockito
 }
+
+swaggerSources {
+    kleo {
+        inputFile = file(OPENAPI_SOURCE)
+        code {
+            language = 'spring'
+            configFile = file('swagger.json')
+            components = [
+                    models: true, apis: true,
+                    supportingFiles: 'SwaggerDocumentationConfig.java'
+            ]
+        }
+    }
+}
+//compileJava.dependsOn swaggerSources.kleo.code
+//sourceSets.main.java.srcDirs += file("$buildDir/swagger-code-kleo/src/main/java")
 
 clean {
     delete fileTree('.') { include '**/*.log' }
