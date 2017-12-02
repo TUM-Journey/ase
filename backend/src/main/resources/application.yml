@@ -1,0 +1,35 @@
+spring:
+  profiles.active: dev
+
+logging:
+  file: kleo-application.log
+  level:
+    org.springframework: INFO
+
+security:
+  oauth2:
+    resource:
+      filter-order: 3
+
+
+  realm: kleo-backend
+  clientId: kleo-client
+  scopes: all
+  accessTokenValidity: 3600
+
+  jwt:
+    signingKey: EZ4cyYpeHucVpWZjvRq5d6LaLjZfcjhkpg5nNBwn
+
+---
+
+spring:
+  profiles: dev
+
+logging:
+  level:
+    org.apache.catalina: WARN
+    org.springframework.security: DEBUG
+    org.springframework.boot.test: DEBUG
+    org.springframework.test: DEBUG
+    org.hibernate.validator: WARN
+    eu.socialedge.hermes: DEBUG

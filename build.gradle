@@ -1,5 +1,28 @@
-apply from: 'build-configs.gradle'
-apply from: 'build-deps.gradle'
-
 group 'de.tum.ase.kleo'
 version '0.1-SNAPSHOT'
+
+allprojects {
+    apply plugin: 'idea'
+    
+    apply from: "$rootDir/build-configs.gradle"
+    apply from: "$rootDir/build-deps.gradle"
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        jcenter()
+    }
+
+    buildscript {
+        apply from: "$rootDir/build-configs.gradle"
+        apply from: "$rootDir/build-deps.gradle"
+
+        repositories {
+            mavenLocal()
+            mavenCentral()
+            google()
+            jcenter()
+        }
+    }
+}

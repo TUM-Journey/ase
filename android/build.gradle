@@ -1,23 +1,10 @@
 buildscript {
-    apply from: "$rootDir/build-configs.gradle"
-
-    repositories {
-        google()
-        jcenter()
-    }
     dependencies {
         classpath plgs.defs.android.androidTools
     }
 }
 
 apply plugin: 'com.android.application'
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-    jcenter()
-    google()
-}
 
 android {
     buildToolsVersion configs.android.buildToolsVersion

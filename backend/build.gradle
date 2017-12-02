@@ -1,13 +1,14 @@
+buildscript {
+    dependencies {
+        classpath plgs.defs.backend.springBoot
+    }
+}
+
 apply from: "$rootDir/build-configs.gradle"
 apply from: "$rootDir/build-deps.gradle"
 
 apply plugin: 'java'
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-    jcenter()
-}
+apply plugin: 'org.springframework.boot'
 
 sourceCompatibility = configs.compiler.sourceCompatibility
 targetCompatibility = configs.compiler.targetCompatibility
@@ -15,6 +16,21 @@ targetCompatibility = configs.compiler.targetCompatibility
 dependencies {
     compileOnly deps.defs.backend.lombok
     testCompileOnly deps.defs.backend.lombok
+
+    compile deps.defs.backend.apacheLang3
+
+    compile deps.defs.backend.jpaApi
+    compile deps.defs.backend.postgresDriver
+    compile deps.defs.backend.h2Driver
+
+    compile deps.defs.backend.springBoot
+    compile deps.defs.backend.springBootWeb
+    compile deps.defs.backend.springBootData
+    compile deps.defs.backend.springBootSecurity
+    compile deps.defs.backend.springSecurityOAuth2
+    compile deps.defs.backend.springSecurityJwt
+
+    compile deps.defs.backend.htmlUnit
 
     testCompile deps.defs.backend.junit
     testCompile deps.defs.backend.assertj
