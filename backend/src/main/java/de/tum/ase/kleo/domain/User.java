@@ -42,7 +42,8 @@ public class User {
     @Column
     private final String studentId;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinColumn(name="user_id", referencedColumnName="user_id")
     private Set<Pass> passes;
 
     public User(String id, List<UserRole> userRoles, String email, String passwordHash,

@@ -22,10 +22,6 @@ public class Pass {
     private final String id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private final User user;
-
-    @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "session_id", nullable = false)
     private final Session session;
@@ -36,9 +32,8 @@ public class Pass {
     @Column
     private LocalDateTime usedDateTime;
 
-    public Pass(String id, User user, Session session) {
+    public Pass(String id, Session session) {
         this.id = notBlank(id);
-        this.user = notNull(user);
         this.session = notNull(session);
     }
 

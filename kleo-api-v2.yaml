@@ -402,6 +402,27 @@ paths:
           description: Internal server error, please contact support
           schema:
             $ref: '#/definitions/ErrorDTO'
+  /users/{userId}/passes:
+    get:
+      tags:
+        - passes
+      operationId: getUserPasses
+      security:
+        - OAuth2Password: [management]
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: An entity requested
+          schema:
+            $ref: '#/definitions/PassDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
   /users/{userId}/attendances:
     get:
       tags:
@@ -427,34 +448,6 @@ paths:
             minItems: 0
             items:
               $ref: '#/definitions/AttendanceDTO'
-        500:
-          description: Internal server error, please contact support
-          schema:
-            $ref: '#/definitions/ErrorDTO'
-  /courses/{courseId}/session/{sessionId}/passes:
-    get:
-      tags:
-        - passes
-      operationId: getCourseSessionPasses
-      security:
-        - OAuth2Password: [management]
-      parameters:
-        - name: courseId
-          in: path
-          required: true
-          type: string
-        - name: sessionId
-          in: path
-          required: true
-          type: string
-      responses:
-        200:
-          description: A list of entities
-          schema:
-            type: array
-            minItems: 0
-            items:
-              $ref: '#/definitions/PassDTO'
         500:
           description: Internal server error, please contact support
           schema:
@@ -568,8 +561,8 @@ definitions:
         type: string
         format: uuid
         description: NFC/RFID/QR content
-      user:
-        $ref: '#/definitions/UserDTO'
+      session:
+        $ref: '#/definitions/SessionDTO'
   AttendanceDTO:
     type: object
     properties:
