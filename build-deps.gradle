@@ -1,19 +1,68 @@
 ext {
-    versions = [
-            android: [
-                    constraintLayout: '1.0.2'
-            ],
-            plugins: [
-                    androidTools: '3.0.0',
-            ]
+    deps = [:]
+    plgs = [:]
+
+    deps.vers = [
+        android: [
+            constraintLayout: '1.0.2'
+        ],
+        backend: [
+            apacheLang3: '3.5',
+
+            jpaApi: '1.0.0.Final',
+            hibernateCore: '5.2.6.Final',
+            postgresDriver: '9.4.1212.jre7',
+            h2Driver: '1.4.193',
+
+            springBoot: '1.5.9.RELEASE',
+
+            lombok: '1.16.+',
+
+            junit: '4.+',
+            assertj: '3.8.+',
+            mockito: '2.12.+'
+        ]
     ]
 
-    deps = [
-            android: [
-                    constraintLayout: "com.android.support.constraint:constraint-layout:${versions.android.constraintLayout}"
-            ],
-            plugins: [
-                    androidTools: "com.android.tools.build:gradle:${versions.plugins.androidTools}"
-            ]
+    deps.defs = [
+        android: [
+            constraintLayout: "com.android.support.constraint:constraint-layout:${deps.vers.android.constraintLayout}"
+        ],
+        backend: [
+            apacheLang3: "org.apache.commons:commons-lang3:${deps.vers.backend.apacheLang3}",
+
+            jpaApi: "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:${deps.vers.backend.jpaApi}",
+            hibernateCore: "org.hibernate:hibernate-core:${deps.vers.backend.hibernateCore}",
+            postgresDriver: "org.postgresql:postgresql:${deps.vers.backend.postgresDriver}",
+            h2Driver: "com.h2database:h2:${deps.vers.backend.h2Driver}",
+
+            springBoot: "org.springframework.boot:spring-boot-starter:${deps.vers.backend.springBoot}",
+            springBootData: "org.springframework.boot:spring-boot-starter-data-jpa:${deps.vers.backend.springBoot}",
+            springBootWeb: "org.springframework.boot:spring-boot-starter-web:${deps.vers.backend.springBoot}",
+
+            lombok: "org.projectlombok:lombok:${deps.vers.backend.lombok}",
+
+            junit: "junit:junit:${deps.vers.backend.junit}",
+            assertj: "org.assertj:assertj-core:${deps.vers.backend.assertj}",
+            mockito: "org.mockito:mockito-core:${deps.vers.backend.mockito}",
+        ]
     ]
+
+    plgs.vers = [
+        android: [
+            androidTools: '3.0.0'
+        ],
+        backend: [
+            springBootPlg: '1.5.9.RELEASE'
+        ]
+    ]
+    plgs.defs = [
+        android: [
+            androidTools: "com.android.tools.build:gradle:${plgs.vers.android.androidTools}"
+        ],
+        backend: [
+            springBoot: "org.springframework.boot:spring-boot-gradle-plugin:${plgs.vers.backend.springBootPlg}"
+        ]
+    ]
+
 }
