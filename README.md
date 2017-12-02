@@ -1,5 +1,5 @@
-# Kleo - An NFC-enabled Electronic Attendance System
-
+# Kleo [![Build Status](https://travis-ci.com/wingsofovnia/kleo.svg?token=ouVhGzR1YKc4zojXsBsf&branch=master)](https://travis-ci.com/wingsofovnia/kleo)
+Kleo is an NFC-enabled electronic attendance system that is designed to cope with the problems of managing attendance lists of students.
 
 ## Bugs and Feedback
 For bugs, questions and discussions please use the [Github Issues](https://github.com/TUM-Journey/kleo/issues).
