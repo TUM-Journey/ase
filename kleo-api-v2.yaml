@@ -516,7 +516,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
       name:
         type: string
       description:
@@ -532,7 +531,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
       location:
         type: string
       note:
@@ -559,7 +557,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
         description: NFC/RFID/QR content
       session:
         $ref: '#/definitions/SessionDTO'
@@ -568,7 +565,6 @@ definitions:
     properties:
       passId:
         type: string
-        format: uuid
         description: NFC/RFID/QR content
       user: # Not used for /users/{userId}/attendances
         $ref: '#/definitions/UserDTO'
