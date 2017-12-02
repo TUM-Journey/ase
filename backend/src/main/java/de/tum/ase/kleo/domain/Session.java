@@ -7,7 +7,7 @@ import org.apache.commons.lang3.Validate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import static org.apache.commons.lang3.Validate.notBlank;
@@ -34,13 +34,13 @@ public class Session implements Comparable<Session> {
 
     @Getter
     @Column(nullable = false)
-    private LocalDateTime begins;
+    private ZonedDateTime begins;
 
     @Getter
     @Column(nullable = false)
-    private LocalDateTime ends;
+    private ZonedDateTime ends;
 
-    public Session(String id, String location, String note, LocalDateTime begins, LocalDateTime ends) {
+    public Session(String id, String location, String note, ZonedDateTime begins, ZonedDateTime ends) {
         this.id = id;
         this.location = notBlank(location);
         this.note = note;
@@ -50,11 +50,11 @@ public class Session implements Comparable<Session> {
         this.ends = ends;
     }
 
-    public Session(String location, String note, LocalDateTime begins, LocalDateTime ends) {
+    public Session(String location, String note, ZonedDateTime begins, ZonedDateTime ends) {
         this(UUID.randomUUID().toString(), location, note, begins, ends);
     }
 
-    public Session(String location, LocalDateTime begins, LocalDateTime ends) {
+    public Session(String location, ZonedDateTime begins, ZonedDateTime ends) {
         this(location, null, begins, ends);
     }
 
@@ -62,12 +62,12 @@ public class Session implements Comparable<Session> {
         this.location = notNull(location);
     }
 
-    public void begins(LocalDateTime begins) {
+    public void begins(ZonedDateTime begins) {
         Validate.isTrue(ends.isBefore(begins), "Session 'ends' datetime must be after 'begins' datetime");
         this.begins = begins;
     }
 
-    public void ends(LocalDateTime ends) {
+    public void ends(ZonedDateTime ends) {
         Validate.isTrue(ends.isBefore(begins), "Session 'ends' datetime must be after 'begins' datetime");
         this.ends = ends;
     }

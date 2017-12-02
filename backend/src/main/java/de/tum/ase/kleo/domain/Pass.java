@@ -6,7 +6,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
@@ -27,10 +27,10 @@ public class Pass {
     private final Session session;
 
     @Column(nullable = false)
-    private final LocalDateTime generatedDateTime = LocalDateTime.now();
+    private final ZonedDateTime generatedDateTime = ZonedDateTime.now();
 
     @Column
-    private LocalDateTime usedDateTime;
+    private ZonedDateTime usedDateTime;
 
     public Pass(String id, Session session) {
         this.id = notBlank(id);
@@ -42,6 +42,6 @@ public class Pass {
     }
 
     public void utilize() {
-        usedDateTime = LocalDateTime.now();
+        usedDateTime = ZonedDateTime.now();
     }
 }
