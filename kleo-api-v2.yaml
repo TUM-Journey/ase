@@ -560,6 +560,9 @@ definitions:
         description: NFC/RFID/QR content
       session:
         $ref: '#/definitions/SessionDTO'
+      generated:
+        type: string
+        format: date-time
   AttendanceDTO:
     type: object
     properties:
