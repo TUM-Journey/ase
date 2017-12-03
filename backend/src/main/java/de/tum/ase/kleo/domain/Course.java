@@ -2,6 +2,7 @@ package de.tum.ase.kleo.domain;
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.SortNatural;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,9 +11,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.UUID;
 
-import static java.util.Collections.emptySortedSet;
-import static java.util.Collections.unmodifiableSet;
-import static java.util.Collections.unmodifiableSortedSet;
+import static java.util.Collections.*;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
@@ -36,15 +35,15 @@ public class Course {
     @Getter @Setter
     private String description;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "course_tutors",
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> tutors;
 
-    @OneToMany
-    @OrderBy("sort")
+    @SortNatural
     @OrderColumn(name = "session_order")
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="course_id", referencedColumnName="course_id")
     private SortedSet<Session> sessions;
 

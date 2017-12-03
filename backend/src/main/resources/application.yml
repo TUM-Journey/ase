@@ -1,6 +1,9 @@
 spring:
   profiles.active: dev
 
+server:
+  contextPath: /api
+
 logging:
   file: kleo-application.log
   level:
