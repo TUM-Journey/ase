@@ -6,10 +6,12 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.UUID;
 
 import static java.util.Collections.emptySortedSet;
+import static java.util.Collections.unmodifiableSet;
 import static java.util.Collections.unmodifiableSortedSet;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.Validate.notBlank;
@@ -34,33 +36,40 @@ public class Course {
     @Getter @Setter
     private String description;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "course_tutors",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> tutors;
+
     @OneToMany
     @OrderBy("sort")
     @OrderColumn(name = "session_order")
     @JoinColumn(name="course_id", referencedColumnName="course_id")
     private SortedSet<Session> sessions;
 
-    public Course(String id, String name, String description, SortedSet<Session> sessions) {
+    public Course(String id, String name, String description, Set<User> tutors, SortedSet<Session> sessions) {
         this.id = isNotBlank(id) ? id : UUID.randomUUID().toString();
         this.name = notBlank(name);
         this.description = description;
+        this.tutors = notNull(tutors);
         this.sessions = notNull(sessions);
     }
 
     public Course(String id, String name, String description) {
-        this(id, name, description, emptySortedSet());
+        this(id, name, description, emptySortedSet(), emptySortedSet());
     }
 
-    public Course(String name, String description, SortedSet<Session> sessions) {
-        this(null, name, description, sessions);
+    public Course(String name, String description, Set<User> tutors, SortedSet<Session> sessions) {
+        this(null, name, description, tutors, sessions);
     }
 
     public Course(String name, String description) {
-        this(name, description, emptySortedSet());
+        this(name, description, emptySortedSet(), emptySortedSet());
     }
 
     public Course(String name) {
-        this(name, null, emptySortedSet());
+        this(name, null, emptySortedSet(), emptySortedSet());
     }
 
     public void name(String name) {
@@ -81,6 +90,22 @@ public class Course {
 
     public void removeSession(String sessionId) {
         sessions.removeIf(session -> session.id().equals(sessionId));
+    }
+
+    public Set<User> tutors() {
+        return unmodifiableSet(tutors);
+    }
+
+    public void addTutor(User tutor) {
+        tutors.add(notNull(tutor));
+    }
+
+    public void removeTutor(User tutor) {
+        tutors.remove(tutor);
+    }
+
+    public void removeTutor(String tutorId) {
+        tutors.removeIf(tutor -> tutor.id().equals(tutorId));
     }
 
     public Optional<LocalDate> begins() {
