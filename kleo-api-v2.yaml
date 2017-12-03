@@ -416,9 +416,12 @@ paths:
           type: string
       responses:
         200:
-          description: An entity requested
+          description: An entities requested
           schema:
-            $ref: '#/definitions/PassDTO'
+            type: array
+            minItems: 0
+            items:
+              $ref: '#/definitions/PassDTO'
         500:
           description: Internal server error, please contact support
           schema:

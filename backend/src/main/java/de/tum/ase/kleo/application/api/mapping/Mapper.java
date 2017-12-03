@@ -1,8 +1,9 @@
 package de.tum.ase.kleo.application.api.mapping;
 
-import java.util.Collection;
+import java.util.List;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.StreamSupport.stream;
 
 /**
  * {@code Mapper} implementations maps properties from
@@ -15,10 +16,10 @@ public interface Mapper<S, D> {
 
     D map(S source);
 
-    default Collection<D> map(Collection<S> sources) {
+    default List<D> map(Iterable<S> sources) {
         if (sources == null)
             return null;
 
-        return sources.stream().map(this::map).collect(toList());
+        return stream(sources.spliterator(), false).map(this::map).collect(toList());
     }
 }
