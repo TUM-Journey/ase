@@ -4,6 +4,7 @@ info:
   title: Kleo Classes and Passes Management API
   description: The API provides endpoints for managing users, courses, sessions and passes.
 
+basePath: /api
 schemes:
   - http
 produces:
