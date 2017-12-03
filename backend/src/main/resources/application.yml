@@ -10,9 +10,12 @@ security:
   realm: kleo-backend
   accessTokenValidity: 3600
 
-  superuser:
-    username: superuser
-    password: c9kfgRCs2nsx
+  provider:
+    superuser:
+      username: superuser
+      password: c9kfgRCs2nsx
+    tum:
+      roles: STUDENT
 
   oauth2:
     resource:

@@ -1,6 +1,7 @@
 package de.tum.ase.kleo.application.auth;
 
 import de.tum.ase.kleo.domain.UserRepository;
+import de.tum.ase.kleo.domain.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,10 +25,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${security.realm}")
     private String realm;
 
-    @Value("${security.superuser.username}")
+    @Value("${security.provider.superuser.username}")
     private String superuserUsername;
-    @Value("${security.superuser.password}")
+    @Value("${security.provider.superuser.password}")
     private String superuserPassword;
+
+    @Value("${security.provider.tum.roles}")
+    private UserRole[] tumUserRoles;
 
     @Autowired
     private UserRepository userRepository;
@@ -65,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private AuthenticationProvider tumAuthenticationProvider() {
-        return new TumAuthenticationProvider(userRepository, passwordEncoder());
+        return new TumAuthenticationProvider(userRepository, passwordEncoder(), tumUserRoles);
     }
 
     private PasswordEncoder passwordEncoder() {
