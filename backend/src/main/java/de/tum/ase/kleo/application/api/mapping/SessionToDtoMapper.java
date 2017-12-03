@@ -16,7 +16,7 @@ public class SessionToDtoMapper implements Mapper<Session, SessionDTO> {
                 .id(source.id())
                 .location(source.location())
                 .note(source.note())
-                .begins(source.begins().toOffsetDateTime())
-                .ends(source.begins().toOffsetDateTime());
+                .begins(source.begins())
+                .ends(source.begins());
     }
 }

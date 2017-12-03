@@ -37,7 +37,7 @@ public class SessionAttendanceDtoMapper implements Mapper<User, List<AttendanceD
                 .map(pass -> new AttendanceDTO()
                         .passId(pass.code())
                         .session(sessionToDtoMapper.map(pass.session()))
-                        .timestamp(pass.usedDateTime().toOffsetDateTime())
+                        .timestamp(pass.usedDateTime())
                         .user(userToDtoMapper.map(source)))
                 .collect(toList());
     }

@@ -4,8 +4,6 @@ import de.tum.ase.kleo.application.api.dto.SessionDTO;
 import de.tum.ase.kleo.domain.Session;
 import org.springframework.stereotype.Component;
 
-import java.time.ZonedDateTime;
-
 @Component
 public class SessionFromDtoMapper implements Mapper<SessionDTO, Session> {
 
@@ -15,6 +13,6 @@ public class SessionFromDtoMapper implements Mapper<SessionDTO, Session> {
             return null;
 
         return new Session(source.getId(), source.getLocation(), source.getNote(),
-                ZonedDateTime.from(source.getBegins()), ZonedDateTime.from(source.getEnds()));
+                source.getBegins(), source.getEnds());
     }
 }

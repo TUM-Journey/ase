@@ -6,13 +6,14 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
 @Embeddable
+@Access(AccessType.FIELD)
 @Accessors(fluent = true)
 @Getter @ToString @EqualsAndHashCode(of = "session") // One pass per session
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
@@ -27,10 +28,10 @@ public class Pass {
     private final Session session;
 
     @Column(nullable = false)
-    private final ZonedDateTime generatedDateTime = ZonedDateTime.now();
+    private final OffsetDateTime generatedDateTime = OffsetDateTime.now();
 
     @Column
-    private ZonedDateTime usedDateTime;
+    private OffsetDateTime usedDateTime;
 
     public Pass(String code, Session session) {
         this.code = isNotBlank(code) ? code : UUID.randomUUID().toString();
@@ -46,6 +47,6 @@ public class Pass {
     }
 
     public void utilize() {
-        usedDateTime = ZonedDateTime.now();
+        usedDateTime = OffsetDateTime.now();
     }
 }

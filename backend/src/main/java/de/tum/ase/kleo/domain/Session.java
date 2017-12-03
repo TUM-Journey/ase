@@ -4,10 +4,8 @@ import lombok.*;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.Validate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.time.ZonedDateTime;
+import javax.persistence.*;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -15,6 +13,7 @@ import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
 @Entity
+@Access(AccessType.FIELD)
 @Accessors(fluent = true)
 @ToString @EqualsAndHashCode(of = "id")
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
@@ -35,13 +34,13 @@ public class Session implements Comparable<Session> {
 
     @Getter
     @Column(nullable = false)
-    private ZonedDateTime begins;
+    private OffsetDateTime begins;
 
     @Getter
     @Column(nullable = false)
-    private ZonedDateTime ends;
+    private OffsetDateTime ends;
 
-    public Session(String id, String location, String note, ZonedDateTime begins, ZonedDateTime ends) {
+    public Session(String id, String location, String note, OffsetDateTime begins, OffsetDateTime ends) {
         this.id = isNotBlank(id) ? id : UUID.randomUUID().toString();
         this.location = notBlank(location);
         this.note = note;
@@ -51,11 +50,11 @@ public class Session implements Comparable<Session> {
         this.ends = ends;
     }
 
-    public Session(String location, String note, ZonedDateTime begins, ZonedDateTime ends) {
+    public Session(String location, String note, OffsetDateTime begins, OffsetDateTime ends) {
         this(null, location, note, begins, ends);
     }
 
-    public Session(String location, ZonedDateTime begins, ZonedDateTime ends) {
+    public Session(String location, OffsetDateTime begins, OffsetDateTime ends) {
         this(location, null, begins, ends);
     }
 
@@ -63,12 +62,12 @@ public class Session implements Comparable<Session> {
         this.location = notNull(location);
     }
 
-    public void begins(ZonedDateTime begins) {
+    public void begins(OffsetDateTime begins) {
         Validate.isTrue(ends.isAfter(begins), "Session 'ends' datetime must be after 'begins' datetime");
         this.begins = begins;
     }
 
-    public void ends(ZonedDateTime ends) {
+    public void ends(OffsetDateTime ends) {
         Validate.isTrue(ends.isAfter(begins), "Session 'ends' datetime must be after 'begins' datetime");
         this.ends = ends;
     }

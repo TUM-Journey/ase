@@ -28,6 +28,6 @@ public class UserAttendanceDtoMapper implements Mapper<Pass, AttendanceDTO> {
         return new AttendanceDTO()
                 .passId(source.code())
                 .session(sessionDtoMapper.map(source.session()))
-                .timestamp(source.usedDateTime().toOffsetDateTime());
+                .timestamp(source.usedDateTime());
     }
 }

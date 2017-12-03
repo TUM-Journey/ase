@@ -25,6 +25,6 @@ public class PassToDtoMapper implements Mapper<Pass, PassDTO> {
         return new PassDTO()
                 .id(source.code())
                 .session(sessionDtoMapper.map(source.session()))
-                .generated(source.generatedDateTime().toOffsetDateTime());
+                .generated(source.generatedDateTime());
     }
 }

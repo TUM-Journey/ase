@@ -4,8 +4,6 @@ import de.tum.ase.kleo.application.api.dto.SessionDTO;
 import de.tum.ase.kleo.domain.Session;
 import org.springframework.stereotype.Component;
 
-import java.time.ZonedDateTime;
-
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Component
@@ -20,10 +18,10 @@ public class SessionDtoMerger implements Merger<SessionDTO, Session> {
             dest.note(source.getNote());
 
         if (source.getBegins() != null)
-            dest.begins(ZonedDateTime.from(source.getBegins()));
+            dest.begins(source.getBegins());
 
         if (source.getEnds() != null)
-            dest.ends(ZonedDateTime.from(source.getEnds()));
+            dest.ends(source.getEnds());
 
     }
 }

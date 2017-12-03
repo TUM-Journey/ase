@@ -15,6 +15,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.Validate.*;
 
 @Entity
+@Access(AccessType.FIELD)
 @Accessors(fluent = true)
 @Getter @ToString @EqualsAndHashCode(of = "id")
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
