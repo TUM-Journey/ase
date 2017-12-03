@@ -46,7 +46,7 @@ public class Session implements Comparable<Session> {
         this.location = notBlank(location);
         this.note = note;
 
-        Validate.isTrue(ends.isBefore(begins), "Session 'ends' datetime must be after 'begins' datetime");
+        Validate.isTrue(ends.isAfter(begins), "Session 'ends' datetime must be after 'begins' datetime");
         this.begins = begins;
         this.ends = ends;
     }
@@ -64,12 +64,12 @@ public class Session implements Comparable<Session> {
     }
 
     public void begins(ZonedDateTime begins) {
-        Validate.isTrue(ends.isBefore(begins), "Session 'ends' datetime must be after 'begins' datetime");
+        Validate.isTrue(ends.isAfter(begins), "Session 'ends' datetime must be after 'begins' datetime");
         this.begins = begins;
     }
 
     public void ends(ZonedDateTime ends) {
-        Validate.isTrue(ends.isBefore(begins), "Session 'ends' datetime must be after 'begins' datetime");
+        Validate.isTrue(ends.isAfter(begins), "Session 'ends' datetime must be after 'begins' datetime");
         this.ends = ends;
     }
 
