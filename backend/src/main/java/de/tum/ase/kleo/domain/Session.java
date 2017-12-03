@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
@@ -41,7 +42,7 @@ public class Session implements Comparable<Session> {
     private ZonedDateTime ends;
 
     public Session(String id, String location, String note, ZonedDateTime begins, ZonedDateTime ends) {
-        this.id = id;
+        this.id = isNotBlank(id) ? id : UUID.randomUUID().toString();
         this.location = notBlank(location);
         this.note = note;
 
@@ -51,7 +52,7 @@ public class Session implements Comparable<Session> {
     }
 
     public Session(String location, String note, ZonedDateTime begins, ZonedDateTime ends) {
-        this(UUID.randomUUID().toString(), location, note, begins, ends);
+        this(null, location, note, begins, ends);
     }
 
     public Session(String location, ZonedDateTime begins, ZonedDateTime ends) {

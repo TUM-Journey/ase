@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.toSet;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.Validate.*;
 
 @Entity
@@ -48,7 +49,7 @@ public class User {
 
     public User(String id, List<UserRole> userRoles, String email, String passwordHash,
                 String name, String studentId, Set<Pass> passes) {
-        this.id = notBlank(id);
+        this.id = isNotBlank(id) ? id : UUID.randomUUID().toString();
         this.userRoles = notEmpty(userRoles);
         this.email = notBlank(email);
         this.passwordHash = notBlank(passwordHash);
@@ -73,12 +74,12 @@ public class User {
 
     public User(List<UserRole> userRoles, String email, String passwordHash,
                 String name, String studentId, Set<Pass> passes) {
-        this(UUID.randomUUID().toString(), userRoles, email, passwordHash, name, studentId, passes);
+        this(null, userRoles, email, passwordHash, name, studentId, passes);
     }
 
     public User(List<UserRole> userRoles, String email, String passwordHash,
                 String name, String studentId) {
-        this(UUID.randomUUID().toString(), userRoles, email, passwordHash, name, studentId, emptySet());
+        this(null, userRoles, email, passwordHash, name, studentId, emptySet());
     }
 
     public User(String email, String passwordHash, String name, String studentId, Set<Pass> passes) {

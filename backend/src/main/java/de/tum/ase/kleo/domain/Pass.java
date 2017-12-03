@@ -7,8 +7,9 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
-import static org.apache.commons.lang3.Validate.notBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
 @Entity
@@ -33,8 +34,12 @@ public class Pass {
     private ZonedDateTime usedDateTime;
 
     public Pass(String id, Session session) {
-        this.id = notBlank(id);
+        this.id = isNotBlank(id) ? id : UUID.randomUUID().toString();
         this.session = notNull(session);
+    }
+
+    public Pass(Session session) {
+        this(null, session);
     }
 
     public boolean isUsed() {

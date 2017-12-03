@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import static java.util.Collections.emptySortedSet;
 import static java.util.Collections.unmodifiableSortedSet;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
@@ -40,7 +41,7 @@ public class Course {
     private SortedSet<Session> sessions;
 
     public Course(String id, String name, String description, SortedSet<Session> sessions) {
-        this.id = notBlank(id);
+        this.id = isNotBlank(id) ? id : UUID.randomUUID().toString();
         this.name = notBlank(name);
         this.description = description;
         this.sessions = notNull(sessions);
@@ -51,7 +52,7 @@ public class Course {
     }
 
     public Course(String name, String description, SortedSet<Session> sessions) {
-        this(UUID.randomUUID().toString(), name, description, sessions);
+        this(null, name, description, sessions);
     }
 
     public Course(String name, String description) {
