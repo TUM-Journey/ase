@@ -12,10 +12,12 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class UserService implements UsersApiDelegate {
 
     private final UserRepository userRepository;
@@ -24,7 +26,8 @@ public class UserService implements UsersApiDelegate {
     private final UserAttendanceDtoMapper userAttendanceMapper;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserToDtoMapper userMapper, PassToDtoMapper passMapper, UserAttendanceDtoMapper userAttendanceMapper) {
+    public UserService(UserRepository userRepository, UserToDtoMapper userMapper, PassToDtoMapper passMapper,
+                       UserAttendanceDtoMapper userAttendanceMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passMapper = passMapper;

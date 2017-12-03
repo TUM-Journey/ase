@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Component
-public class SesssionDtoMerger implements Merger<SessionDTO, Session> {
+public class SessionDtoMerger implements Merger<SessionDTO, Session> {
 
     @Override
     public void merge(SessionDTO source, Session dest) {

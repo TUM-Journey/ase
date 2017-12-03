@@ -14,7 +14,7 @@ import static org.apache.commons.lang3.Validate.notNull;
 
 @Entity
 @Accessors(fluent = true)
-@Getter @ToString @EqualsAndHashCode(of = "id")
+@Getter @ToString @EqualsAndHashCode(of = "session") // One pass per session
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
 public class Pass {
 

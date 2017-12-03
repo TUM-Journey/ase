@@ -80,16 +80,20 @@ public class Course {
         return unmodifiableSortedSet(sessions);
     }
 
+    public Optional<Session> session(String sessionId) {
+        return sessions.stream().filter(session -> session.id().equals(sessionId)).findAny();
+    }
+
     public void addSession(Session session) {
         sessions.add(notNull(session));
     }
 
-    public void removeSession(Session session) {
-        sessions.remove(session);
+    public boolean removeSession(Session session) {
+        return sessions.remove(session);
     }
 
-    public void removeSession(String sessionId) {
-        sessions.removeIf(session -> session.id().equals(sessionId));
+    public boolean removeSession(String sessionId) {
+        return sessions.removeIf(session -> session.id().equals(sessionId));
     }
 
     public Set<User> tutors() {
@@ -100,12 +104,12 @@ public class Course {
         tutors.add(notNull(tutor));
     }
 
-    public void removeTutor(User tutor) {
-        tutors.remove(tutor);
+    public boolean removeTutor(User tutor) {
+        return tutors.remove(tutor);
     }
 
-    public void removeTutor(String tutorId) {
-        tutors.removeIf(tutor -> tutor.id().equals(tutorId));
+    public boolean removeTutor(String userId) {
+        return tutors.removeIf(tutor -> tutor.id().equals(userId));
     }
 
     public Optional<LocalDate> begins() {

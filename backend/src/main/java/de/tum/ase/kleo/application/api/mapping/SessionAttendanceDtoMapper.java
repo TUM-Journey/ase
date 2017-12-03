@@ -1,40 +1,44 @@
 package de.tum.ase.kleo.application.api.mapping;
 
 import de.tum.ase.kleo.application.api.dto.AttendanceDTO;
-import de.tum.ase.kleo.application.api.dto.UserDTO;
-import de.tum.ase.kleo.domain.Pass;
 import de.tum.ase.kleo.domain.User;
-import de.tum.ase.kleo.domain.UserRepository;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
-public class SessionAttendanceDtoMapper implements Mapper<Pass, AttendanceDTO> {
+import java.util.List;
 
-    private final UserRepository userRepository;
-    private final Mapper<User, UserDTO> userDtoMapper;
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
+
+@Component
+public class SessionAttendanceDtoMapper implements Mapper<User, List<AttendanceDTO>> {
+
+    private final UserToDtoMapper userToDtoMapper;
+    private final SessionToDtoMapper sessionToDtoMapper;
 
     @Autowired
-    public SessionAttendanceDtoMapper(UserRepository userRepository, Mapper<User, UserDTO> userDtoMapper) {
-        this.userRepository = userRepository;
-        this.userDtoMapper = userDtoMapper;
+    public SessionAttendanceDtoMapper(UserToDtoMapper userToDtoMapper, SessionToDtoMapper sessionToDtoMapper) {
+        this.userToDtoMapper = userToDtoMapper;
+        this.sessionToDtoMapper = sessionToDtoMapper;
     }
 
+
     @Override
-    public AttendanceDTO map(Pass source) {
+    public List<AttendanceDTO> map(User source) {
         if (source == null)
             return null;
 
-        if (!source.isUsed())
-            throw new MappingException("The Pass given has not being used. Cannot extract Attendance DTO");
+        val usedPasses = source.usedPasses();
+        if (usedPasses.isEmpty())
+            return emptyList();
 
-        val user = userRepository.findByPassesContains(source)
-                .orElseThrow(() -> new MappingException("Failed to find the holder (user) of pass given"));
-
-        return new AttendanceDTO()
-                .passId(source.id())
-                .user(userDtoMapper.map(user))
-                .timestamp(source.usedDateTime().toOffsetDateTime());
+        return usedPasses.stream()
+                .map(pass -> new AttendanceDTO()
+                        .passId(pass.id())
+                        .session(sessionToDtoMapper.map(pass.session()))
+                        .timestamp(pass.usedDateTime().toOffsetDateTime())
+                        .user(userToDtoMapper.map(source)))
+                .collect(toList());
     }
 }

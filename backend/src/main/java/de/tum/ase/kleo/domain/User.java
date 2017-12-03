@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -90,6 +91,14 @@ public class User {
         return unmodifiableSet(passes);
     }
 
+    public Optional<Pass> pass(String sessionId) {
+        return passes.stream().filter(pass -> pass.session().id().equals(sessionId)).findAny();
+    }
+
+    public Optional<Pass> pass(Session session) {
+        return pass(session.id());
+    }
+
     public Set<Pass> usedPasses() {
         return passes.stream().filter(Pass::isUsed).collect(toSet());
     }
@@ -98,11 +107,11 @@ public class User {
         passes.add(notNull(pass));
     }
 
-    public void removePass(Pass pass) {
-        passes.remove(pass);
+    public boolean removePass(Pass pass) {
+        return passes.remove(pass);
     }
 
-    public void removePass(String passId) {
-        passes.removeIf(pass -> pass.id().equals(passId));
+    public boolean removePass(String passId) {
+        return passes.removeIf(pass -> pass.id().equals(passId));
     }
 }

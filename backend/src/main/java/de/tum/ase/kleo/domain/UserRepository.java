@@ -3,6 +3,7 @@ package de.tum.ase.kleo.domain;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -11,4 +12,8 @@ public interface UserRepository extends CrudRepository<User, String> {
     Optional<User> findByEmail(String email);
 
     Optional<User> findByPassesContains(Pass pass);
+
+    List<User> findAllByPassesSession(Session session);
+
+    Optional<User> findByIdAndPassesSession(String id, Session session);
 }
