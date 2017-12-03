@@ -35,7 +35,7 @@ public class SessionAttendanceDtoMapper implements Mapper<User, List<AttendanceD
 
         return usedPasses.stream()
                 .map(pass -> new AttendanceDTO()
-                        .passId(pass.id())
+                        .passId(pass.code())
                         .session(sessionToDtoMapper.map(pass.session()))
                         .timestamp(pass.usedDateTime().toOffsetDateTime())
                         .user(userToDtoMapper.map(source)))

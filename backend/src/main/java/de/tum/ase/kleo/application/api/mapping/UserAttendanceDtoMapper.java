@@ -26,7 +26,7 @@ public class UserAttendanceDtoMapper implements Mapper<Pass, AttendanceDTO> {
             throw new MappingException("The Pass given has not being used. Cannot extract Attendance DTO");
 
         return new AttendanceDTO()
-                .passId(source.id())
+                .passId(source.code())
                 .session(sessionDtoMapper.map(source.session()))
                 .timestamp(source.usedDateTime().toOffsetDateTime());
     }

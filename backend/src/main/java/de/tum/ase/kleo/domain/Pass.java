@@ -12,15 +12,14 @@ import java.util.UUID;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
-@Entity
+@Embeddable
 @Accessors(fluent = true)
 @Getter @ToString @EqualsAndHashCode(of = "session") // One pass per session
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
 public class Pass {
 
-    @Id
-    @Column(name = "pass_id")
-    private final String id;
+    @Column(name = "code")
+    private final String code;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -33,8 +32,8 @@ public class Pass {
     @Column
     private ZonedDateTime usedDateTime;
 
-    public Pass(String id, Session session) {
-        this.id = isNotBlank(id) ? id : UUID.randomUUID().toString();
+    public Pass(String code, Session session) {
+        this.code = isNotBlank(code) ? code : UUID.randomUUID().toString();
         this.session = notNull(session);
     }
 

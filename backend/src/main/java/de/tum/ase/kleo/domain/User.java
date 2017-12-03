@@ -44,8 +44,8 @@ public class User {
     @Column
     private final String studentId;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name="user_id", referencedColumnName="user_id")
+    @ElementCollection
+    @CollectionTable(name = "user_passes", joinColumns = @JoinColumn(name = "user_id"))
     private Set<Pass> passes;
 
     public User(String id, List<UserRole> userRoles, String email, String passwordHash,
@@ -111,7 +111,7 @@ public class User {
         return passes.remove(pass);
     }
 
-    public boolean removePass(String passId) {
-        return passes.removeIf(pass -> pass.id().equals(passId));
+    public boolean removePass(String passCode) {
+        return passes.removeIf(pass -> pass.code().equals(passCode));
     }
 }

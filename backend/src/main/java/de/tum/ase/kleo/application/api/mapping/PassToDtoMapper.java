@@ -23,7 +23,7 @@ public class PassToDtoMapper implements Mapper<Pass, PassDTO> {
             return null;
 
         return new PassDTO()
-                .id(source.id())
+                .id(source.code())
                 .session(sessionDtoMapper.map(source.session()))
                 .generated(source.generatedDateTime().toOffsetDateTime());
     }
