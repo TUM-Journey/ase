@@ -1,6 +1,5 @@
 package de.tum.ase.kleo.application.auth;
 
-import de.tum.ase.kleo.domain.User;
 import de.tum.ase.kleo.domain.UserRole;
 import lombok.val;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -8,6 +7,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.UUID;
 
 import static java.util.Collections.singletonList;
 
@@ -28,8 +29,8 @@ public class SuperuserAuthenticationProvider implements AuthenticationProvider {
         if (!password.equals(authentication.getCredentials().toString()))
             return null;
 
-        val superuser = new User(singletonList(UserRole.SUPERUSER), username, password, username, null);
-        return new UsernamePasswordAuthenticationToken(superuser, null,
+        val superuserPrincipal = new UserPrincipal(UUID.randomUUID().toString(), username, username);
+        return new UsernamePasswordAuthenticationToken(superuserPrincipal, null,
                 singletonList(new SimpleGrantedAuthority(UserRole.SUPERUSER.name())));
     }
 

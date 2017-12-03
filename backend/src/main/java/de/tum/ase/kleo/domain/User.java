@@ -18,7 +18,7 @@ import static org.apache.commons.lang3.Validate.*;
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
 public class User {
 
-    private static final UserRole DEFAULT_USER_ROLE = UserRole.STUDENT;
+    public static final UserRole DEFAULT_USER_ROLE = UserRole.STUDENT;
 
     @Id
     @Column(name = "user_id")

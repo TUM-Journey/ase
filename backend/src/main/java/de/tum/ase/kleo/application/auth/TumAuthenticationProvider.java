@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 public class TumAuthenticationProvider implements AuthenticationProvider {
@@ -45,10 +46,16 @@ public class TumAuthenticationProvider implements AuthenticationProvider {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final List<UserRole> userRoles;
 
-    public TumAuthenticationProvider(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public TumAuthenticationProvider(UserRepository userRepository, PasswordEncoder passwordEncoder, UserRole... userRoles) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userRoles = asList(userRoles);
+    }
+
+    public TumAuthenticationProvider(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this(userRepository, passwordEncoder, User.DEFAULT_USER_ROLE);
     }
 
     @Override
@@ -56,21 +63,21 @@ public class TumAuthenticationProvider implements AuthenticationProvider {
         val email = authentication.getName();
         val password = authentication.getCredentials().toString();
 
-        val userOpt = userRepository.findByEmail(email);
-        if (userOpt.isPresent()) {
-            val user = userOpt.get();
-            if (!passwordEncoder.matches(password, user.passwordHash()))
+        User user = userRepository.findByEmail(email).filter(usr -> {
+            if (!passwordEncoder.matches(password, usr.passwordHash()))
                 throw new BadCredentialsException("Password is invalid");
 
-            return new UsernamePasswordAuthenticationToken(user, null,
-                    userGrantedAuthorities(user.userRoles()));
-        } else {
+            return true;
+        }).orElseGet(() -> {
             val shibbolethUser = fetchShibbolethUser(email, password);
             userRepository.save(shibbolethUser);
 
-            return new UsernamePasswordAuthenticationToken(shibbolethUser, null,
-                    userGrantedAuthorities(shibbolethUser.userRoles()));
-        }
+            return shibbolethUser;
+        });
+
+        val userPrincipal = UserPrincipal.from(user);
+        val userGrantedAthorities = grantedAuthoritiesFrom(userRoles);
+        return new UsernamePasswordAuthenticationToken(userPrincipal, null, userGrantedAthorities);
     }
 
     private User fetchShibbolethUser(String email, String password) {
@@ -106,7 +113,7 @@ public class TumAuthenticationProvider implements AuthenticationProvider {
             val studentId = matricInput.getValueAttribute();
             val passwordHash = passwordEncoder.encode(password);
 
-            return new User(userId, email, passwordHash, name, studentId);
+            return new User(userId, userRoles, email, passwordHash, name, studentId);
         } catch (IOException e) {
             throw new AuthenticationServiceException("Failed to navigate through Shibboleth auth page", e);
         }
@@ -117,7 +124,7 @@ public class TumAuthenticationProvider implements AuthenticationProvider {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 
-    private List<GrantedAuthority> userGrantedAuthorities(List<UserRole> userRoles) {
+    private static List<GrantedAuthority> grantedAuthoritiesFrom(List<UserRole> userRoles) {
         return userRoles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.name()))
                 .collect(toList());
