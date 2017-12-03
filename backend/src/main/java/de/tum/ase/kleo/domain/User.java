@@ -76,6 +76,11 @@ public class User {
         this(UUID.randomUUID().toString(), userRoles, email, passwordHash, name, studentId, passes);
     }
 
+    public User(List<UserRole> userRoles, String email, String passwordHash,
+                String name, String studentId) {
+        this(UUID.randomUUID().toString(), userRoles, email, passwordHash, name, studentId, emptySet());
+    }
+
     public User(String email, String passwordHash, String name, String studentId, Set<Pass> passes) {
         this(singletonList(DEFAULT_USER_ROLE), email, passwordHash, name, studentId, passes);
     }

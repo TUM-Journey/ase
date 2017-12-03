@@ -24,6 +24,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${security.realm}")
     private String realm;
 
+    @Value("${security.superuser.username}")
+    private String superuserUsername;
+    @Value("${security.superuser.password}")
+    private String superuserPassword;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -43,7 +48,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authenticationProvider());
+        auth
+                .authenticationProvider(superuserAuthenticationProvider())
+                .authenticationProvider(tumAuthenticationProvider());
     }
 
     @Override
@@ -53,7 +60,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    private AuthenticationProvider authenticationProvider() {
+    private AuthenticationProvider superuserAuthenticationProvider() {
+        return new SuperuserAuthenticationProvider(superuserUsername, superuserPassword);
+    }
+
+    private AuthenticationProvider tumAuthenticationProvider() {
         return new TumAuthenticationProvider(userRepository, passwordEncoder());
     }
 
