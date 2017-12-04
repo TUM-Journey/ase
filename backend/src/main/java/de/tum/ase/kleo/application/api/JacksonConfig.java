@@ -6,8 +6,11 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
 
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT;
+import static com.fasterxml.jackson.annotation.PropertyAccessor.ALL;
+import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
 
 @Configuration
@@ -18,7 +21,8 @@ public class JacksonConfig {
 
     @PostConstruct
     public void configureJacksonObjectMapper() {
-        objectMapper.enable(INDENT_OUTPUT);
+        objectMapper.setVisibility(ALL, NONE);
+        objectMapper.setVisibility(FIELD, ANY);
         objectMapper.setSerializationInclusion(NON_EMPTY);
         objectMapper.disable(WRITE_DATES_AS_TIMESTAMPS);
         objectMapper.findAndRegisterModules();

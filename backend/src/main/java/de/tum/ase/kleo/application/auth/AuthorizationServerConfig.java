@@ -1,5 +1,7 @@
 package de.tum.ase.kleo.application.auth;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,8 +13,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.UserAuthenticationConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
@@ -36,6 +40,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private String oauth2GrandType;
     @Value("${security.oauth2.scopes}")
     private String[] oauth2Scopes;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) {
@@ -65,7 +72,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Bean
     JwtAccessTokenConverter accessTokenConverter() {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        val internalAccessTokenConverter = new DefaultAccessTokenConverter();
+        internalAccessTokenConverter.setUserTokenConverter(userPrincipleAuthenticationConverter());
+
+        val converter = new JwtAccessTokenConverter();
+        converter.setAccessTokenConverter(internalAccessTokenConverter);
         converter.setSigningKey(jwtSigningKey);
         return converter;
     }
@@ -73,9 +84,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean
     @Primary
     DefaultTokenServices tokenServices() {
-        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+        val defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore());
         defaultTokenServices.setSupportRefreshToken(true);
         return defaultTokenServices;
+    }
+
+    @Bean
+    UserAuthenticationConverter userPrincipleAuthenticationConverter() {
+        return new UserPrincipleAuthenticationConverter(objectMapper);
     }
 }

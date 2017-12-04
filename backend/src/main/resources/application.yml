@@ -24,6 +24,7 @@ security:
     superuser:
       username: superuser
       password: c9kfgRCs2nsx
+      roles: SUPERUSER
     tum:
       roles: USER
 

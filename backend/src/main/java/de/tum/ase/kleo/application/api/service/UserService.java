@@ -60,6 +60,7 @@ public class UserService implements UsersApiDelegate {
     }
 
     @Override
+    @PreAuthorize("hasRole('SUPERUSER') OR hasPermission(#userId, 'user', 'passes')")
     public ResponseEntity<List<PassDTO>> getUserPasses(String userId) {
         val user = userRepository.findOne(userId);
         if (user == null)
