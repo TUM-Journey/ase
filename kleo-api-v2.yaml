@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: "2.0.0"
+  version: "2.0.5"
   title: Kleo Classes and Passes Management API
   description: The API provides endpoints for managing users, courses, sessions and passes.
 
@@ -8,7 +8,7 @@ basePath: /api
 schemes:
   - http
 produces:
-  - "application/vnd.tum.aes.kleo.v2+json"
+  - "application/vnd.tum.aes.kleo.v2.0.5+json"
 
 securityDefinitions:
   OAuth2Password:
@@ -403,6 +403,26 @@ paths:
           description: Internal server error, please contact support
           schema:
             $ref: '#/definitions/ErrorDTO'
+    delete:
+      tags:
+        - users
+      operationId: deleteUser
+      security:
+        - OAuth2Password: [management]
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: User removed
+        404:
+          description: Entity not found
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
   /users/{userId}/passes:
     get:
       tags:
@@ -423,6 +443,35 @@ paths:
             minItems: 0
             items:
               $ref: '#/definitions/PassDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /users/{userId}/roles:
+   put:
+      tags:
+        - users
+      operationId: updateUserRoles
+      security:
+        - OAuth2Password: [management]
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+        - in: body
+          name: roles
+          schema:
+            type: array
+            minItems: 0
+            items:
+              type: string
+              description: "Roles allowed: SUPERUSER, STAFF, STUDENT"
+      responses:
+        200:
+          description: A updated entity
+          schema:
+            $ref: '#/definitions/SessionDTO'
         500:
           description: Internal server error, please contact support
           schema:

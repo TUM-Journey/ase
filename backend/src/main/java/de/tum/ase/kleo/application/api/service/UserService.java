@@ -3,13 +3,16 @@ package de.tum.ase.kleo.application.api.service;
 import de.tum.ase.kleo.application.api.UsersApiDelegate;
 import de.tum.ase.kleo.application.api.dto.AttendanceDTO;
 import de.tum.ase.kleo.application.api.dto.PassDTO;
+import de.tum.ase.kleo.application.api.dto.SessionDTO;
 import de.tum.ase.kleo.application.api.dto.UserDTO;
 import de.tum.ase.kleo.application.api.mapping.PassToDtoMapper;
 import de.tum.ase.kleo.application.api.mapping.UserAttendanceDtoMapper;
 import de.tum.ase.kleo.application.api.mapping.UserToDtoMapper;
 import de.tum.ase.kleo.domain.UserRepository;
+import de.tum.ase.kleo.domain.UserRole;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,5 +71,32 @@ public class UserService implements UsersApiDelegate {
     public ResponseEntity<List<UserDTO>> getUsers() {
         val users = userRepository.findAll();
         return ResponseEntity.ok(userMapper.map(users));
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<Void> deleteUser(String userId) {
+        val user = userRepository.findOne(userId);
+        if (user == null)
+            return ResponseEntity.notFound().build();
+
+        userRepository.delete(userId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<SessionDTO> updateUserRoles(String userId, List<String> roles) {
+        val user = userRepository.findOne(userId);
+        if (user == null)
+            return ResponseEntity.notFound().build();
+
+
+        val newUserRoles = UserRole.from(roles);
+        user.truncateUserRoles();
+        newUserRoles.forEach(user::addUserRole);
+
+        return ResponseEntity.ok().build();
     }
 }

@@ -17,13 +17,14 @@ import static org.apache.commons.lang3.Validate.*;
 @Entity
 @Access(AccessType.FIELD)
 @Accessors(fluent = true)
-@Getter @ToString @EqualsAndHashCode(of = "id")
+@ToString @EqualsAndHashCode(of = "id")
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
 public class User {
 
     public static final UserRole DEFAULT_USER_ROLE = UserRole.STUDENT;
 
     @Id
+    @Getter
     @Column(name = "user_id")
     private final String id;
 
@@ -33,15 +34,19 @@ public class User {
     @Enumerated(EnumType.STRING)
     private final List<UserRole> userRoles;
 
+    @Getter
     @Column(nullable = false)
     private final String email;
 
+    @Getter
     @Column(nullable = false)
     private final String passwordHash;
 
+    @Getter
     @Column(nullable = false)
     private final String name;
 
+    @Getter
     @Column
     private final String studentId;
 
@@ -86,6 +91,22 @@ public class User {
 
     public User(String email, String passwordHash, String name, String studentId, Set<Pass> passes) {
         this(singletonList(DEFAULT_USER_ROLE), email, passwordHash, name, studentId, passes);
+    }
+
+    public List<UserRole> userRoles() {
+        return unmodifiableList(userRoles);
+    }
+
+    public void addUserRole(UserRole userRole) {
+        userRoles.add(notNull(userRole));
+    }
+
+    public boolean removeUserRole(UserRole userRole) {
+        return userRoles.remove(userRole);
+    }
+
+    public void truncateUserRoles() {
+        userRoles.clear();
     }
 
     public Set<Pass> passes() {
