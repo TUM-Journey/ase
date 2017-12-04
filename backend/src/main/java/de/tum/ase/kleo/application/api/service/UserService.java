@@ -14,6 +14,7 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,6 +76,7 @@ public class UserService implements UsersApiDelegate {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('SUPERUSER')")
     public ResponseEntity<Void> deleteUser(String userId) {
         val user = userRepository.findOne(userId);
         if (user == null)
@@ -87,6 +89,7 @@ public class UserService implements UsersApiDelegate {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('SUPERUSER')")
     public ResponseEntity<SessionDTO> updateUserRoles(String userId, List<String> roles) {
         val user = userRepository.findOne(userId);
         if (user == null)

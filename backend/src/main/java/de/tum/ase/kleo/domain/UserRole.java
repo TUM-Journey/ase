@@ -5,7 +5,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 public enum UserRole {
-    SUPERUSER, STAFF, STUDENT;
+    SUPERUSER, USER;
 
     public static UserRole from(String role) {
         return UserRole.valueOf(role.toUpperCase());

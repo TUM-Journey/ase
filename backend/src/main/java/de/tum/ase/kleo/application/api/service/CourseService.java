@@ -9,6 +9,7 @@ import de.tum.ase.kleo.domain.UserRepository;
 import lombok.val;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +56,7 @@ public class CourseService implements CoursesApiDelegate {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('SUPERUSER')")
     public ResponseEntity<CourseDTO> addCourse(CourseDTO courseDto) {
         val course = courseFromDtoMapper.map(courseDto);
         courseRepository.save(course);
@@ -77,6 +79,7 @@ public class CourseService implements CoursesApiDelegate {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('SUPERUSER')")
     public ResponseEntity<Void> addCourseTutor(String courseId, String userId) {
         val course = courseRepository.findOne(courseId);
         if (course == null)
@@ -94,6 +97,7 @@ public class CourseService implements CoursesApiDelegate {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('SUPERUSER')")
     public ResponseEntity<Void> deleteCourse(String courseId) {
         if (!courseRepository.exists(courseId))
             return ResponseEntity.notFound().build();
@@ -118,6 +122,8 @@ public class CourseService implements CoursesApiDelegate {
     }
 
     @Override
+    @Transactional
+    @PreAuthorize("hasRole('SUPERUSER')")
     public ResponseEntity<Void> deleteCourseTutor(String courseId, String userId) {
         val course = courseRepository.findOne(courseId);
         if (course == null)
