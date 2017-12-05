@@ -7,6 +7,7 @@ ext {
             constraintLayout: '1.0.2'
         ],
         backend: [
+            dddSupport: '0.2.+',
             apacheLang3: '3.5',
 
             jpaApi: '1.0.0.Final',
@@ -36,6 +37,7 @@ ext {
             constraintLayout: "com.android.support.constraint:constraint-layout:${deps.vers.android.constraintLayout}"
         ],
         backend: [
+            dddSupport: "eu.socialedge.ddd:ddd-api:${deps.vers.backend.dddSupport}",
             apacheLang3: "org.apache.commons:commons-lang3:${deps.vers.backend.apacheLang3}",
 
             jpaApi: "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:${deps.vers.backend.jpaApi}",

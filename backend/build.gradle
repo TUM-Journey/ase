@@ -8,7 +8,7 @@ buildscript {
 apply from: "$rootDir/build-configs.gradle"
 apply from: "$rootDir/build-deps.gradle"
 
-def OPENAPI_SOURCE = "$rootDir/kleo-api-v2.yaml"
+def OPENAPI_SOURCE = "$rootDir/kleo-api-v3.yaml"
 
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
@@ -21,6 +21,7 @@ dependencies {
     compileOnly deps.defs.backend.lombok
     testCompileOnly deps.defs.backend.lombok
 
+    compile deps.defs.backend.dddSupport
     compile deps.defs.backend.apacheLang3
 
     compile deps.defs.backend.jpaApi
