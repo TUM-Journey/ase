@@ -32,8 +32,8 @@ public class Session extends AggregateRoot<SessionId> {
     @Column(nullable = false)
     private OffsetDateTime ends;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "session_passes", joinColumns = @JoinColumn(name = "session_id"))
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "session_id", referencedColumnName = "session_id")
     private final Set<Pass> passes = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.LAZY)
@@ -103,7 +103,7 @@ public class Session extends AggregateRoot<SessionId> {
 
     private Optional<Pass> nonExpiredPass(PassId passId) {
         return passes.stream().filter(pass -> pass.id().equals(passId)).findAny()
-                .filter(Pass::isExpired);
+                .filter(Pass::notExpired);
     }
 
     private boolean hasNonExpiredPass(UserId requesteeId) {

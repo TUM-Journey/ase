@@ -19,7 +19,7 @@ import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
-@Entity @Access(AccessType.FIELD)
+@Entity(name = "GR0UP") @Access(AccessType.FIELD)
 @Accessors(fluent = true) @ToString
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
 public class Group extends AggregateRoot<GroupId> {

@@ -58,4 +58,8 @@ public class Pass extends Entity<PassId> {
     public boolean isExpired() {
         return OffsetDateTime.now().isAfter(expiresAt);
     }
+
+    public boolean notExpired() {
+        return !isExpired();
+    }
 }
