@@ -755,17 +755,6 @@ paths:
       operationId: getSessions
       security:
         - OAuth2Password: []
-      parameters:
-        - name: studentIds
-          in: query
-          required: false
-          type: string
-          description: Filter sessions by signed up students
-        - name: tutorsIds
-          in: query
-          required: false
-          type: string
-          description: Filter sessions by signed up tutors
       responses:
         200:
           description: A list of Sessions
@@ -868,7 +857,7 @@ paths:
         201:
           description: A Pass created
           schema:
-            $ref: '#/definitions/PassDTO'
+            type: string
         400:
           description: Problem with the request, such as a missing, invalid or type mismatched parameter
           schema:
@@ -933,6 +922,8 @@ definitions:
       attendedAt:
         type: string
         format: date-time
+      passId:
+        type: string
   TutoringDTO:
     type: object
     properties:

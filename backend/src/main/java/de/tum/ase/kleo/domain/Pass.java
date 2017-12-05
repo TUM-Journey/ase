@@ -1,26 +1,30 @@
 package de.tum.ase.kleo.domain;
 
+import de.tum.ase.kleo.domain.id.PassId;
 import de.tum.ase.kleo.domain.id.UserId;
-import lombok.*;
+import eu.socialedge.ddd.domain.Entity;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.*;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
 import java.time.Duration;
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
+import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.Validate.notNull;
-import static org.eclipse.jetty.util.StringUtil.isBlank;
 
-@Embeddable @Access(AccessType.FIELD)
-@Getter @Accessors(fluent = true) @ToString @EqualsAndHashCode
+@Getter @Accessors(fluent = true) @ToString
+@javax.persistence.Entity @Access(AccessType.FIELD)
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
-public class Pass {
+public class Pass extends Entity<PassId> {
 
     private final static Duration DEFAULT_EXPIRE = Duration.ofMinutes(15);
-
-    @Column(nullable = false)
-    private final String code;
 
     @Column(nullable = false)
     @AttributeOverride(name = "value", column = @Column(name = "requester_user_id"))
@@ -36,18 +40,18 @@ public class Pass {
     @Column(name = "expires_at", nullable = false)
     private final OffsetDateTime expiresAt;
 
-    public Pass(String code, UserId requesterId, UserId requesteeId, Duration expireIn) {
-        this.code = isBlank(code) ? UUID.randomUUID().toString() : code;
+    protected Pass(PassId passId, UserId requesterId, UserId requesteeId, Duration expireIn) {
+        super(nonNull(passId) ? passId : new PassId());
         this.requesterId = notNull(requesterId);
         this.requesteeId = notNull(requesteeId);
         this.expiresAt = requestedAt.plus(expireIn);
     }
 
-    public Pass(UserId requesterId, UserId requesteeId, Duration expireIn) {
+    protected Pass(UserId requesterId, UserId requesteeId, Duration expireIn) {
         this(null, requesterId, requesteeId, expireIn);
     }
 
-    public Pass(UserId requesterId, UserId requesteeId) {
+    protected Pass(UserId requesterId, UserId requesteeId) {
         this(null, requesterId, requesteeId, DEFAULT_EXPIRE);
     }
 

@@ -1,5 +1,6 @@
 package de.tum.ase.kleo.domain;
 
+import de.tum.ase.kleo.domain.id.PassId;
 import de.tum.ase.kleo.domain.id.SessionId;
 import de.tum.ase.kleo.domain.id.UserId;
 import eu.socialedge.ddd.domain.AggregateRoot;
@@ -66,7 +67,7 @@ public class Session extends AggregateRoot<SessionId> {
         this.ends = ends;
     }
 
-    public Pass addPass(UserId requesterId, UserId requesteeId) {
+    public PassId addPass(UserId requesterId, UserId requesteeId) {
         if (hasNonExpiredPass(requesteeId))
             throw new IllegalStateException("User already has valid pass for this session");
         else if (hasAttended(requesteeId))
@@ -74,15 +75,11 @@ public class Session extends AggregateRoot<SessionId> {
 
         val pass = new Pass(requesterId, requesteeId);
         passes.add(pass);
-        return pass;
+        return pass.id();
     }
 
-    public Attendance attend(Pass pass) {
-        return attend(pass.code());
-    }
-
-    public Attendance attend(String passCode) {
-        val pass = nonExpiredPass(passCode).orElseThrow(()
+    public Attendance attend(PassId passId) {
+        val pass = nonExpiredPass(passId).orElseThrow(()
                 -> new IllegalArgumentException("No valid pass with given id found"));
 
         val requesteeId = pass.requesteeId();
@@ -90,7 +87,7 @@ public class Session extends AggregateRoot<SessionId> {
         if (hasAttended(requesteeId))
             throw new IllegalStateException("User has already attended this session");
 
-        val attendance = new Attendance(requesteeId);
+        val attendance = new Attendance(passId, requesteeId);
         attendances.add(attendance);
 
         return attendance;
@@ -104,25 +101,13 @@ public class Session extends AggregateRoot<SessionId> {
         return attendances().stream().filter(a -> a.userId().equals(userId)).findFirst();
     }
 
-    private Optional<Pass> nonExpiredPass(String passCode) {
-        return passes.stream().filter(pass -> pass.code().equals(passCode)).findAny()
-                .filter(pass -> {
-                    if (pass.isExpired()) {
-                        passes.remove(pass);
-                        return false;
-                    }
-                    return true;
-                });
+    private Optional<Pass> nonExpiredPass(PassId passId) {
+        return passes.stream().filter(pass -> pass.id().equals(passId)).findAny()
+                .filter(Pass::isExpired);
     }
 
     private boolean hasNonExpiredPass(UserId requesteeId) {
         return passes.stream().filter(pass -> pass.requesteeId().equals(requesteeId)).findAny()
-                .filter(pass -> {
-                    if (pass.isExpired()) {
-                        passes.remove(pass);
-                        return false;
-                    }
-                    return true;
-                }).isPresent();
+                .filter(Pass::isExpired).isPresent();
     }
 }
