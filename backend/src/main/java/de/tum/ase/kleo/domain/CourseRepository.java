@@ -11,4 +11,6 @@ import java.util.List;
 public interface CourseRepository extends CrudRepository<Course, CourseId> {
 
     List<Course> findAllByGroupIdsContaining(GroupId groupId);
+
+    List<Course> findAllByGroupIdsIn(List<GroupId> groupIds);
 }

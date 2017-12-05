@@ -57,6 +57,13 @@ public class Course extends AggregateRoot<CourseId> {
         return unmodifiableSet(groupIds);
     }
 
+    public void groupIds(Set<GroupId> groupIds) {
+        if (groupIds == null)
+            throw new NullPointerException();
+        this.groupIds.clear();
+        this.groupIds.addAll(groupIds);
+    }
+
     public void addGroup(GroupId groupId) {
         groupIds.add(notNull(groupId));
     }
