@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 public class UsersService implements UsersApiDelegate {
-    
+
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
     private final GroupRepository groupRepository;
@@ -81,11 +81,11 @@ public class UsersService implements UsersApiDelegate {
                     new IllegalStateException("User has to have the attendance since the session asked " +
                             "has been taken directly by repository"));
 
-           groupRepository.findAllBySessionIdsContaining(session.id()).forEach(group -> {
-               courseRepository.findAllByGroupIdsContaining(group.id()).forEach(course -> {
-                   attendanceDtos.add(attendanceDtoFactory.create(course, group, session, attendance.attendedAt()));
-               });
-           });
+            groupRepository.findAllBySessionIdsContaining(session.id()).forEach(group -> {
+                courseRepository.findAllByGroupIdsContaining(group.id()).forEach(course -> {
+                    attendanceDtos.add(attendanceDtoFactory.create(course, group, session, attendance.attendedAt()));
+                });
+            });
         });
 
         return ResponseEntity.ok(attendanceDtos);

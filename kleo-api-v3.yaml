@@ -439,12 +439,6 @@ paths:
       operationId: getGroups
       security:
         - OAuth2Password: []
-      parameters:
-        - name: sessionIds
-          in: query
-          required: false
-          type: string
-          description: Filter groups by sessionIds
       responses:
         200:
           description: A list of Groups

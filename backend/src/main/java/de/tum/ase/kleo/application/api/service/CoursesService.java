@@ -27,7 +27,7 @@ import static org.eclipse.jetty.util.StringUtil.isBlank;
 @Service
 @Transactional(readOnly = true)
 public class CoursesService implements CoursesApiDelegate {
-    
+
     private final CourseRepository courseRepository;
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;

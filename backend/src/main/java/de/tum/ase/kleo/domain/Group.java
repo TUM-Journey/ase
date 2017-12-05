@@ -62,6 +62,10 @@ public class Group extends AggregateRoot<GroupId> {
         this(name, null, null, null);
     }
 
+    public void name(String name) {
+        this.name = notBlank(name);
+    }
+
     public boolean hasTutor(UserId userId) {
         return tutorIds.stream().anyMatch(id -> id.equals(userId));
     }
@@ -76,6 +80,14 @@ public class Group extends AggregateRoot<GroupId> {
 
     public Set<UserId> tutorIds() {
         return unmodifiableSet(tutorIds);
+    }
+
+    public void tutorIds(Set<UserId> tutorIds) {
+        if (tutorIds == null)
+            throw new NullPointerException();
+
+        this.tutorIds.clear();
+        this.tutorIds.addAll(tutorIds);
     }
 
     public boolean hasStudent(UserId userId) {
@@ -94,6 +106,14 @@ public class Group extends AggregateRoot<GroupId> {
         return unmodifiableSet(studentIds);
     }
 
+    public void studentIds(Set<UserId> studentIds) {
+        if (studentIds == null)
+            throw new NullPointerException();
+
+        this.studentIds.clear();
+        this.studentIds.addAll(studentIds);
+    }
+
     public boolean hasSession(SessionId sessionId) {
         return sessionIds.stream().anyMatch(id -> id.equals(sessionId));
     }
@@ -108,5 +128,13 @@ public class Group extends AggregateRoot<GroupId> {
 
     public Set<SessionId> sessionIds() {
         return unmodifiableSet(sessionIds);
+    }
+
+    public void sessionIds(Set<SessionId> sessionIds) {
+        if (sessionIds == null)
+            throw new NullPointerException();
+
+        this.sessionIds.clear();
+        this.sessionIds.addAll(sessionIds);
     }
 }
