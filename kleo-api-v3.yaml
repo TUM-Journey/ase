@@ -933,8 +933,6 @@ definitions:
       attendedAt:
         type: string
         format: date-time
-      passId:
-        type: string
   TutoringDTO:
     type: object
     properties:

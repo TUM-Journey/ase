@@ -5,8 +5,10 @@ import de.tum.ase.kleo.domain.id.GroupId;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CourseRepository extends CrudRepository<Course, CourseId> {
 
-    Course findByGroupIdsContaining(GroupId groupId);
+    List<Course> findAllByGroupIdsContaining(GroupId groupId);
 }

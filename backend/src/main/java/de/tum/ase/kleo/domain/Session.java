@@ -68,7 +68,9 @@ public class Session extends AggregateRoot<SessionId> {
 
     public Pass addPass(UserId requesterId, UserId requesteeId) {
         if (hasNonExpiredPass(requesteeId))
-            throw new IllegalStateException("User already has the nonExpiredPass for this session");
+            throw new IllegalStateException("User already has valid pass for this session");
+        else if (hasAttended(requesteeId))
+            throw new IllegalArgumentException("User has already attended this session");
 
         val pass = new Pass(requesterId, requesteeId);
         passes.add(pass);
@@ -83,10 +85,23 @@ public class Session extends AggregateRoot<SessionId> {
         val pass = nonExpiredPass(passCode).orElseThrow(()
                 -> new IllegalArgumentException("No valid pass with given id found"));
 
-        val attendance = new Attendance(id, pass.requesteeId());
+        val requesteeId = pass.requesteeId();
+
+        if (hasAttended(requesteeId))
+            throw new IllegalStateException("User has already attended this session");
+
+        val attendance = new Attendance(id, requesteeId);
         attendances.add(attendance);
 
         return attendance;
+    }
+
+    public boolean hasAttended(UserId userId) {
+        return attendances.stream().anyMatch(a -> a.userId().equals(userId));
+    }
+
+    public Optional<Attendance> attendance(UserId userId) {
+        return attendances().stream().filter(a -> a.userId().equals(userId)).findFirst();
     }
 
     private Optional<Pass> nonExpiredPass(String passCode) {

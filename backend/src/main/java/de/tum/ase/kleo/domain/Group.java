@@ -93,4 +93,20 @@ public class Group extends AggregateRoot<GroupId> {
     public Set<UserId> studentIds() {
         return unmodifiableSet(studentIds);
     }
+
+    public boolean hasSession(SessionId sessionId) {
+        return sessionIds.stream().anyMatch(id -> id.equals(sessionId));
+    }
+
+    public void addSession(SessionId sessionId) {
+        sessionIds.add(notNull(sessionId));
+    }
+
+    public boolean removeSession(SessionId sessionId) {
+        return sessionIds.remove(sessionId);
+    }
+
+    public Set<SessionId> sessionIds() {
+        return unmodifiableSet(sessionIds);
+    }
 }
