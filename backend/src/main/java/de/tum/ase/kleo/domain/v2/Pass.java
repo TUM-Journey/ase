@@ -1,27 +1,26 @@
 package de.tum.ase.kleo.domain.v2;
 
-import de.tum.ase.kleo.domain.v2.id.PassId;
 import de.tum.ase.kleo.domain.v2.id.UserId;
-import eu.socialedge.ddd.domain.Entity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
-import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.Validate.notNull;
+import static org.eclipse.jetty.util.StringUtil.isBlank;
 
-@javax.persistence.Entity @Access(AccessType.FIELD)
+@Embeddable @Access(AccessType.FIELD)
+@Getter @Accessors(fluent = true) @ToString @EqualsAndHashCode
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
-@Getter(AccessLevel.PROTECTED) @Accessors(fluent = true) @ToString
-public class Pass extends Entity<PassId> {
+public class Pass {
 
     private final static Duration DEFAULT_EXPIRE = Duration.ofMinutes(15);
+
+    @Column(nullable = false)
+    private final String code;
 
     @Column(nullable = false)
     private final UserId requesterId;
@@ -36,22 +35,22 @@ public class Pass extends Entity<PassId> {
     @Column(nullable = false)
     private final OffsetDateTime expiresAt;
 
-    protected Pass(PassId id, UserId requesterId, UserId requesteeId, Duration expireIn) {
-        super(nonNull(id) ? id : new PassId());
+    public Pass(String code, UserId requesterId, UserId requesteeId, Duration expireIn) {
+        this.code = isBlank(code) ? UUID.randomUUID().toString() : code;
         this.requesterId = notNull(requesterId);
         this.requesteeId = notNull(requesteeId);
         this.expiresAt = requestedAt.plus(expireIn);
     }
 
-    protected Pass(UserId requesterId, UserId requesteeId, Duration expireIn) {
+    public Pass(UserId requesterId, UserId requesteeId, Duration expireIn) {
         this(null, requesterId, requesteeId, expireIn);
     }
 
-    protected Pass(UserId requesterId, UserId requesteeId) {
+    public Pass(UserId requesterId, UserId requesteeId) {
         this(null, requesterId, requesteeId, DEFAULT_EXPIRE);
     }
 
-    protected boolean isExpired() {
+    public boolean isExpired() {
         return OffsetDateTime.now().isAfter(expiresAt);
     }
 }

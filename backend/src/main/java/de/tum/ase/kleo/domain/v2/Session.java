@@ -1,6 +1,5 @@
 package de.tum.ase.kleo.domain.v2;
 
-import de.tum.ase.kleo.domain.v2.id.PassId;
 import de.tum.ase.kleo.domain.v2.id.SessionId;
 import de.tum.ase.kleo.domain.v2.id.UserId;
 import eu.socialedge.ddd.domain.AggregateRoot;
@@ -19,19 +18,16 @@ import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
 @Entity @Access(AccessType.FIELD)
-@Accessors(fluent = true) @ToString
+@Getter @Accessors(fluent = true) @ToString
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
-public class Session extends AggregateRoot<SessionId> implements Comparable<Session> {
+public class Session extends AggregateRoot<SessionId> {
 
-    @Getter
     @Column(nullable = false)
     private String location;
 
-    @Getter
     @Column(nullable = false)
     private OffsetDateTime begins;
 
-    @Getter
     @Column(nullable = false)
     private OffsetDateTime ends;
 
@@ -39,7 +35,6 @@ public class Session extends AggregateRoot<SessionId> implements Comparable<Sess
     @CollectionTable(name = "session_passes", joinColumns = @JoinColumn(name = "session_id"))
     private final Set<Pass> passes = new HashSet<>();
 
-    @Getter
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "session_attendances", joinColumns = @JoinColumn(name = "session_id"))
     private final Set<Attendance> attendances = new HashSet<>();
@@ -71,21 +66,21 @@ public class Session extends AggregateRoot<SessionId> implements Comparable<Sess
         this.ends = ends;
     }
 
-    public PassId createPass(UserId requesterId, UserId requesteeId) {
+    public Pass addPass(UserId requesterId, UserId requesteeId) {
         if (hasNonExpiredPass(requesteeId))
             throw new IllegalStateException("User already has the nonExpiredPass for this session");
 
         val pass = new Pass(requesterId, requesteeId);
         passes.add(pass);
-        return pass.id();
+        return pass;
     }
 
-    public boolean hasNonExpiredPass(PassId passId, UserId requesteeId) {
-        return nonExpiredPass(passId).filter(pass -> pass.requesteeId().equals(requesteeId)).isPresent();
+    public Attendance attend(Pass pass) {
+        return attend(pass.code());
     }
 
-    public Attendance attend(PassId passId) {
-        val pass = nonExpiredPass(passId).orElseThrow(()
+    public Attendance attend(String passCode) {
+        val pass = nonExpiredPass(passCode).orElseThrow(()
                 -> new IllegalArgumentException("No valid pass with given id found"));
 
         val attendance = new Attendance(id, pass.requesteeId());
@@ -94,8 +89,8 @@ public class Session extends AggregateRoot<SessionId> implements Comparable<Sess
         return attendance;
     }
 
-    private Optional<Pass> nonExpiredPass(PassId passId) {
-        return passes.stream().filter(pass -> pass.id().equals(passId)).findAny()
+    private Optional<Pass> nonExpiredPass(String passCode) {
+        return passes.stream().filter(pass -> pass.code().equals(passCode)).findAny()
                 .filter(pass -> {
                     if (pass.isExpired()) {
                         passes.remove(pass);
@@ -114,10 +109,5 @@ public class Session extends AggregateRoot<SessionId> implements Comparable<Sess
                     }
                     return true;
                 }).isPresent();
-    }
-
-    @Override
-    public int compareTo(Session o) {
-        return this.begins.compareTo(o.begins);
     }
 }
