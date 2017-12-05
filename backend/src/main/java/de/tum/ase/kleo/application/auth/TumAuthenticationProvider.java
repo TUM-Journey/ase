@@ -9,6 +9,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import de.tum.ase.kleo.domain.User;
 import de.tum.ase.kleo.domain.UserRepository;
 import de.tum.ase.kleo.domain.UserRole;
+import de.tum.ase.kleo.domain.id.UserId;
 import lombok.val;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -113,7 +114,7 @@ public class TumAuthenticationProvider implements AuthenticationProvider {
             val studentId = matricInput.getValueAttribute();
             val passwordHash = passwordEncoder.encode(password);
 
-            return new User(userId, userRoles, email, passwordHash, name, studentId);
+            return new User(UserId.of(userId), userRoles, email, passwordHash, name, studentId);
         } catch (IOException e) {
             throw new AuthenticationServiceException("Failed to navigate through Shibboleth auth page", e);
         }

@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.domain.v2.id;
+package de.tum.ase.kleo.domain.id;
 
 import eu.socialedge.ddd.domain.id.Identifier;
 

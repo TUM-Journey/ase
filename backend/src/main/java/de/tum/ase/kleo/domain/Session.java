@@ -1,61 +1,55 @@
 package de.tum.ase.kleo.domain;
 
+import de.tum.ase.kleo.domain.id.SessionId;
+import de.tum.ase.kleo.domain.id.UserId;
+import eu.socialedge.ddd.domain.AggregateRoot;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.Validate;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
-@Entity
-@Access(AccessType.FIELD)
-@Accessors(fluent = true)
-@ToString @EqualsAndHashCode(of = "id")
+@Entity @Access(AccessType.FIELD)
+@Getter @Accessors(fluent = true) @ToString
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
-public class Session implements Comparable<Session> {
+public class Session extends AggregateRoot<SessionId> {
 
-    @Id
-    @Getter
-    @Column(name = "session_id")
-    private final String id;
-
-    @Getter
     @Column(nullable = false)
     private String location;
 
-    @Column
-    @Getter @Setter
-    private String note;
-
-    @Getter
     @Column(nullable = false)
     private OffsetDateTime begins;
 
-    @Getter
     @Column(nullable = false)
     private OffsetDateTime ends;
 
-    public Session(String id, String location, String note, OffsetDateTime begins, OffsetDateTime ends) {
-        this.id = isNotBlank(id) ? id : UUID.randomUUID().toString();
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "session_passes", joinColumns = @JoinColumn(name = "session_id"))
+    private final Set<Pass> passes = new HashSet<>();
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "session_attendances", joinColumns = @JoinColumn(name = "session_id"))
+    private final Set<Attendance> attendances = new HashSet<>();
+
+    public Session(SessionId id, String location, OffsetDateTime begins, OffsetDateTime ends) {
+        super(nonNull(id) ? id : new SessionId());
         this.location = notBlank(location);
-        this.note = note;
 
         Validate.isTrue(ends.isAfter(begins), "Session 'ends' datetime must be after 'begins' datetime");
         this.begins = begins;
         this.ends = ends;
     }
 
-    public Session(String location, String note, OffsetDateTime begins, OffsetDateTime ends) {
-        this(null, location, note, begins, ends);
-    }
-
     public Session(String location, OffsetDateTime begins, OffsetDateTime ends) {
-        this(location, null, begins, ends);
+        this(null, location, begins, ends);
     }
 
     public void location(String location) {
@@ -72,8 +66,48 @@ public class Session implements Comparable<Session> {
         this.ends = ends;
     }
 
-    @Override
-    public int compareTo(Session o) {
-        return this.begins.compareTo(o.begins);
+    public Pass addPass(UserId requesterId, UserId requesteeId) {
+        if (hasNonExpiredPass(requesteeId))
+            throw new IllegalStateException("User already has the nonExpiredPass for this session");
+
+        val pass = new Pass(requesterId, requesteeId);
+        passes.add(pass);
+        return pass;
+    }
+
+    public Attendance attend(Pass pass) {
+        return attend(pass.code());
+    }
+
+    public Attendance attend(String passCode) {
+        val pass = nonExpiredPass(passCode).orElseThrow(()
+                -> new IllegalArgumentException("No valid pass with given id found"));
+
+        val attendance = new Attendance(id, pass.requesteeId());
+        attendances.add(attendance);
+
+        return attendance;
+    }
+
+    private Optional<Pass> nonExpiredPass(String passCode) {
+        return passes.stream().filter(pass -> pass.code().equals(passCode)).findAny()
+                .filter(pass -> {
+                    if (pass.isExpired()) {
+                        passes.remove(pass);
+                        return false;
+                    }
+                    return true;
+                });
+    }
+
+    private boolean hasNonExpiredPass(UserId requesteeId) {
+        return passes.stream().filter(pass -> pass.requesteeId().equals(requesteeId)).findAny()
+                .filter(pass -> {
+                    if (pass.isExpired()) {
+                        passes.remove(pass);
+                        return false;
+                    }
+                    return true;
+                }).isPresent();
     }
 }

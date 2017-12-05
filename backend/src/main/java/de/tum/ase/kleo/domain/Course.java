@@ -1,32 +1,24 @@
 package de.tum.ase.kleo.domain;
 
+import de.tum.ase.kleo.domain.id.CourseId;
+import de.tum.ase.kleo.domain.id.GroupId;
+import eu.socialedge.ddd.domain.AggregateRoot;
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.SortNatural;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.Optional;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.UUID;
 
-import static java.util.Collections.*;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static java.util.Collections.unmodifiableSet;
+import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
-@Entity
-@Access(AccessType.FIELD)
-@Accessors(fluent = true)
-@ToString @EqualsAndHashCode(of = "id")
+@Entity @Access(AccessType.FIELD)
+@Accessors(fluent = true) @ToString
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
-public class Course {
-
-    @Id
-    @Getter
-    @Column(name = "course_id")
-    private final String id;
+public class Course extends AggregateRoot<CourseId> {
 
     @Getter
     @Column(nullable = false)
@@ -36,93 +28,44 @@ public class Course {
     @Getter @Setter
     private String description;
 
-    @ManyToMany
-    @JoinTable(name = "course_tutors",
-            joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> tutors;
+    @ElementCollection
+    @CollectionTable(name = "course_groups", joinColumns = @JoinColumn(name = "course_id"))
+    private final Set<GroupId> groupIds = new HashSet<>();
 
-    @SortNatural
-    @OrderColumn(name = "session_order")
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="course_id", referencedColumnName="course_id")
-    private SortedSet<Session> sessions;
-
-    public Course(String id, String name, String description, Set<User> tutors, SortedSet<Session> sessions) {
-        this.id = isNotBlank(id) ? id : UUID.randomUUID().toString();
+    public Course(CourseId id, String name, String description, Set<GroupId> groupIds) {
+        super(nonNull(id) ? id : new CourseId());
         this.name = notBlank(name);
         this.description = description;
-        this.tutors = notNull(tutors);
-        this.sessions = notNull(sessions);
-    }
 
-    public Course(String id, String name, String description) {
-        this(id, name, description, emptySortedSet(), emptySortedSet());
-    }
-
-    public Course(String name, String description, Set<User> tutors, SortedSet<Session> sessions) {
-        this(null, name, description, tutors, sessions);
+        if (groupIds != null)
+            this.groupIds.addAll(groupIds);
     }
 
     public Course(String name, String description) {
-        this(name, description, emptySortedSet(), emptySortedSet());
+        this(null, name, description, null);
     }
 
     public Course(String name) {
-        this(name, null, emptySortedSet(), emptySortedSet());
+        this(name, null);
     }
 
     public void name(String name) {
         this.name = notBlank(name);
     }
 
-    public SortedSet<Session> sessions() {
-        return unmodifiableSortedSet(sessions);
+    public Set<GroupId> groupIds() {
+        return unmodifiableSet(groupIds);
     }
 
-    public Optional<Session> session(String sessionId) {
-        return sessions.stream().filter(session -> session.id().equals(sessionId)).findAny();
+    public void addGroup(GroupId groupId) {
+        groupIds.add(notNull(groupId));
     }
 
-    public void addSession(Session session) {
-        sessions.add(notNull(session));
+    public boolean hasGroup(GroupId groupId) {
+        return groupIds.contains(groupId);
     }
 
-    public boolean removeSession(Session session) {
-        return sessions.remove(session);
-    }
-
-    public boolean removeSession(String sessionId) {
-        return sessions.removeIf(session -> session.id().equals(sessionId));
-    }
-
-    public Set<User> tutors() {
-        return unmodifiableSet(tutors);
-    }
-
-    public void addTutor(User tutor) {
-        tutors.add(notNull(tutor));
-    }
-
-    public boolean removeTutor(User tutor) {
-        return tutors.remove(tutor);
-    }
-
-    public boolean removeTutor(String userId) {
-        return tutors.removeIf(tutor -> tutor.id().equals(userId));
-    }
-
-    public Optional<LocalDate> begins() {
-        if (sessions.isEmpty())
-            return Optional.empty();
-
-        return Optional.of(sessions.first().begins().toLocalDate());
-    }
-
-    public Optional<LocalDate> ends() {
-        if (sessions.isEmpty())
-            return Optional.empty();
-
-        return Optional.of(sessions.last().ends().toLocalDate());
+    public boolean removeGroup(GroupId groupId) {
+        return groupIds.remove(groupId);
     }
 }

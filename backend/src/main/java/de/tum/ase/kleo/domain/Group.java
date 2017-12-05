@@ -1,8 +1,8 @@
-package de.tum.ase.kleo.domain.v2;
+package de.tum.ase.kleo.domain;
 
-import de.tum.ase.kleo.domain.v2.id.GroupId;
-import de.tum.ase.kleo.domain.v2.id.SessionId;
-import de.tum.ase.kleo.domain.v2.id.UserId;
+import de.tum.ase.kleo.domain.id.GroupId;
+import de.tum.ase.kleo.domain.id.SessionId;
+import de.tum.ase.kleo.domain.id.UserId;
 import eu.socialedge.ddd.domain.AggregateRoot;
 import lombok.AccessLevel;
 import lombok.Getter;

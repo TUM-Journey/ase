@@ -1,32 +1,28 @@
 package de.tum.ase.kleo.domain;
 
-import lombok.*;
+
+import de.tum.ase.kleo.domain.id.UserId;
+import eu.socialedge.ddd.domain.AggregateRoot;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 
-import static java.util.Collections.*;
-import static java.util.stream.Collectors.toSet;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static java.util.Collections.singletonList;
+import static java.util.Collections.unmodifiableList;
+import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.Validate.*;
 
-@Entity
-@Access(AccessType.FIELD)
-@Accessors(fluent = true)
-@ToString @EqualsAndHashCode(of = "id")
+@Entity @Access(AccessType.FIELD)
+@Accessors(fluent = true) @ToString
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
-public class User {
+public class User extends AggregateRoot<UserId> {
 
     public static final UserRole DEFAULT_USER_ROLE = UserRole.USER;
-
-    @Id
-    @Getter
-    @Column(name = "user_id")
-    private final String id;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "user_roles", nullable = false)
@@ -50,47 +46,26 @@ public class User {
     @Column
     private final String studentId;
 
-    @ElementCollection
-    @CollectionTable(name = "user_passes", joinColumns = @JoinColumn(name = "user_id"))
-    private Set<Pass> passes;
-
-    public User(String id, List<UserRole> userRoles, String email, String passwordHash,
-                String name, String studentId, Set<Pass> passes) {
-        this.id = isNotBlank(id) ? id : UUID.randomUUID().toString();
+    public User(UserId id, List<UserRole> userRoles, String email, String passwordHash, String name, String studentId) {
+        super(nonNull(id) ? id : new UserId());
         this.userRoles = notEmpty(userRoles);
         this.email = notBlank(email);
         this.passwordHash = notBlank(passwordHash);
         this.name = notBlank(name);
         this.studentId = studentId;
-        this.passes = notNull(passes);
     }
 
-    public User(String id, String email, String passwordHash,
-                String name, String studentId, Set<Pass> passes) {
-        this(id, singletonList(DEFAULT_USER_ROLE), email, passwordHash, name, studentId, passes);
-    }
-
-    public User(String id, List<UserRole> userRoles, String email, String passwordHash,
-                String name, String studentId) {
-        this(id, userRoles, email, passwordHash, name, studentId, emptySet());
-    }
-
-    public User(String id, String email, String passwordHash, String name, String studentId) {
+    public User(UserId id, String email, String passwordHash, String name, String studentId) {
         this(id, singletonList(DEFAULT_USER_ROLE), email, passwordHash, name, studentId);
     }
 
     public User(List<UserRole> userRoles, String email, String passwordHash,
-                String name, String studentId, Set<Pass> passes) {
-        this(null, userRoles, email, passwordHash, name, studentId, passes);
-    }
-
-    public User(List<UserRole> userRoles, String email, String passwordHash,
                 String name, String studentId) {
-        this(null, userRoles, email, passwordHash, name, studentId, emptySet());
+        this(null, userRoles, email, passwordHash, name, studentId);
     }
 
-    public User(String email, String passwordHash, String name, String studentId, Set<Pass> passes) {
-        this(singletonList(DEFAULT_USER_ROLE), email, passwordHash, name, studentId, passes);
+    public User(String email, String passwordHash, String name, String studentId) {
+        this(singletonList(DEFAULT_USER_ROLE), email, passwordHash, name, studentId);
     }
 
     public List<UserRole> userRoles() {
@@ -107,33 +82,5 @@ public class User {
 
     public void truncateUserRoles() {
         userRoles.clear();
-    }
-
-    public Set<Pass> passes() {
-        return unmodifiableSet(passes);
-    }
-
-    public Optional<Pass> pass(String sessionId) {
-        return passes.stream().filter(pass -> pass.session().id().equals(sessionId)).findAny();
-    }
-
-    public Optional<Pass> pass(Session session) {
-        return pass(session.id());
-    }
-
-    public Set<Pass> usedPasses() {
-        return passes.stream().filter(Pass::isUsed).collect(toSet());
-    }
-
-    public void addPass(Pass pass) {
-        passes.add(notNull(pass));
-    }
-
-    public boolean removePass(Pass pass) {
-        return passes.remove(pass);
-    }
-
-    public boolean removePass(String passCode) {
-        return passes.removeIf(pass -> pass.code().equals(passCode));
     }
 }
