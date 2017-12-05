@@ -90,7 +90,7 @@ public class Session extends AggregateRoot<SessionId> {
         if (hasAttended(requesteeId))
             throw new IllegalStateException("User has already attended this session");
 
-        val attendance = new Attendance(id, requesteeId);
+        val attendance = new Attendance(requesteeId);
         attendances.add(attendance);
 
         return attendance;

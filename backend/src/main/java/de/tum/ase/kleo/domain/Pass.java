@@ -23,16 +23,17 @@ public class Pass {
     private final String code;
 
     @Column(nullable = false)
+    @AttributeOverride(name = "value", column = @Column(name = "requester_user_id"))
     private final UserId requesterId;
 
-    @OneToOne
-    @JoinColumn(name = "requestee_user_id")
+    @Column(nullable = false)
+    @AttributeOverride(name = "value", column = @Column(name = "requestee_user_id"))
     private final UserId requesteeId;
 
-    @Column(nullable = false)
+    @Column(name = "requested_at", nullable = false)
     private final OffsetDateTime requestedAt = OffsetDateTime.now();
 
-    @Column(nullable = false)
+    @Column(name = "expires_at", nullable = false)
     private final OffsetDateTime expiresAt;
 
     public Pass(String code, UserId requesterId, UserId requesteeId, Duration expireIn) {

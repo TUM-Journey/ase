@@ -1,6 +1,5 @@
 package de.tum.ase.kleo.domain;
 
-import de.tum.ase.kleo.domain.id.SessionId;
 import de.tum.ase.kleo.domain.id.UserId;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -19,16 +18,12 @@ import static org.apache.commons.lang3.Validate.notNull;
 public class Attendance {
 
     @Column(nullable = false)
-    private final SessionId sessionId;
-
-    @Column(nullable = false)
     private final UserId userId;
 
-    @Column(nullable = false)
+    @Column(name = "attended_at", nullable = false)
     private final OffsetDateTime attendedAt = OffsetDateTime.now();
 
-    public Attendance(SessionId sessionId, UserId userId) {
-        this.sessionId = notNull(sessionId);
+    public Attendance(UserId userId) {
         this.userId = notNull(userId);
     }
 }
