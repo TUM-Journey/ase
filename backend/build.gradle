@@ -21,6 +21,7 @@ dependencies {
     compileOnly deps.defs.backend.lombok
     testCompileOnly deps.defs.backend.lombok
 
+    compile deps.defs.backend.dddSupport
     compile deps.defs.backend.apacheLang3
 
     compile deps.defs.backend.jpaApi
