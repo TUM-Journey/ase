@@ -22,7 +22,7 @@ public class Group {
 
     @Getter
     @EmbeddedId
-    private final GroupId id = new GroupId();
+    private final GroupId id;
 
     @Getter
     @Column(nullable = false)
@@ -48,8 +48,13 @@ public class Group {
     @CollectionTable(name = "session_attendances", joinColumns = @JoinColumn(name = "group_id"))
     private final Set<Attendance> attendances = new HashSet<>();
 
-    public Group(String name) {
+    public Group(GroupId id, String name) {
+        this.id = id == null ? new GroupId() : id;
         this.name = notBlank(name);
+    }
+
+    public Group(String name) {
+        this(null, name);
     }
 
     public void rename(String name) {
@@ -88,10 +93,14 @@ public class Group {
         return tutorIds.removeIf(tId -> tId.equals(tutorId));
     }
 
-    public SessionId addSession(SessionType sessionType, String location, OffsetDateTime begins, OffsetDateTime ends) {
-        val newSession = new Session(sessionType, location, begins, ends);
+    public SessionId addSession(SessionId sessionId, SessionType sessionType, String location, OffsetDateTime begins, OffsetDateTime ends) {
+        val newSession = new Session(sessionId, sessionType, location, begins, ends);
         sessions.add(newSession);
         return newSession.id();
+    }
+
+    public SessionId addSession(SessionType sessionType, String location, OffsetDateTime begins, OffsetDateTime ends) {
+        return addSession(null, sessionType, location, begins, ends);
     }
 
     public List<Session> sessions() {

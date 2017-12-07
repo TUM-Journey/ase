@@ -15,15 +15,13 @@ import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
 @Entity @Access(AccessType.FIELD)
-@Accessors(fluent = true) @ToString
+@Getter @Accessors(fluent = true) @ToString
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
 public class Session {
 
-    @Getter
     @EmbeddedId
-    private final SessionId id = new SessionId();
+    private final SessionId id;
 
-    @Getter
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SessionType sessionType;
@@ -37,13 +35,18 @@ public class Session {
     @Column(nullable = false)
     private OffsetDateTime ends;
 
-    protected Session(SessionType sessionType, String location, OffsetDateTime begins, OffsetDateTime ends) {
+    protected Session(SessionId id, SessionType sessionType, String location, OffsetDateTime begins, OffsetDateTime ends) {
+        this.id = id == null ? new SessionId() : id;
         this.sessionType = notNull(sessionType);
         this.location = notBlank(location);
 
         Validate.isTrue(ends.isAfter(begins), "Session 'ends' datetime must be after 'begins' datetime");
         this.begins = notNull(begins);
         this.ends = notNull(ends);
+    }
+
+    protected Session(SessionType sessionType, String location, OffsetDateTime begins, OffsetDateTime ends) {
+        this(null, sessionType, location, begins, ends);
     }
 
     protected void sessionType(SessionType sessionType) {

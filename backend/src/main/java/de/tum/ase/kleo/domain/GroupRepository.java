@@ -13,4 +13,6 @@ public interface GroupRepository extends CrudRepository<Group, GroupId> {
     List<Group> findAllByStudentIdsContaining(UserId userId);
 
     List<Group> findAllByTutorIdsContaining(UserId userId);
+
+    List<Group> findAllByAttendancesStudentId(UserId userId);
 }
