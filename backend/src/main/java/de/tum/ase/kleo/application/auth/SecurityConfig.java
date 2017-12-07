@@ -2,7 +2,7 @@ package de.tum.ase.kleo.application.auth;
 
 import de.tum.ase.kleo.application.auth.auth.PermissionEvaluatorManager;
 import de.tum.ase.kleo.application.auth.auth.SelectivePermissionEvaluator;
-import de.tum.ase.kleo.application.auth.auth.UserPassesSelectivePermissionEvaluator;
+import de.tum.ase.kleo.application.auth.auth.PersonalSelectivePermissionEvaluator;
 import de.tum.ase.kleo.domain.UserRepository;
 import de.tum.ase.kleo.domain.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PermissionEvaluator permissionEvaluatorManager() {
         return new PermissionEvaluatorManager(new ArrayList<SelectivePermissionEvaluator>() {{
-            add(new UserPassesSelectivePermissionEvaluator());
+            add(new PersonalSelectivePermissionEvaluator());
         }});
     }
 
