@@ -29,7 +29,7 @@ public class Group {
     private String name;
 
     @ElementCollection
-    @CollectionTable(name = "course_students", joinColumns = @JoinColumn(name = "group_id"))
+    @CollectionTable(name = "group_students", joinColumns = @JoinColumn(name = "group_id"))
     private final Set<UserId> studentIds = new HashSet<>();
 
     @ElementCollection
@@ -41,11 +41,11 @@ public class Group {
     private final List<Session> sessions = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "session_passes", joinColumns = @JoinColumn(name = "group_id"))
+    @CollectionTable(name = "group_passes", joinColumns = @JoinColumn(name = "group_id"))
     private final Set<Pass> passes = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "session_attendances", joinColumns = @JoinColumn(name = "group_id"))
+    @CollectionTable(name = "group_attendances", joinColumns = @JoinColumn(name = "group_id"))
     private final Set<Attendance> attendances = new HashSet<>();
 
     public Group(GroupId id, String name) {
@@ -158,11 +158,13 @@ public class Group {
         return sessions.removeIf(s -> s.id().equals(sessionId));
     }
 
-    public boolean registerPass(Pass pass) {
+    public UUID registerPass(Pass pass) {
         if (hasPass(pass.studentId(), pass.sessionId()))
             throw new IllegalArgumentException("Only one Pass per student & session is allowed");
 
-        return passes.add(pass);
+        passes.add(pass);
+
+        return pass.code();
     }
 
     public boolean hasPass(UserId studentId, SessionId sessionId) {
