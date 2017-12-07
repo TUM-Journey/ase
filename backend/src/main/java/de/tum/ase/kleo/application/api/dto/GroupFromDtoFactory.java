@@ -7,7 +7,7 @@ import lombok.val;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GroupDtoFactory {
+public class GroupFromDtoFactory {
 
     public Group create(GroupDTO groupDTO) {
         if (groupDTO == null)

@@ -22,18 +22,18 @@ public class UsersService implements UsersApiDelegate {
 
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
-    private final UserDtoSerializer userDtoSerializer;
-    private final AttendanceDtoSerializer attendanceDtoSerializer;
-    private final GroupDtoSerializer groupDtoSerializer;
+    private final UserToDtoSerializer userToDtoSerializer;
+    private final AttendanceToDtoSerializer attendanceToDtoSerializer;
+    private final GroupToDtoSerializer groupToDtoSerializer;
 
     public UsersService(UserRepository userRepository, GroupRepository groupRepository,
-                        UserDtoSerializer userDtoSerializer, AttendanceDtoSerializer attendanceDtoSerializer,
-                        GroupDtoSerializer groupDtoSerializer) {
+                        UserToDtoSerializer userToDtoSerializer, AttendanceToDtoSerializer attendanceToDtoSerializer,
+                        GroupToDtoSerializer groupToDtoSerializer) {
         this.userRepository = userRepository;
         this.groupRepository = groupRepository;
-        this.userDtoSerializer = userDtoSerializer;
-        this.attendanceDtoSerializer = attendanceDtoSerializer;
-        this.groupDtoSerializer = groupDtoSerializer;
+        this.userToDtoSerializer = userToDtoSerializer;
+        this.attendanceToDtoSerializer = attendanceToDtoSerializer;
+        this.groupToDtoSerializer = groupToDtoSerializer;
     }
 
     @Override
@@ -44,13 +44,13 @@ public class UsersService implements UsersApiDelegate {
         if (user == null)
             return ResponseEntity.notFound().build();
 
-        return ResponseEntity.ok(userDtoSerializer.toDto(user));
+        return ResponseEntity.ok(userToDtoSerializer.toDto(user));
     }
 
     @Override
     public ResponseEntity<List<UserDTO>> getUsers() {
         val users = userRepository.findAll();
-        return ResponseEntity.ok(userDtoSerializer.toDto(users));
+        return ResponseEntity.ok(userToDtoSerializer.toDto(users));
     }
 
     @Override
@@ -93,7 +93,7 @@ public class UsersService implements UsersApiDelegate {
         val attendanceDtos = new LinkedList<AttendanceDTO>();
         attendedGroups.forEach(group -> {
             val attendances = group.attendances(userId);
-            attendanceDtos.addAll(attendanceDtoSerializer.toDto(group, attendances));
+            attendanceDtos.addAll(attendanceToDtoSerializer.toDto(group, attendances));
         });
 
         return ResponseEntity.ok(attendanceDtos);
@@ -104,7 +104,7 @@ public class UsersService implements UsersApiDelegate {
         val userId = UserId.of(userIdRaw);
         val groups = groupRepository.findAllByStudentIdsContaining(userId);
 
-        return ResponseEntity.ok(groupDtoSerializer.toDto(groups));
+        return ResponseEntity.ok(groupToDtoSerializer.toDto(groups));
     }
 
     @Override
@@ -112,6 +112,6 @@ public class UsersService implements UsersApiDelegate {
         val userId = UserId.of(userIdRaw);
         val groups = groupRepository.findAllByTutorIdsContaining(userId);
 
-        return ResponseEntity.ok(groupDtoSerializer.toDto(groups));
+        return ResponseEntity.ok(groupToDtoSerializer.toDto(groups));
     }
 }

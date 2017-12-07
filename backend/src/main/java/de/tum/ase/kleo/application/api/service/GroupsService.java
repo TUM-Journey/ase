@@ -29,30 +29,31 @@ public class GroupsService implements GroupsApiDelegate {
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
 
-    private final UserDtoSerializer userDtoSerializer;
-    private final GroupDtoSerializer groupDtoSerializer;
-    private final GroupDtoFactory groupDtoFactory;
+    private final GroupToDtoSerializer groupToDtoSerializer;
+    private final GroupFromDtoFactory groupFromDtoFactory;
+
+    private final UserToDtoSerializer userToDtoSerializer;
     private final PassDtoMapper passDtoMapper;
 
     @Autowired
     public GroupsService(GroupRepository groupRepository, UserRepository userRepository,
-                         UserDtoSerializer userDtoSerializer, GroupDtoSerializer groupDtoSerializer,
-                         GroupDtoFactory groupDtoFactory, PassDtoMapper passDtoMapper) {
+                         UserToDtoSerializer userToDtoSerializer, GroupToDtoSerializer groupToDtoSerializer,
+                         GroupFromDtoFactory groupFromDtoFactory, PassDtoMapper passDtoMapper) {
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
-        this.userDtoSerializer = userDtoSerializer;
-        this.groupDtoSerializer = groupDtoSerializer;
-        this.groupDtoFactory = groupDtoFactory;
+        this.userToDtoSerializer = userToDtoSerializer;
+        this.groupToDtoSerializer = groupToDtoSerializer;
+        this.groupFromDtoFactory = groupFromDtoFactory;
         this.passDtoMapper = passDtoMapper;
     }
 
     @Override
     @Transactional
     public ResponseEntity<GroupDTO> addGroup(GroupDTO groupDto) {
-        val group = groupDtoFactory.create(groupDto);
+        val group = groupFromDtoFactory.create(groupDto);
         val savedGroup = groupRepository.save(group);
 
-        return ResponseEntity.ok(groupDtoSerializer.toDto(savedGroup));
+        return ResponseEntity.ok(groupToDtoSerializer.toDto(savedGroup));
     }
 
     @Override
@@ -152,7 +153,7 @@ public class GroupsService implements GroupsApiDelegate {
             return ResponseEntity.notFound().build();
 
         val students = userRepository.findAll(group.studentIds());
-        return ResponseEntity.ok(userDtoSerializer.toDto(students));
+        return ResponseEntity.ok(userToDtoSerializer.toDto(students));
     }
 
     @Override
@@ -164,12 +165,12 @@ public class GroupsService implements GroupsApiDelegate {
             return ResponseEntity.notFound().build();
 
         val tutors = userRepository.findAll(group.tutorIds());
-        return ResponseEntity.ok(userDtoSerializer.toDto(tutors));
+        return ResponseEntity.ok(userToDtoSerializer.toDto(tutors));
     }
 
     @Override
     public ResponseEntity<List<GroupDTO>> getGroups() {
-        return ResponseEntity.ok(groupDtoSerializer.toDto(groupRepository.findAll()));
+        return ResponseEntity.ok(groupToDtoSerializer.toDto(groupRepository.findAll()));
     }
 
     @Override
@@ -190,7 +191,7 @@ public class GroupsService implements GroupsApiDelegate {
         if (groupDto.getTutorIds() != null && !groupDto.getTutorIds().isEmpty())
             group.tutorIds(groupDto.getTutorIds().stream().map(UserId::of).collect(toSet()));
 
-        return ResponseEntity.ok(groupDtoSerializer.toDto(group));
+        return ResponseEntity.ok(groupToDtoSerializer.toDto(group));
     }
 
     @Override

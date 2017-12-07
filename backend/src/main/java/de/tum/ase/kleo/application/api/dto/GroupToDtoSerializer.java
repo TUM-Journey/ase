@@ -12,13 +12,13 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
 
 @Component
-public class GroupDtoSerializer {
+public class GroupToDtoSerializer {
 
-    private final SessionDtoSerializer sessionDtoSerializer;
+    private final SessionToDtoSerializer sessionToDtoSerializer;
 
     @Autowired
-    public GroupDtoSerializer(SessionDtoSerializer sessionDtoSerializer) {
-        this.sessionDtoSerializer = sessionDtoSerializer;
+    public GroupToDtoSerializer(SessionToDtoSerializer sessionToDtoSerializer) {
+        this.sessionToDtoSerializer = sessionToDtoSerializer;
     }
 
     public GroupDTO toDto(Group source) {
@@ -36,7 +36,7 @@ public class GroupDtoSerializer {
                 .tutorIds(source.tutorIds().stream().map(Identifier::toString).collect(toList()));
 
         if (includeSessions)
-            dto.sessions(sessionDtoSerializer.toDto(source.sessions()));
+            dto.sessions(sessionToDtoSerializer.toDto(source.sessions()));
 
         return dto;
     }

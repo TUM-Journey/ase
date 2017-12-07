@@ -8,9 +8,8 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 
 @Component
-public class PassDtoMapper implements DtoMapper<Pass, PassDTO> {
+public class PassDtoMapper {
 
-    @Override
     public PassDTO toDto(Pass source) {
         if (source == null)
             return null;
@@ -24,7 +23,6 @@ public class PassDtoMapper implements DtoMapper<Pass, PassDTO> {
                 .expiresAt(source.expiresAt());
     }
 
-    @Override
     public Pass fromDto(PassDTO passDTO) {
         if (passDTO == null)
             return null;

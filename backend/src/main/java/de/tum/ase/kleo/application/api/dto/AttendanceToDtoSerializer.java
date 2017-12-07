@@ -11,15 +11,16 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
 
 @Component
-public class AttendanceDtoSerializer {
+public class AttendanceToDtoSerializer {
 
-    private final GroupDtoSerializer groupDtoSerializer;
-    private final SessionDtoSerializer sessionDtoSerializer;
+    private final GroupToDtoSerializer groupToDtoSerializer;
+    private final SessionToDtoSerializer sessionToDtoSerializer;
 
     @Autowired
-    public AttendanceDtoSerializer(GroupDtoSerializer groupDtoSerializer, SessionDtoSerializer sessionDtoSerializer) {
-        this.groupDtoSerializer = groupDtoSerializer;
-        this.sessionDtoSerializer = sessionDtoSerializer;
+    public AttendanceToDtoSerializer(GroupToDtoSerializer groupToDtoSerializer,
+                                     SessionToDtoSerializer sessionToDtoSerializer) {
+        this.groupToDtoSerializer = groupToDtoSerializer;
+        this.sessionToDtoSerializer = sessionToDtoSerializer;
     }
 
     public AttendanceDTO toDto(Group group, Attendance attendance) {
@@ -27,8 +28,8 @@ public class AttendanceDtoSerializer {
             return null;
 
         return new AttendanceDTO()
-                .session(sessionDtoSerializer.toDto(group.session(attendance.sessionId()).get()))
-                .group(groupDtoSerializer.toDto(group, false))
+                .session(sessionToDtoSerializer.toDto(group.session(attendance.sessionId()).get()))
+                .group(groupToDtoSerializer.toDto(group, false))
                 .attendedAt(attendance.attendedAt())
                 .passCode(attendance.passCode().toString());
     }
