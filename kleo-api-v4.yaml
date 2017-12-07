@@ -1,0 +1,582 @@
+swagger: '2.0'
+info:
+  version: "4.0.0"
+  title: Kleo Classes and Passes Management API
+  description: The API provides endpoints for managing users, courses, sessions and passes.
+  
+basePath: /api
+schemes:
+  - http
+produces:
+  - "application/vnd.tum.aes.kleo.v4.0.0+json"
+
+securityDefinitions:
+  OAuth2Password:
+    type: oauth2
+    flow: password
+    tokenUrl: "oauth/token"
+    scopes:
+      undefined: "Scopes are not used"
+
+tags:
+- name: "groups"
+- name: "passes"
+- name: "users"
+- name: "students"
+- name: "tutors"
+
+paths:
+  /users/:
+    get:
+      tags:
+        - users
+      operationId: getUsers
+      security:
+        - OAuth2Password: []
+      responses:
+        200:
+          description: List of users cached from TUM Shibboleth SSO
+          schema:
+            type: array
+            minItems: 0
+            items:
+              $ref: '#/definitions/UserDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /users/{userId}:
+    get:
+      tags:
+        - users
+      operationId: getUser
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: A Used object
+          schema:
+            $ref: '#/definitions/UserDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+    delete:
+      tags:
+        - users
+      operationId: deleteUser
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: User removed
+        404:
+          description: Entity not found
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /users/{userId}/roles:
+    put:
+      tags:
+        - users
+      operationId: updateUserRoles
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+        - in: body
+          name: roles
+          schema:
+            type: array
+            minItems: 0
+            items:
+              type: string
+              enum: [SUPERUSER, STAFF, USER]
+      responses:
+        200:
+          description: User roles has been updated
+          schema:
+            $ref: '#/definitions/SessionDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /users/{userId}/attendances:
+    get:
+      tags:
+        - users
+        - students
+        - groups
+      operationId: getStudentAttendances
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: List of attended sessions
+          schema:
+            type: array
+            minItems: 0
+            items:
+              $ref: '#/definitions/AttendanceDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /users/{userId}/registrations:
+    get:
+      tags:
+        - users
+        - students
+        - groups
+      operationId: getStudentGroups
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: List of registrations for groups and courses
+          schema:
+            type: array
+            minItems: 0
+            items:
+              $ref: '#/definitions/GroupDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /users/{userId}/tutorings:
+    get:
+      tags:
+        - users
+        - tutors
+        - groups
+      operationId: getTutorGroups
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: List of groups the given user is tutor of
+          schema:
+            type: array
+            minItems: 0
+            items:
+              $ref: '#/definitions/GroupDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /groups/:
+    get:
+      tags:
+        - groups
+      operationId: getGroups
+      security:
+        - OAuth2Password: []
+      responses:
+        200:
+          description: A list of Groups
+          schema:
+            type: array
+            minItems: 0
+            items:
+              $ref: '#/definitions/GroupDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+    post:
+      tags:
+        - groups
+      operationId: addGroup
+      security:
+        - OAuth2Password: []
+      parameters:
+      - in: body
+        name: group
+        schema:
+          $ref: '#/definitions/GroupDTO'
+      responses:
+        201:
+          description: A Group created
+          schema:
+            $ref: '#/definitions/GroupDTO'
+        400:
+          description: Problem with the request, such as a missing, invalid or type mismatched parameter
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /groups/{groupId}/:
+    patch:
+      tags:
+        - groups
+      operationId: updateGroup
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          type: string
+        - in: body
+          name: group
+          schema:
+            $ref: '#/definitions/GroupDTO'
+      responses:
+        200:
+          description: A updated Group
+          schema:
+            $ref: '#/definitions/GroupDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+    delete:
+      tags:
+        - groups
+      operationId: "deleteGroup"
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: The Group has been deleted sucessufly
+        404:
+          description: Entity not found
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /groups/{groupId}/students:
+    get:
+      tags:
+        - groups
+        - students
+      operationId: getGroupStudents
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: A list of Students from the given Group
+          schema:
+            type: array
+            minItems: 0
+            items:
+              $ref: '#/definitions/UserDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /groups/{groupId}/students/{userId}:
+    put:
+      tags:
+        - groups
+        - students
+      operationId: addGroupStudent
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          type: string
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Student has been added to the Group successfully
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+    delete:
+      tags:
+        - groups
+        - students
+      operationId: "deleteGroupStudent"
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          type: string
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: User has been removed from the Group
+        404:
+          description: Entity not found
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /groups/{groupId}/tutors:
+    get:
+      tags:
+        - groups
+        - tutors
+      operationId: getGroupTutors
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: A list of Tutors from the given Group
+          schema:
+            type: array
+            minItems: 0
+            items:
+              $ref: '#/definitions/UserDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /groups/{groupId}/tutors/{userId}:
+    put:
+      tags:
+        - groups
+        - tutors
+      operationId: addGroupTutor
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          type: string
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Tutor has been added to the Group successfully
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+    delete:
+      tags:
+        - groups
+        - tutors
+      operationId: "deleteGroupTutor"
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          type: string
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: Tutor has been removed from the Group
+        404:
+          description: Entity not found
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /groups/{groupId}/passes:
+    post:
+      tags:
+        - groups
+        - passes
+      operationId: generateSessionPass
+      security:
+        - OAuth2Password: []
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        type: string
+      - in: body
+        name: pass
+        schema:
+          $ref: '#/definitions/PassDTO'
+      responses:
+        201:
+          description: A Pass created
+          schema:
+            $ref: '#/definitions/PassDTO'
+        400:
+          description: Problem with the request, such as a missing, invalid or type mismatched parameter
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /groups/{groupId}/passes/{passCode}:
+    put:
+      tags:
+        - groups
+        - passes
+      operationId: utilizeSessionPass
+      security:
+        - OAuth2Password: []
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        type: string
+      - name: passCode
+        in: path
+        required: true
+        type: string
+      responses:
+        200:
+          description: A Pass has been utilized
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+
+definitions:
+  UserDTO:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      email:
+        type: string
+      studentId:
+        type: string
+  AttendanceDTO:
+    type: object
+    properties:
+      group:
+        $ref: '#/definitions/GroupDTO'
+      session:
+        $ref: '#/definitions/SessionDTO'
+      attendedAt:
+        type: string
+        format: date-time
+      passCode:
+        type: string
+  GroupDTO:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      studentIds:
+        type: array
+        items:
+          type: string
+      tutorIds:
+        type: array
+        items:
+          type: string
+      session:
+        type: array
+        items:
+          $ref: '#/definitions/SessionDTO'
+  SessionDTO:
+    type: object
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        enum: [EXERCISE, TUTORIAL, SEMINAR, OTHER]
+      location:
+        type: string
+      begins:
+        type: string
+        format: date-time
+      ends:
+        type: string
+        format: date-time
+  PassDTO:
+    type: object
+    properties:
+      code:
+        type: string
+      studentId:
+        type: string
+      tutorId:
+        type: string
+      requestedAt:
+        type: string
+        format: date-time
+      expireIn:
+        type: integer
+        description: in seconds
+      expiresAt:
+        type: string
+        format: date-time
+        readOnly: true
+  ErrorDTO:
+    type: object
+    description: Describes a failure occured
+    properties:
+      timestamp:
+        type: string
+        format: date
+      status:
+        type: integer
+      error:
+        type: string
+      exception:
+        type: string
+        description: A java exception class name
+      message:
+        type: string
+      path:
+        type: string

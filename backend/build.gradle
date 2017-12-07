@@ -8,7 +8,7 @@ buildscript {
 apply from: "$rootDir/build-configs.gradle"
 apply from: "$rootDir/build-deps.gradle"
 
-def OPENAPI_SOURCE = "$rootDir/kleo-api-v2.yaml"
+def OPENAPI_SOURCE = "$rootDir/kleo-api-v4.yaml"
 
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
