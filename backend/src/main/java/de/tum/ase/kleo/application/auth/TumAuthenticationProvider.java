@@ -113,7 +113,7 @@ public class TumAuthenticationProvider implements AuthenticationProvider {
             val studentId = matricInput.getValueAttribute();
             val passwordHash = passwordEncoder.encode(password);
 
-            return new User(userId, userRoles, email, passwordHash, name, studentId);
+            return new User(email, passwordHash, userRoles, name, studentId);
         } catch (IOException e) {
             throw new AuthenticationServiceException("Failed to navigate through Shibboleth auth page", e);
         }

@@ -1,79 +1,69 @@
 package de.tum.ase.kleo.domain;
 
-import lombok.*;
+import de.tum.ase.kleo.domain.id.SessionId;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.Validate;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
-@Entity
-@Access(AccessType.FIELD)
-@Accessors(fluent = true)
-@ToString @EqualsAndHashCode(of = "id")
+@Entity @Access(AccessType.FIELD)
+@Getter @Accessors(fluent = true) @ToString
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
-public class Session implements Comparable<Session> {
+public class Session {
 
-    @Id
-    @Getter
-    @Column(name = "session_id")
-    private final String id;
+    @EmbeddedId
+    private final SessionId id;
 
-    @Getter
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SessionType sessionType;
+
     @Column(nullable = false)
     private String location;
 
-    @Column
-    @Getter @Setter
-    private String note;
-
-    @Getter
     @Column(nullable = false)
     private OffsetDateTime begins;
 
-    @Getter
     @Column(nullable = false)
     private OffsetDateTime ends;
 
-    public Session(String id, String location, String note, OffsetDateTime begins, OffsetDateTime ends) {
-        this.id = isNotBlank(id) ? id : UUID.randomUUID().toString();
+    protected Session(SessionId id, SessionType sessionType, String location, OffsetDateTime begins, OffsetDateTime ends) {
+        this.id = id == null ? new SessionId() : id;
+        this.sessionType = notNull(sessionType);
         this.location = notBlank(location);
-        this.note = note;
 
         Validate.isTrue(ends.isAfter(begins), "Session 'ends' datetime must be after 'begins' datetime");
-        this.begins = begins;
-        this.ends = ends;
+        this.begins = notNull(begins);
+        this.ends = notNull(ends);
     }
 
-    public Session(String location, String note, OffsetDateTime begins, OffsetDateTime ends) {
-        this(null, location, note, begins, ends);
+    protected Session(SessionType sessionType, String location, OffsetDateTime begins, OffsetDateTime ends) {
+        this(null, sessionType, location, begins, ends);
     }
 
-    public Session(String location, OffsetDateTime begins, OffsetDateTime ends) {
-        this(location, null, begins, ends);
+    protected void sessionType(SessionType sessionType) {
+        this.sessionType = notNull(sessionType);
     }
 
-    public void location(String location) {
+    protected void location(String location) {
         this.location = notNull(location);
     }
 
-    public void begins(OffsetDateTime begins) {
+    protected void begins(OffsetDateTime begins) {
         Validate.isTrue(ends.isAfter(begins), "Session 'ends' datetime must be after 'begins' datetime");
         this.begins = begins;
     }
 
-    public void ends(OffsetDateTime ends) {
+    protected void ends(OffsetDateTime ends) {
         Validate.isTrue(ends.isAfter(begins), "Session 'ends' datetime must be after 'begins' datetime");
         this.ends = ends;
-    }
-
-    @Override
-    public int compareTo(Session o) {
-        return this.begins.compareTo(o.begins);
     }
 }

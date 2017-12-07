@@ -3,7 +3,7 @@ Kleo is an NFC-enabled electronic attendance system that is designed to cope wit
 
 ## API
 Kleo provides several APIs:
- - **REST**, for Android and Web applications. The REST API is defined with OpenAPI2 (Swagger) [here](https://github.com/wingsofovnia/kleo/blob/master/kleo-api-v2.yaml). The Postman collection is also [provided](https://www.getpostman.com/collections/13101a247d1457fbbbbf).
+ - **REST**, for Android and Web applications. The REST API is defined with OpenAPI2 (Swagger) and availale on [Swaggerhub](https://app.swaggerhub.com/apis/wingsofovnia/kleo-api/). The Postman collection is also [provided](https://www.getpostman.com/collections/f318526cfbae39df8a2e).
  - **MQTT** (under development), for a remote devices designed to accept student passes. 
 
 ## Bugs and Feedback
