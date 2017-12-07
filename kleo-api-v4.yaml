@@ -1,14 +1,14 @@
 swagger: '2.0'
 info:
-  version: "4.0.0"
+  version: "4.1.0"
   title: Kleo Classes and Passes Management API
   description: The API provides endpoints for managing users, courses, sessions and passes.
-  
+
 basePath: /api
 schemes:
   - http
 produces:
-  - "application/vnd.tum.aes.kleo.v4.0.0+json"
+  - "application/vnd.tum.aes.kleo.v4.1.0+json"
 
 securityDefinitions:
   OAuth2Password:
@@ -423,6 +423,82 @@ paths:
       responses:
         204:
           description: Tutor has been removed from the Group
+        404:
+          description: Entity not found
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /groups/{groupId}/sessions/:
+    post:
+      tags:
+        - groups
+      operationId: addGroupSession
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          type: string
+        - in: body
+          name: session
+          schema:
+            $ref: '#/definitions/SessionDTO'
+      responses:
+        201:
+          description: A Group created
+          schema:
+            $ref: '#/definitions/SessionDTO'
+        400:
+          description: Problem with the request, such as a missing, invalid or type mismatched parameter
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+  /groups/{groupId}/sessions/{sessionId}:
+    put:
+      tags:
+        - groups
+      operationId: updateGroupSession
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          type: string
+        - name: sessionId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Session has been updated to the Group successfully
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+    delete:
+      tags:
+        - groups
+      operationId: "deleteGroupSession"
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          type: string
+        - name: sessionId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: Session has been removed from the Group
         404:
           description: Entity not found
         500:
