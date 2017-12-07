@@ -134,13 +134,20 @@ public class Group {
     }
 
     public boolean registerPass(Pass pass) {
+        if (hasPass(pass.studentId(), pass.sessionId()))
+            throw new IllegalArgumentException("Only one Pass per student & session is allowed");
+
         return passes.add(pass);
     }
 
-    public boolean hasValidPass(UUID passCode) {
+    public boolean hasPass(UserId studentId, SessionId sessionId) {
         return passes.stream()
-                .filter(pass -> pass.code().equals(passCode))
-                .anyMatch(Pass::notExpired);
+                .anyMatch(pass -> pass.studentId().equals(studentId)
+                        && pass.sessionId().equals(sessionId));
+    }
+
+    public boolean isPassUsed(UUID passCode) {
+        return attendances.stream().anyMatch(a -> a.passCode().equals(passCode));
     }
 
     public Set<Pass> passes() {
@@ -150,17 +157,23 @@ public class Group {
     protected Optional<Pass> validPass(UUID passCode) {
         return passes.stream()
                 .filter(pass -> pass.code().equals(passCode))
+                .filter(pass -> !isPassUsed(passCode))
                 .filter(Pass::notExpired)
                 .findAny();
     }
 
     public Attendance attend(UUID passCode) {
         val eligiblePass = validPass(passCode)
-                .orElseThrow(() -> new IllegalArgumentException("Pass with given code is expired or invalid"));
+                .orElseThrow(() -> new IllegalArgumentException("Pass with given code is expired or already used"));
 
         val newAttendance = new Attendance(passCode, eligiblePass.sessionId(), eligiblePass.tutorId());
         attendances.add(newAttendance);
         return newAttendance;
+    }
+
+    public boolean hasAttended(UserId studentId, SessionId sessionId) {
+        return attendances.stream().anyMatch(a -> a.studentId().equals(studentId)
+                && a.sessionId().equals(sessionId));
     }
 
     public Set<Attendance> attendances(UserId studentId) {
