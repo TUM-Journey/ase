@@ -65,8 +65,7 @@ public class UsersService implements UsersApiDelegate {
 
 
         val newUserRoles = UserRole.from(userRolesRaw);
-        user.truncateUserRoles();
-        newUserRoles.forEach(user::addUserRole);
+        user.userRoles(newUserRoles);
 
         return ResponseEntity.ok().build();
     }

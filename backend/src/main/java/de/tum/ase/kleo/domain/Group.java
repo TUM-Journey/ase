@@ -73,6 +73,14 @@ public class Group {
         return Collections.unmodifiableSet(studentIds);
     }
 
+    public void studentIds(Set<UserId> studentIds) {
+        if (studentIds == null || studentIds.isEmpty())
+            throw new IllegalArgumentException("Empty or null studentIds given");
+
+        this.studentIds.clear();
+        this.studentIds.addAll(studentIds);
+    }
+
     public boolean removeStudent(UserId studentId) {
         return studentIds.removeIf(sId -> sId.equals(studentId));
     }
@@ -87,6 +95,14 @@ public class Group {
 
     public Set<UserId> tutorIds() {
         return Collections.unmodifiableSet(tutorIds);
+    }
+
+    public void tutorIds(Set<UserId> tutorIds) {
+        if (tutorIds == null)
+            throw new NullPointerException("Null tutorIds given");
+
+        this.tutorIds.clear();
+        this.tutorIds.addAll(tutorIds);
     }
 
     public boolean removeTutor(UserId tutorId) {

@@ -70,15 +70,14 @@ public class User {
     }
 
     public void userRoles(Collection<UserRole> userRoles) {
-        truncateUserRoles();
+        if (userRoles == null || userRoles.isEmpty())
+            throw new NullPointerException("Null userRoles given");
+
+        this.userRoles.clear();
         this.userRoles.addAll(userRoles);
     }
 
     public boolean removeUserRole(UserRole userRole) {
         return userRoles.remove(userRole);
-    }
-
-    public void truncateUserRoles() {
-        userRoles.clear();
     }
 }

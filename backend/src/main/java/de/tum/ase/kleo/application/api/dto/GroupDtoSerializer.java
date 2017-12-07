@@ -36,7 +36,7 @@ public class GroupDtoSerializer {
                 .tutorIds(source.tutorIds().stream().map(Identifier::toString).collect(toList()));
 
         if (includeSessions)
-            dto.session(sessionDtoSerializer.toDto(source.sessions()));
+            dto.sessions(sessionDtoSerializer.toDto(source.sessions()));
 
         return dto;
     }

@@ -1,76 +1,272 @@
 package de.tum.ase.kleo.application.api.service;
 
 import de.tum.ase.kleo.application.api.GroupsApiDelegate;
-import de.tum.ase.kleo.application.api.dto.GroupDTO;
-import de.tum.ase.kleo.application.api.dto.PassDTO;
-import de.tum.ase.kleo.application.api.dto.UserDTO;
+import de.tum.ase.kleo.application.api.dto.*;
+import de.tum.ase.kleo.domain.GroupRepository;
+import de.tum.ase.kleo.domain.SessionType;
+import de.tum.ase.kleo.domain.UserRepository;
+import de.tum.ase.kleo.domain.id.GroupId;
+import de.tum.ase.kleo.domain.id.SessionId;
+import de.tum.ase.kleo.domain.id.UserId;
+import lombok.val;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
+
+import static java.util.stream.Collectors.toSet;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Service
 @Transactional(readOnly = true)
 public class GroupsService implements GroupsApiDelegate {
 
-    @Override
-    public ResponseEntity<GroupDTO> addGroup(GroupDTO group) {
-        return null;
+    private final GroupRepository groupRepository;
+    private final UserRepository userRepository;
+
+    private final UserDtoSerializer userDtoSerializer;
+    private final GroupDtoSerializer groupDtoSerializer;
+    private final GroupDtoFactory groupDtoFactory;
+    private final PassDtoMapper passDtoMapper;
+
+    @Autowired
+    public GroupsService(GroupRepository groupRepository, UserRepository userRepository,
+                         UserDtoSerializer userDtoSerializer, GroupDtoSerializer groupDtoSerializer,
+                         GroupDtoFactory groupDtoFactory, PassDtoMapper passDtoMapper) {
+        this.groupRepository = groupRepository;
+        this.userRepository = userRepository;
+        this.userDtoSerializer = userDtoSerializer;
+        this.groupDtoSerializer = groupDtoSerializer;
+        this.groupDtoFactory = groupDtoFactory;
+        this.passDtoMapper = passDtoMapper;
     }
 
     @Override
-    public ResponseEntity<Void> addGroupStudent(String groupId, String userId) {
-        return null;
+    @Transactional
+    public ResponseEntity<GroupDTO> addGroup(GroupDTO groupDto) {
+        val group = groupDtoFactory.create(groupDto);
+        val savedGroup = groupRepository.save(group);
+
+        return ResponseEntity.ok(groupDtoSerializer.toDto(savedGroup));
     }
 
     @Override
-    public ResponseEntity<Void> addGroupTutor(String groupId, String userId) {
-        return null;
+    @Transactional
+    public ResponseEntity<Void> addGroupStudent(String groupIdRaw, String userIdRaw) {
+        val groupId = GroupId.of(groupIdRaw);
+        val studentId = UserId.of(userIdRaw);
+
+        val group = groupRepository.findOne(groupId);
+        if (group == null)
+            return ResponseEntity.notFound().build();
+
+        // TODO: Add notFound message to distinct 404 resps (relies on issue #2)
+        if (!userRepository.exists(studentId))
+            return ResponseEntity.notFound().build();
+
+        group.addStudent(studentId);
+
+        return ResponseEntity.ok().build();
     }
 
     @Override
-    public ResponseEntity<Void> deleteGroup(String groupId) {
-        return null;
+    @Transactional
+    @PreAuthorize("hasRole('SUPERUSER')")
+    public ResponseEntity<Void> addGroupTutor(String groupIdRaw, String userIdRaw) {
+        val groupId = GroupId.of(groupIdRaw);
+        val tutorId = UserId.of(userIdRaw);
+
+        val group = groupRepository.findOne(groupId);
+        if (group == null)
+            return ResponseEntity.notFound().build();
+
+        // TODO: Add notFound message to distinct 404 resps (relies on issue #2)
+        if (!userRepository.exists(tutorId))
+            return ResponseEntity.notFound().build();
+
+        group.addTutor(tutorId);
+
+        return ResponseEntity.ok().build();
     }
 
     @Override
-    public ResponseEntity<Void> deleteGroupStudent(String groupId, String userId) {
-        return null;
+    @Transactional
+    @PreAuthorize("hasRole('SUPERUSER')")
+    public ResponseEntity<Void> deleteGroup(String groupIdRaw) {
+        val groupId = GroupId.of(groupIdRaw);
+
+        if (!groupRepository.exists(groupId))
+            return ResponseEntity.notFound().build();
+
+        groupRepository.delete(groupId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
-    public ResponseEntity<Void> deleteGroupTutor(String groupId, String userId) {
-        return null;
+    @Transactional
+    public ResponseEntity<Void> deleteGroupStudent(String groupIdRaw, String userIdRaw) {
+        val groupId = GroupId.of(groupIdRaw);
+        val studentId = UserId.of(userIdRaw);
+
+        val group = groupRepository.findOne(groupId);
+        if (group == null)
+            return ResponseEntity.notFound().build();
+
+        // TODO: Add notFound message to distinct 404 resps (relies on issue #2)
+        if (!group.removeStudent(studentId))
+            return ResponseEntity.notFound().build();
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
-    public ResponseEntity<List<UserDTO>> getGroupStudents(String groupId) {
-        return null;
+    @Transactional
+    @PreAuthorize("hasRole('SUPERUSER')")
+    public ResponseEntity<Void> deleteGroupTutor(String groupIdRaw, String userIdRaw) {
+        val groupId = GroupId.of(groupIdRaw);
+        val tutorId = UserId.of(userIdRaw);
+
+        val group = groupRepository.findOne(groupId);
+        if (group == null)
+            return ResponseEntity.notFound().build();
+
+        // TODO: Add notFound message to distinct 404 resps (relies on issue #2)
+        if (!group.removeTutor(tutorId))
+            return ResponseEntity.notFound().build();
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
-    public ResponseEntity<List<UserDTO>> getGroupTutors(String groupId) {
-        return null;
+    public ResponseEntity<List<UserDTO>> getGroupStudents(String groupIdRaw) {
+        val groupId = GroupId.of(groupIdRaw);
+
+        val group = groupRepository.findOne(groupId);
+        if (group == null)
+            return ResponseEntity.notFound().build();
+
+        val students = userRepository.findAll(group.studentIds());
+        return ResponseEntity.ok(userDtoSerializer.toDto(students));
+    }
+
+    @Override
+    public ResponseEntity<List<UserDTO>> getGroupTutors(String groupIdRaw) {
+        val groupId = GroupId.of(groupIdRaw);
+
+        val group = groupRepository.findOne(groupId);
+        if (group == null)
+            return ResponseEntity.notFound().build();
+
+        val tutors = userRepository.findAll(group.tutorIds());
+        return ResponseEntity.ok(userDtoSerializer.toDto(tutors));
     }
 
     @Override
     public ResponseEntity<List<GroupDTO>> getGroups() {
-        return null;
+        return ResponseEntity.ok(groupDtoSerializer.toDto(groupRepository.findAll()));
     }
 
     @Override
-    public ResponseEntity<GroupDTO> updateGroup(String groupId, GroupDTO group) {
-        return null;
+    @Transactional
+    public ResponseEntity<GroupDTO> updateGroup(String groupIdRaw, GroupDTO groupDto) {
+        val groupId = GroupId.of(groupIdRaw);
+
+        val group = groupRepository.findOne(groupId);
+        if (group == null)
+            return ResponseEntity.notFound().build();
+
+        if (isNotBlank(groupDto.getName()))
+            group.rename(groupDto.getName());
+
+        if (groupDto.getStudentIds() != null && !groupDto.getStudentIds().isEmpty())
+            group.studentIds(groupDto.getStudentIds().stream().map(UserId::of).collect(toSet()));
+
+        if (groupDto.getTutorIds() != null && !groupDto.getTutorIds().isEmpty())
+            group.tutorIds(groupDto.getTutorIds().stream().map(UserId::of).collect(toSet()));
+
+        return ResponseEntity.ok(groupDtoSerializer.toDto(group));
     }
 
     @Override
-    public ResponseEntity<PassDTO> generateSessionPass(String groupId, PassDTO pass) {
-        return null;
+    @Transactional
+    public ResponseEntity<PassDTO> generateSessionPass(String groupIdRaw, PassDTO passDto) {
+        val groupId = GroupId.of(groupIdRaw);
+
+        val group = groupRepository.findOne(groupId);
+        if (group == null)
+            return ResponseEntity.notFound().build();
+
+        val pass = passDtoMapper.fromDto(passDto);
+        group.registerPass(pass);
+
+        return ResponseEntity.ok(passDtoMapper.toDto(pass));
     }
 
     @Override
-    public ResponseEntity<Void> utilizeSessionPass(String groupId, String passCode) {
-        return null;
+    @Transactional
+    public ResponseEntity<Void> utilizeSessionPass(String groupIdRaw, String passCodeRaw) {
+        val groupId = GroupId.of(groupIdRaw);
+        val passCode = UUID.fromString(passCodeRaw);
+
+        val group = groupRepository.findOne(groupId);
+        if (group == null)
+            return ResponseEntity.notFound().build();
+
+        group.attend(passCode);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<SessionDTO> addGroupSession(String groupIdRaw, SessionDTO sessDto) {
+        val groupId = GroupId.of(groupIdRaw);
+
+        val group = groupRepository.findOne(groupId);
+        if (group == null)
+            return ResponseEntity.notFound().build();
+
+        group.addSession(SessionType.valueOf(sessDto.getType().toString()),
+                sessDto.getLocation(), sessDto.getBegins(), sessDto.getEnds());
+
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<Void> deleteGroupSession(String groupIdRaw, String sessionIdRaw) {
+        val groupId = GroupId.of(groupIdRaw);
+        val sessionId = SessionId.of(sessionIdRaw);
+
+        val group = groupRepository.findOne(groupId);
+        if (group == null)
+            return ResponseEntity.notFound().build();
+
+        // TODO: Add notFound message to distinct 404 resps (relies on issue #2)
+        if (!group.removeSession(sessionId))
+            return ResponseEntity.notFound().build();
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<Void> rescheduleGroupSession(String groupIdRaw, String sessionIdRaw, SessionDTO sessDto) {
+        val groupId = GroupId.of(groupIdRaw);
+        val sessionId = SessionId.of(sessionIdRaw);
+
+        val group = groupRepository.findOne(groupId);
+        if (group == null)
+            return ResponseEntity.notFound().build();
+
+        group.rescheduleSession(sessionId, sessDto.getBegins(), sessDto.getEnds());
+
+        return ResponseEntity.ok().build();
     }
 }
