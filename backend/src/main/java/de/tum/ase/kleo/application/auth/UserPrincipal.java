@@ -33,6 +33,6 @@ public class UserPrincipal {
     }
 
     public static UserPrincipal from(User user) {
-        return new UserPrincipal(user.id(), user.email(), user.name(), user.studentId());
+        return new UserPrincipal(user.id().toString(), user.email(), user.name(), user.studentId());
     }
 }
