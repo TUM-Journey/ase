@@ -1,15 +1,11 @@
 package de.tum.ase.kleo.application.auth;
 
-import de.tum.ase.kleo.application.auth.auth.PermissionEvaluatorManager;
-import de.tum.ase.kleo.application.auth.auth.SelectivePermissionEvaluator;
-import de.tum.ase.kleo.application.auth.auth.PersonalSelectivePermissionEvaluator;
 import de.tum.ase.kleo.domain.UserRepository;
 import de.tum.ase.kleo.domain.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -21,8 +17,6 @@ import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.ArrayList;
 
 @Configuration
 @EnableWebSecurity
@@ -76,13 +70,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         // provides the default AuthenticationManager as a Bean
         return super.authenticationManagerBean();
-    }
-
-    @Bean
-    public PermissionEvaluator permissionEvaluatorManager() {
-        return new PermissionEvaluatorManager(new ArrayList<SelectivePermissionEvaluator>() {{
-            add(new PersonalSelectivePermissionEvaluator());
-        }});
     }
 
     private AuthenticationProvider superuserAuthenticationProvider() {
