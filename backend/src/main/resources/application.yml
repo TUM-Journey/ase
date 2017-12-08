@@ -33,7 +33,7 @@ security:
       filter-order: 3
 
     clientId: kleo-client
-    grandType: password
+    grandTypes: password,refresh_token
     scopes: management
 
   jwt:

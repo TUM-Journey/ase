@@ -36,8 +36,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Value("${security.oauth2.clientId}")
     private String oauth2ClientId;
-    @Value("${security.oauth2.grandType}")
-    private String oauth2GrandType;
+    @Value("${security.oauth2.grandTypes}")
+    private String[] oauth2GrandTypes;
     @Value("${security.oauth2.scopes}")
     private String[] oauth2Scopes;
 
@@ -60,7 +60,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
                 .withClient(oauth2ClientId)
-                .authorizedGrantTypes(oauth2GrandType)
+                .authorizedGrantTypes(oauth2GrandTypes)
                 .scopes(oauth2Scopes)
                 .accessTokenValiditySeconds(accessTokenValidity);
     }
