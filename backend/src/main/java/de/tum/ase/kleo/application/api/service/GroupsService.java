@@ -49,6 +49,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF')")
     public ResponseEntity<GroupDTO> addGroup(GroupDTO groupDto) {
         val group = groupFromDtoFactory.create(groupDto);
         val savedGroup = groupRepository.save(group);
@@ -58,6 +59,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF') OR @currentUser.hasUserId(#userIdRaw)")
     public ResponseEntity<Void> addGroupStudent(String groupIdRaw, String userIdRaw) {
         val groupId = GroupId.of(groupIdRaw);
         val studentId = UserId.of(userIdRaw);
@@ -77,7 +79,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('SUPERUSER')")
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF')")
     public ResponseEntity<Void> addGroupTutor(String groupIdRaw, String userIdRaw) {
         val groupId = GroupId.of(groupIdRaw);
         val tutorId = UserId.of(userIdRaw);
@@ -97,7 +99,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('SUPERUSER')")
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF')")
     public ResponseEntity<Void> deleteGroup(String groupIdRaw) {
         val groupId = GroupId.of(groupIdRaw);
 
@@ -111,6 +113,8 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF') " +
+            "OR @currentUser.hasUserId(#userIdRaw) OR @currentUser.isTutorOf(#groupIdRaw)")
     public ResponseEntity<Void> deleteGroupStudent(String groupIdRaw, String userIdRaw) {
         val groupId = GroupId.of(groupIdRaw);
         val studentId = UserId.of(userIdRaw);
@@ -128,7 +132,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('SUPERUSER')")
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF') OR @currentUser.hasUserId(#userIdRaw)")
     public ResponseEntity<Void> deleteGroupTutor(String groupIdRaw, String userIdRaw) {
         val groupId = GroupId.of(groupIdRaw);
         val tutorId = UserId.of(userIdRaw);
@@ -175,6 +179,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF') OR @currentUser.isTutorOf(#groupIdRaw)")
     public ResponseEntity<GroupDTO> updateGroup(String groupIdRaw, GroupDTO groupDto) {
         val groupId = GroupId.of(groupIdRaw);
 
@@ -196,6 +201,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('SUPERUSER') OR @currentUser.isTutorOf(#groupIdRaw)")
     public ResponseEntity<PassDTO> generateSessionPass(String groupIdRaw, PassDTO passDto) {
         val groupId = GroupId.of(groupIdRaw);
 
@@ -211,6 +217,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
+    @PreAuthorize("@currentUser.hasUserId(#userIdRaw)")
     public ResponseEntity<Void> utilizeSessionPass(String groupIdRaw, String passCodeRaw) {
         val groupId = GroupId.of(groupIdRaw);
         val passCode = UUID.fromString(passCodeRaw);
@@ -226,6 +233,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF') OR @currentUser.isTutorOf(#groupIdRaw)")
     public ResponseEntity<SessionDTO> addGroupSession(String groupIdRaw, SessionDTO sessDto) {
         val groupId = GroupId.of(groupIdRaw);
 
@@ -241,6 +249,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF') OR @currentUser.isTutorOf(#groupIdRaw)")
     public ResponseEntity<Void> deleteGroupSession(String groupIdRaw, String sessionIdRaw) {
         val groupId = GroupId.of(groupIdRaw);
         val sessionId = SessionId.of(sessionIdRaw);
@@ -258,6 +267,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF') OR @currentUser.isTutorOf(#groupIdRaw)")
     public ResponseEntity<Void> rescheduleGroupSession(String groupIdRaw, String sessionIdRaw, SessionDTO sessDto) {
         val groupId = GroupId.of(groupIdRaw);
         val sessionId = SessionId.of(sessionIdRaw);

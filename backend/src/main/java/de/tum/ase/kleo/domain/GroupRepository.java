@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface GroupRepository extends CrudRepository<Group, GroupId> {
@@ -15,4 +16,6 @@ public interface GroupRepository extends CrudRepository<Group, GroupId> {
     List<Group> findAllByTutorIdsContaining(UserId userId);
 
     List<Group> findAllByAttendancesStudentId(UserId userId);
+
+    Optional<Group> findOptionalByIdAndTutorIdsContaining(GroupId groupId, UserId tutorId);
 }
