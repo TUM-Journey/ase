@@ -21,7 +21,9 @@ dependencies {
     implementation deps.defs.android.retrofit
     implementation deps.defs.android.retrofitScalars
     implementation deps.defs.android.retrofitGson
-    implementation deps.defs.android.oltuOAuth2
+    implementation (deps.defs.android.oltuOAuth2) {
+        exclude group: 'org.apache.oltu.oauth2', module: 'org.apache.oltu.oauth2.common'
+    }
     implementation deps.defs.android.gsonFire
 
     testImplementation deps.defs.common.junit
@@ -32,6 +34,10 @@ dependencies {
 android {
     buildToolsVersion configs.android.buildToolsVersion
     compileSdkVersion configs.android.compileSdkVersion
+
+    packagingOptions {
+        pickFirst 'META-INF/DEPENDENCIES.txt'
+    }
 
     defaultConfig {
         applicationId "de.tum.kleo"
