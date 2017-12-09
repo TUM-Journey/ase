@@ -1,4 +1,4 @@
-package com.example.kleo;
+package de.tum.ase.kleo.android;
 
 import android.app.Activity;
 import android.os.Bundle;

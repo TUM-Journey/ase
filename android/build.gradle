@@ -1,10 +1,33 @@
 buildscript {
     dependencies {
         classpath plgs.defs.android.androidTools
+        classpath plgs.defs.common.swaggerCodegen
     }
 }
 
+def OPENAPI_SOURCE = "$rootDir/kleo-api-v4.yaml"
+
 apply plugin: 'com.android.application'
+apply plugin: 'org.hidetake.swagger.generator'
+
+dependencies {
+    implementation deps.defs.common.apacheLang3
+
+    swaggerCodegen deps.defs.common.swaggerCodegenCli
+
+    implementation deps.defs.android.constraintLayout
+
+    implementation deps.defs.android.swaggerAnnotations
+    implementation deps.defs.android.gson
+    implementation deps.defs.android.httpmime
+    implementation deps.defs.android.httpcore
+    implementation deps.defs.android.httpclient
+    implementation deps.defs.android.volley
+
+    testImplementation deps.defs.common.junit
+    testImplementation deps.defs.common.assertj
+    testImplementation deps.defs.common.mockito
+}
 
 android {
     buildToolsVersion configs.android.buildToolsVersion
@@ -31,8 +54,26 @@ android {
     lintOptions {
         tasks.lint.enabled = configs.android.lintEnabled
     }
+
+    sourceSets.main.java.srcDirs += file("$buildDir/swagger-code-kleo/src/main/java")
 }
 
-dependencies {
-    implementation deps.defs.android.constraintLayout
+swaggerSources {
+    kleo {
+        inputFile = file(OPENAPI_SOURCE)
+        code {
+            language = 'android'
+            configFile = file('swagger.json')
+        }
+    }
+}
+
+swaggerSources.kleo.code.doLast {
+    delete fileTree(dir: "$buildDir/swagger-code-kleo").exclude("src/")
+}
+
+afterEvaluate {
+    android.applicationVariants.all { variant ->
+        variant.javaCompiler.dependsOn(swaggerSources.kleo.code)
+    }
 }

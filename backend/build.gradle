@@ -1,12 +1,9 @@
 buildscript {
     dependencies {
         classpath plgs.defs.backend.springBoot
-        classpath plgs.defs.backend.swaggerCodegen
+        classpath plgs.defs.common.swaggerCodegen
     }
 }
-
-apply from: "$rootDir/build-configs.gradle"
-apply from: "$rootDir/build-deps.gradle"
 
 def OPENAPI_SOURCE = "$rootDir/kleo-api-v4.yaml"
 
@@ -18,10 +15,11 @@ sourceCompatibility = configs.compiler.sourceCompatibility
 targetCompatibility = configs.compiler.targetCompatibility
 
 dependencies {
+    compile deps.defs.common.apacheLang3
+
     compileOnly deps.defs.backend.lombok
     testCompileOnly deps.defs.backend.lombok
-
-    compile deps.defs.backend.apacheLang3
+    swaggerCodegen deps.defs.common.swaggerCodegenCli
 
     compile deps.defs.backend.jpaApi
     compile deps.defs.backend.postgresDriver
@@ -37,11 +35,10 @@ dependencies {
     compile deps.defs.backend.htmlUnit
 
     compile deps.defs.backend.swaggerSpringfox
-    swaggerCodegen deps.defs.backend.swaggerCodegenCli
 
-    testCompile deps.defs.backend.junit
-    testCompile deps.defs.backend.assertj
-    testCompile deps.defs.backend.mockito
+    testCompile deps.defs.common.junit
+    testCompile deps.defs.common.assertj
+    testCompile deps.defs.common.mockito
 }
 
 swaggerSources {

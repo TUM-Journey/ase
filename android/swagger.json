@@ -1,0 +1,5 @@
+{
+  "modelPackage": "de.tum.ase.kleo.android.client.dto",
+  "invokerPackage": "de.tum.ase.kleo.android.client.invoker",
+  "apiPackage": "de.tum.ase.kleo.android.client"
+}

@@ -3,12 +3,24 @@ ext {
     plgs = [:]
 
     deps.vers = [
+        common: [
+            apacheLang3: '3.5',
+            swaggerCodegenCli: '2.3.1-SNAPSHOT',
+
+            junit: '4.+',
+            assertj: '3.8.+',
+            mockito: '2.12.+',
+        ],
         android: [
-            constraintLayout: '1.0.2'
+            constraintLayout: '1.0.2',
+            swaggerAnnotations: '1.5.0',
+            gson: '2.3.1',
+            httpmime: '4.4.4',
+            httpcore: '4.5.2',
+            httpclient: '4.3.3',
+            volley: '1.0.0',
         ],
         backend: [
-            apacheLang3: '3.5',
-
             jpaApi: '1.0.0.Final',
             hibernate: '5.0.12.Final',
             postgresDriver: '42.1.4',
@@ -23,21 +35,34 @@ ext {
 
             swaggerSpringfox: '2.7.0',
             swaggerCodegenCli: '2.3.1-SNAPSHOT',
-            lombok: '1.16.+',
 
-            junit: '4.+',
-            assertj: '3.8.+',
-            mockito: '2.12.+'
+            lombok: '1.16.+',
         ]
     ]
 
     deps.defs = [
+        common: [
+            apacheLang3: "org.apache.commons:commons-lang3:${deps.vers.common.apacheLang3}",
+
+            //TODO: replace with stable release 2.3
+            //swaggerCodegenCli: "io.swagger:swagger-codegen-cli:${versions.gen.swaggerCodegenCli}"
+            swaggerCodegenCli: "com.github.wingsofovnia:swagger-codegen:${deps.vers.common.swaggerCodegenCli}",
+            lombok: "org.projectlombok:lombok:${deps.vers.common.lombok}",
+
+            junit: "junit:junit:${deps.vers.common.junit}",
+            assertj: "org.assertj:assertj-core:${deps.vers.common.assertj}",
+            mockito: "org.mockito:mockito-core:${deps.vers.common.mockito}",
+        ],
         android: [
-            constraintLayout: "com.android.support.constraint:constraint-layout:${deps.vers.android.constraintLayout}"
+            constraintLayout: "com.android.support.constraint:constraint-layout:${deps.vers.android.constraintLayout}",
+            swaggerAnnotations: "io.swagger:swagger-annotations:${deps.vers.android.swaggerAnnotations}",
+            gson: "com.google.code.gson:gson:${deps.vers.android.gson}",
+            httpmime: "org.apache.httpcomponents:httpcore:${deps.vers.android.httpmime}",
+            httpcore: "org.apache.httpcomponents:httpmime:${deps.vers.android.httpcore}",
+            httpclient: "org.apache.httpcomponents:httpclient-android:${deps.vers.android.httpclient}",
+            volley: "com.android.volley:volley:${deps.vers.android.volley}",
         ],
         backend: [
-            apacheLang3: "org.apache.commons:commons-lang3:${deps.vers.backend.apacheLang3}",
-
             jpaApi: "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:${deps.vers.backend.jpaApi}",
             postgresDriver: "org.postgresql:postgresql:${deps.vers.backend.postgresDriver}",
             h2Driver: "com.h2database:h2:${deps.vers.backend.h2Driver}",
@@ -59,32 +84,30 @@ ext {
             htmlUnit: "net.sourceforge.htmlunit:htmlunit:${deps.vers.backend.htmlunit}",
 
             swaggerSpringfox: "io.springfox:springfox-swagger2:${deps.vers.backend.swaggerSpringfox}",
-            //TODO: replace with stable release 2.3
-            //swaggerCodegenCli: "io.swagger:swagger-codegen-cli:${versions.gen.swaggerCodegenCli}"
-            swaggerCodegenCli: "com.github.wingsofovnia:swagger-codegen:${deps.vers.backend.swaggerCodegenCli}",
-            lombok: "org.projectlombok:lombok:${deps.vers.backend.lombok}",
 
-            junit: "junit:junit:${deps.vers.backend.junit}",
-            assertj: "org.assertj:assertj-core:${deps.vers.backend.assertj}",
-            mockito: "org.mockito:mockito-core:${deps.vers.backend.mockito}",
+            lombok: "org.projectlombok:lombok:${deps.vers.backend.lombok}",
         ]
     ]
 
     plgs.vers = [
+        common: [
+            swaggerCodegenPlugin: '2.9.0'
+        ],
         android: [
             androidTools: '3.0.1'
         ],
         backend: [
-            swaggerCodegenPlugin: '2.8.0'
         ]
     ]
     plgs.defs = [
+        common: [
+            swaggerCodegen: "gradle.plugin.org.hidetake:gradle-swagger-generator-plugin:${plgs.vers.common.swaggerCodegenPlugin}"
+        ],
         android: [
             androidTools: "com.android.tools.build:gradle:${plgs.vers.android.androidTools}"
         ],
         backend: [
             springBoot: "org.springframework.boot:spring-boot-gradle-plugin:${deps.vers.backend.springBoot}",
-            swaggerCodegen: "gradle.plugin.org.hidetake:gradle-swagger-generator-plugin:${plgs.vers.backend.swaggerCodegenPlugin}"
         ]
     ]
 
