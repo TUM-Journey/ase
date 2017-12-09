@@ -38,8 +38,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private String oauth2ClientId;
     @Value("${security.oauth2.grandTypes}")
     private String[] oauth2GrandTypes;
-    @Value("${security.oauth2.scopes}")
-    private String[] oauth2Scopes;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -53,6 +51,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints.tokenStore(tokenStore())
                 .accessTokenConverter(accessTokenConverter())
+                .requestValidator(new ReferenceOAuth2RequestValidator())
                 .authenticationManager(authenticationManager);
     }
 
@@ -61,7 +60,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         clients.inMemory()
                 .withClient(oauth2ClientId)
                 .authorizedGrantTypes(oauth2GrandTypes)
-                .scopes(oauth2Scopes)
                 .accessTokenValiditySeconds(accessTokenValidity);
     }
 

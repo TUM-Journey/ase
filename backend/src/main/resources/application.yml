@@ -34,7 +34,6 @@ security:
 
     clientId: kleo-client
     grandTypes: password,refresh_token
-    scopes: management
 
   jwt:
     signingKey: EZ4cyYpeHucVpWZjvRq5d6LaLjZfcjhkpg5nNBwn
