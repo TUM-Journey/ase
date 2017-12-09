@@ -18,11 +18,11 @@ dependencies {
     implementation deps.defs.android.constraintLayout
 
     implementation deps.defs.android.swaggerAnnotations
-    implementation deps.defs.android.gson
-    implementation deps.defs.android.httpmime
-    implementation deps.defs.android.httpcore
-    implementation deps.defs.android.httpclient
-    implementation deps.defs.android.volley
+    implementation deps.defs.android.retrofit
+    implementation deps.defs.android.retrofitScalars
+    implementation deps.defs.android.retrofitGson
+    implementation deps.defs.android.oltuOAuth2
+    implementation deps.defs.android.gsonFire
 
     testImplementation deps.defs.common.junit
     testImplementation deps.defs.common.assertj
@@ -62,7 +62,7 @@ swaggerSources {
     kleo {
         inputFile = file(OPENAPI_SOURCE)
         code {
-            language = 'android'
+            language = 'java'
             configFile = file('swagger.json')
         }
     }

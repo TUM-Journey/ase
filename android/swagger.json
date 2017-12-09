@@ -1,5 +1,9 @@
 {
   "modelPackage": "de.tum.ase.kleo.android.client.dto",
   "invokerPackage": "de.tum.ase.kleo.android.client.invoker",
-  "apiPackage": "de.tum.ase.kleo.android.client"
+  "apiPackage": "de.tum.ase.kleo.android.client",
+  "basePackage": "de.tum.ase.kleo.android.client",
+  "library": "retrofit2",
+  "dateLibrary": "java8",
+  "hideGenerationTimestamp": true
 }

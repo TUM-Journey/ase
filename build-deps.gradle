@@ -14,11 +14,11 @@ ext {
         android: [
             constraintLayout: '1.0.2',
             swaggerAnnotations: '1.5.0',
-            gson: '2.3.1',
-            httpmime: '4.4.4',
-            httpcore: '4.5.2',
-            httpclient: '4.3.3',
-            volley: '1.0.0',
+            retrofit: '2.3.0',
+            retrofitScalars: '2.3.0',
+            retrofitGson: '2.3.0',
+            oltuOAuth2: '1.0.1',
+            gsonFire: '1.8.0',
         ],
         backend: [
             jpaApi: '1.0.0.Final',
@@ -56,11 +56,11 @@ ext {
         android: [
             constraintLayout: "com.android.support.constraint:constraint-layout:${deps.vers.android.constraintLayout}",
             swaggerAnnotations: "io.swagger:swagger-annotations:${deps.vers.android.swaggerAnnotations}",
-            gson: "com.google.code.gson:gson:${deps.vers.android.gson}",
-            httpmime: "org.apache.httpcomponents:httpcore:${deps.vers.android.httpmime}",
-            httpcore: "org.apache.httpcomponents:httpmime:${deps.vers.android.httpcore}",
-            httpclient: "org.apache.httpcomponents:httpclient-android:${deps.vers.android.httpclient}",
-            volley: "com.android.volley:volley:${deps.vers.android.volley}",
+            retrofit: "com.squareup.retrofit2:retrofit:${deps.vers.android.retrofit}",
+            retrofitScalars: "com.squareup.retrofit2:converter-scalars:${deps.vers.android.retrofitScalars}",
+            retrofitGson: "com.squareup.retrofit2:converter-gson:${deps.vers.android.retrofitGson}",
+            oltuOAuth2: "org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:${deps.vers.android.oltuOAuth2}",
+            gsonFire: "io.gsonfire:gson-fire:${deps.vers.android.gsonFire}",
         ],
         backend: [
             jpaApi: "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:${deps.vers.backend.jpaApi}",
