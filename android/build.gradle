@@ -16,6 +16,7 @@ dependencies {
     swaggerCodegen deps.defs.common.swaggerCodegenCli
 
     implementation deps.defs.android.constraintLayout
+    implementation deps.defs.android.playServicesAuth
 
     implementation deps.defs.android.swaggerAnnotations
     implementation deps.defs.android.retrofit

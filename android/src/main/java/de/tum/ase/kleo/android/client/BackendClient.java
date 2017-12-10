@@ -6,7 +6,7 @@ import de.tum.ase.kleo.android.client.invoker.ApiClient;
 import de.tum.ase.kleo.android.client.invoker.auth.OAuth;
 import de.tum.ase.kleo.android.client.invoker.auth.OAuthFlow;
 
-public class BackendClient extends ApiClient {
+class BackendClient extends ApiClient {
 
     private static final String OAUTH_TOKEN_ENDPOINT = "oauth/token";
 

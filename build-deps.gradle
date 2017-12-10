@@ -13,6 +13,7 @@ ext {
         ],
         android: [
             constraintLayout: '1.0.2',
+            playServicesAuth: '9.8.0',
             swaggerAnnotations: '1.5.0',
             retrofit: '2.3.0',
             retrofitScalars: '2.3.0',
@@ -55,6 +56,7 @@ ext {
         ],
         android: [
             constraintLayout: "com.android.support.constraint:constraint-layout:${deps.vers.android.constraintLayout}",
+            playServicesAuth: "com.google.android.gms:play-services-auth:${deps.vers.android.playServicesAuth}",
             swaggerAnnotations: "io.swagger:swagger-annotations:${deps.vers.android.swaggerAnnotations}",
             retrofit: "com.squareup.retrofit2:retrofit:${deps.vers.android.retrofit}",
             retrofitScalars: "com.squareup.retrofit2:converter-scalars:${deps.vers.android.retrofitScalars}",
