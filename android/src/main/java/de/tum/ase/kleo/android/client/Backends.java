@@ -1,5 +1,6 @@
 package de.tum.ase.kleo.android.client;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,17 +12,19 @@ public class Backends {
     private String clientId;
     private String clientSecret;
     private BackendClient client;
+    private Duration authTimeout;
+
     private final Map<String, Object> services = new HashMap<>();
 
     public static void init(String basePath, String clientId) {
-        init(basePath, clientId, null);
+        init(basePath, clientId, null, null);
     }
 
-    public static void init(String basePath, String clientId, String clientSecret) {
+    public static void init(String basePath, String clientId, String clientSecret, Duration authTimeout) {
         thiz.basePath = basePath;
         thiz.clientId = clientId;
         thiz.clientSecret = clientSecret;
-
+        thiz.authTimeout = authTimeout;
     }
 
     public static void login(String username, String password) {
@@ -29,7 +32,7 @@ public class Backends {
             throw new IllegalStateException("Initialize object first");
         
         thiz.client = new BackendClient(thiz.basePath, thiz.clientId, thiz.clientSecret,
-                username, password);
+                username, password, thiz.authTimeout);
     }
 
     @SuppressWarnings("unchecked")
