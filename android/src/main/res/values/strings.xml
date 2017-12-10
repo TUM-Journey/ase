@@ -3,7 +3,9 @@
     <string name="tum_e_mail">TUM E-mail</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
+    <string name="empty_email">Please type your TUM email first</string>
+    <string name="empty_password">Please type your password first</string>
+    <string name="logging_in">Logging in…</string>
+    <string name="monitoring_sessions">Monitoring sessions</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
