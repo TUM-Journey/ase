@@ -23,34 +23,35 @@
         android:id="@+id/loginEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="14dp"
-        android:layout_marginStart="1dp"
+        android:layout_marginBottom="15dp"
         android:ems="10"
         android:hint="@string/tum_e_mail"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/loginPassword"
+        app:layout_constraintEnd_toEndOf="@+id/loginPassword"
         app:layout_constraintStart_toStartOf="@+id/loginPassword" />
 
     <EditText
         android:id="@+id/loginPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="15dp"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/loginSubmit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/loginSubmit"
+        app:layout_constraintHorizontal_bias="0.473"
+        app:layout_constraintStart_toStartOf="@+id/loginSubmit" />
 
     <Button
         android:id="@+id/loginSubmit"
         style="@android:style/Widget.Material.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="86dp"
+        android:layout_marginBottom="60dp"
         android:text="@string/login"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/loginBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -59,8 +60,6 @@
         android:layout_width="87dp"
         android:layout_height="42dp"
         android:layout_marginBottom="15dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:src="@drawable/tum_logo"
         app:layout_constraintBottom_toTopOf="@+id/loginEmail"
         app:layout_constraintEnd_toEndOf="@+id/loginEmail"
@@ -70,13 +69,12 @@
         android:id="@+id/loginKeloLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="80dp"
         android:src="@drawable/kleo_logo"
-        app:layout_constraintBottom_toTopOf="@+id/loginTumLogo"
-        app:layout_constraintEnd_toEndOf="@+id/loginTumLogo"
-        app:layout_constraintStart_toStartOf="@+id/loginTumLogo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/loginBackground" />
 
 </android.support.constraint.ConstraintLayout>
