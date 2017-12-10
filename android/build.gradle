@@ -33,6 +33,11 @@ dependencies {
 }
 
 android {
+    compileOptions {
+        sourceCompatibility configs.compiler.sourceCompatibility
+        targetCompatibility configs.compiler.targetCompatibility
+    }
+
     buildToolsVersion configs.android.buildToolsVersion
     compileSdkVersion configs.android.compileSdkVersion
 
