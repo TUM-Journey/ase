@@ -7,5 +7,8 @@
     <string name="empty_password">Please type your password first</string>
     <string name="logging_in">Logging in…</string>
     <string name="monitoring_sessions">Monitoring sessions</string>
+    <string name="login_with">Login with</string>
+    <string name="account">account</string>
+    <string name="kleo_name">kleo</string>
 
 </resources>

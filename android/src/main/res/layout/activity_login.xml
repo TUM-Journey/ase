@@ -2,20 +2,18 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:screenOrientation="portrait"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="de.tum.ase.kleo.android.LoginActivity"
     tools:layout_editor_absoluteY="25dp">
 
     <ImageView
-        android:id="@+id/loginBackground"
+        android:id="@+id/loginTumBg"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:adjustViewBounds="true"
-        android:contentDescription="Background"
+        android:layout_height="wrap_content"
         android:scaleType="centerCrop"
-        android:src="@drawable/tum_background_light"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/tum_backgroud"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,6 +25,8 @@
         android:ems="10"
         android:hint="@string/tum_e_mail"
         android:inputType="textEmailAddress"
+        android:singleLine="true"
+        android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/loginPassword"
         app:layout_constraintEnd_toEndOf="@+id/loginPassword"
         app:layout_constraintStart_toStartOf="@+id/loginPassword" />
@@ -39,9 +39,10 @@
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
+        android:singleLine="true"
+        android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/loginSubmit"
         app:layout_constraintEnd_toEndOf="@+id/loginSubmit"
-        app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="@+id/loginSubmit" />
 
     <Button
@@ -49,32 +50,67 @@
         style="@android:style/Widget.Material.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="110dp"
         android:text="@string/login"
-        app:layout_constraintBottom_toBottomOf="@+id/loginBackground"
+        app:layout_constraintBottom_toBottomOf="@+id/loginTumBg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/loginTumLogo"
-        android:layout_width="87dp"
-        android:layout_height="42dp"
-        android:layout_marginBottom="15dp"
-        android:src="@drawable/tum_logo"
-        app:layout_constraintBottom_toTopOf="@+id/loginEmail"
-        app:layout_constraintEnd_toEndOf="@+id/loginEmail"
-        app:layout_constraintStart_toStartOf="@+id/loginEmail" />
-
-    <ImageView
-        android:id="@+id/loginKeloLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="80dp"
-        android:src="@drawable/kleo_logo"
+        android:id="@+id/loginKeloDiamond"
+        android:layout_width="127dp"
+        android:layout_height="131dp"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/kleo_diamond"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/loginBackground" />
+        app:layout_constraintTop_toTopOf="@+id/loginTumBg" />
+
+    <TextView
+        android:id="@+id/loginKleoName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/satisfy"
+        android:text="@string/kleo_name"
+        android:textAlignment="center"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/loginKeloDiamond"
+        app:layout_constraintStart_toStartOf="@+id/loginKeloDiamond"
+        app:layout_constraintTop_toBottomOf="@+id/loginKeloDiamond" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical|center_horizontal|center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/loginWith"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:text="@string/login_with" />
+
+        <ImageView
+            android:id="@+id/loginTumLogo"
+            android:layout_width="42dp"
+            android:layout_height="28dp"
+            android:src="@drawable/tum_logo" />
+
+        <TextView
+            android:id="@+id/loginAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="@string/account" />
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
