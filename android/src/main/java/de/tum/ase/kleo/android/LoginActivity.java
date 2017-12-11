@@ -24,6 +24,11 @@ public class LoginActivity extends Activity {
 
         this.backendClient = ((KleoApplication) getApplication()).backendClient();
 
+        if (backendClient.isAuthenticated()) {
+            proceed();
+            return;
+        }
+
         loggingInDialog = new ProgressDialog(LoginActivity.this);
         loggingInDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         loggingInDialog.setMessage(getString(R.string.logging_in));
@@ -46,8 +51,7 @@ public class LoginActivity extends Activity {
                 try {
                     LoginActivity.this.runOnUiThread(() -> loggingInDialog.show());
                     backendClient.authenticate(email, password);
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    finish();
+                    proceed();
                 } catch (AuthenticationException e) {
                     LoginActivity.this.runOnUiThread(() ->
                             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show());
@@ -58,10 +62,15 @@ public class LoginActivity extends Activity {
         }
     }
 
+    private void proceed() {
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        finish();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (loggingInDialog.isShowing()) {
+        if (loggingInDialog != null && loggingInDialog.isShowing()) {
             loggingInDialog.cancel();
         }
     }

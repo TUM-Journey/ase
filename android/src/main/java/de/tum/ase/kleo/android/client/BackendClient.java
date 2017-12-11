@@ -25,7 +25,7 @@ public class BackendClient {
     private final String clientId;
     private final String secret;
 
-    private final AtomicBoolean isAuthenciated = new AtomicBoolean();
+    private final AtomicBoolean isAuthenticated = new AtomicBoolean();
     private final Map<String, Object> services = new ConcurrentHashMap<>();
 
     public BackendClient(String basePath, String clientId, String secret) {
@@ -63,7 +63,7 @@ public class BackendClient {
     }
 
     public synchronized void authenticate(String username, String password, Duration timeout) {
-        if (isAuthenciated.get())
+        if (isAuthenticated.get())
             throw new IllegalStateException("Backend client has been already synchronized");
 
         try {
@@ -78,7 +78,7 @@ public class BackendClient {
             oAuth.updateAccessToken(null);
 
             apiClient.addAuthorization(oAuth.getClass().getName(), oAuth);
-            isAuthenciated.set(true);
+            isAuthenticated.set(true);
         } catch (IOException e) {
             throw new AuthenticationException("Failed to log in with given credentials", e);
         }
@@ -86,6 +86,10 @@ public class BackendClient {
 
     public void authenticate(String username, String password) {
         authenticate(username, password, null);
+    }
+
+    public boolean isAuthenticated() {
+        return isAuthenticated.get();
     }
 
     private static OkHttpClient okHttpClient(Duration timeout) {
