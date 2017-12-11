@@ -12,6 +12,9 @@ ext {
             mockito: '2.12.+',
         ],
         android: [
+            appcompat: '26.1.0',
+            support: '26.1.0',
+            supportDesign: '26.1.0',
             constraintLayout: '1.0.2',
             playServicesAuth: '9.8.0',
             swaggerAnnotations: '1.5.0',
@@ -55,6 +58,9 @@ ext {
             mockito: "org.mockito:mockito-core:${deps.vers.common.mockito}",
         ],
         android: [
+            appcompat: "com.android.support:appcompat-v7:${deps.vers.android.appcompat}",
+            support: "com.android.support:support-v4:${deps.vers.android.support}",
+            supportDesign: "com.android.support:design:${deps.vers.android.supportDesign}",
             constraintLayout: "com.android.support.constraint:constraint-layout:${deps.vers.android.constraintLayout}",
             playServicesAuth: "com.google.android.gms:play-services-auth:${deps.vers.android.playServicesAuth}",
             swaggerAnnotations: "io.swagger:swagger-annotations:${deps.vers.android.swaggerAnnotations}",

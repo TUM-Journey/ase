@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Kleo</string>
+    <string name="app_name">kleo</string>
     <string name="tum_e_mail">TUM E-mail</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
@@ -9,6 +9,15 @@
     <string name="monitoring_sessions">Monitoring sessions</string>
     <string name="login_with">Login with</string>
     <string name="account">account</string>
-    <string name="kleo_name">kleo</string>
 
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="studying">Studying</string>
+    <string name="group_scanner">Group Scanner</string>
+    <string name="study_groups">Study Groups</string>
+    <string name="my_registrations">My Registrations</string>
+    <string name="my_attendances">My Attendances</string>
+    <string name="tutoring">Tutoring</string>
+    <string name="group_broadcaster">Group Broadcaster</string>
+    <string name="tutoring_groups">Tutoring Groups</string>
 </resources>

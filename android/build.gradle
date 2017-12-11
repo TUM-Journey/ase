@@ -15,6 +15,9 @@ dependencies {
 
     swaggerCodegen deps.defs.common.swaggerCodegenCli
 
+    implementation deps.defs.android.appcompat
+    implementation deps.defs.android.support
+    implementation deps.defs.android.supportDesign
     implementation deps.defs.android.constraintLayout
     implementation deps.defs.android.playServicesAuth
 
