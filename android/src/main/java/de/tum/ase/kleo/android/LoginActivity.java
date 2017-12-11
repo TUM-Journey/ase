@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -15,42 +14,37 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class LoginActivity extends Activity {
 
-    private ProgressDialog logginInDialog;
-    // TODO: configure based on build variant
-    private final BackendClient backendClient = new BackendClient("http://192.168.0.11:8080/api/", "kleo-client");
+    private ProgressDialog loggingInDialog;
+    private BackendClient backendClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        logginInDialog = new ProgressDialog(LoginActivity.this); // this = YourActivity
-        logginInDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        logginInDialog.setMessage(getString(R.string.logging_in));
-        logginInDialog.setIndeterminate(true);
-        logginInDialog.setCanceledOnTouchOutside(false);
+        this.backendClient = ((KleoApplication) getApplication()).backendClient();
 
-        findViewById(R.id.loginSubmit).setOnClickListener(new LoginSubmitListener());
+        loggingInDialog = new ProgressDialog(LoginActivity.this);
+        loggingInDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        loggingInDialog.setMessage(getString(R.string.logging_in));
+        loggingInDialog.setIndeterminate(true);
+        loggingInDialog.setCanceledOnTouchOutside(false);
+
+        findViewById(R.id.loginSubmit).setOnClickListener(v -> LoginActivity.this.authenticate());
     }
 
-    public class LoginSubmitListener implements View.OnClickListener {
+    private void authenticate() {
+        final String email = ((EditText) findViewById(R.id.loginEmail)).getText().toString();
+        final String password = ((EditText) findViewById(R.id.loginPassword)).getText().toString();
 
-        @Override
-        public void onClick(View v) {
-            final String email = ((EditText) findViewById(R.id.loginEmail)).getText().toString();
-            final String password = ((EditText) findViewById(R.id.loginPassword)).getText().toString();
-
-            if (isBlank(email)) {
-                Toast.makeText(getApplicationContext(), R.string.empty_email, Toast.LENGTH_LONG).show();
-                return;
-            } else if (isBlank(password)) {
-                Toast.makeText(getApplicationContext(), R.string.empty_password, Toast.LENGTH_LONG).show();
-                return;
-            }
-
+        if (isBlank(email)) {
+            Toast.makeText(getApplicationContext(), R.string.empty_email, Toast.LENGTH_LONG).show();
+        } else if (isBlank(password)) {
+            Toast.makeText(getApplicationContext(), R.string.empty_password, Toast.LENGTH_LONG).show();
+        } else {
             new Thread(() -> {
                 try {
-                    LoginActivity.this.runOnUiThread(() -> logginInDialog.show());
+                    LoginActivity.this.runOnUiThread(() -> loggingInDialog.show());
                     backendClient.authenticate(email, password);
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
@@ -58,7 +52,7 @@ public class LoginActivity extends Activity {
                     LoginActivity.this.runOnUiThread(() ->
                             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show());
                 } finally {
-                    LoginActivity.this.runOnUiThread(() -> logginInDialog.dismiss());
+                    LoginActivity.this.runOnUiThread(() -> loggingInDialog.dismiss());
                 }
             }).start();
         }
@@ -67,8 +61,8 @@ public class LoginActivity extends Activity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (logginInDialog != null && logginInDialog.isShowing()) {
-            logginInDialog.cancel();
+        if (loggingInDialog.isShowing()) {
+            loggingInDialog.cancel();
         }
     }
 }
