@@ -5,35 +5,39 @@
 
     <item android:title="@string/studying">
         <menu>
-            <item
-                android:id="@+id/group_scanner"
-                android:icon="@drawable/ic_explore"
-                android:title="@string/group_scanner" />
-            <item
-                android:id="@+id/student_groups"
-                android:icon="@drawable/ic_import_contacts"
-                android:title="@string/study_groups" />
-            <item
-                android:id="@+id/student_registrations"
-                android:icon="@drawable/ic_bookmark"
-                android:title="@string/my_registrations" />
-            <item
-                android:id="@+id/student_attendances"
-                android:icon="@drawable/ic_assessment"
-                android:title="@string/my_attendances" />
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/group_scanner"
+                    android:icon="@drawable/ic_explore"
+                    android:title="@string/group_scanner" />
+                <item
+                    android:id="@+id/student_groups"
+                    android:icon="@drawable/ic_import_contacts"
+                    android:title="@string/study_groups" />
+                <item
+                    android:id="@+id/student_registrations"
+                    android:icon="@drawable/ic_bookmark"
+                    android:title="@string/my_registrations" />
+                <item
+                    android:id="@+id/student_attendances"
+                    android:icon="@drawable/ic_assessment"
+                    android:title="@string/my_attendances" />
+            </group>
         </menu>
     </item>
 
     <item android:title="@string/tutoring">
         <menu>
-            <item
-                android:id="@+id/group_broadcaster"
-                android:icon="@drawable/ic_router"
-                android:title="@string/group_broadcaster" />
-            <item
-                android:id="@+id/tutoring_groups"
-                android:icon="@drawable/ic_work"
-                android:title="@string/tutoring_groups" />
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/group_broadcaster"
+                    android:icon="@drawable/ic_router"
+                    android:title="@string/group_broadcaster" />
+                <item
+                    android:id="@+id/tutoring_groups"
+                    android:icon="@drawable/ic_work"
+                    android:title="@string/tutoring_groups" />
+            </group>
         </menu>
     </item>
 
