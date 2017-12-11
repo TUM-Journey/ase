@@ -3,21 +3,21 @@ package de.tum.ase.kleo.android;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.wifi.hotspot2.pps.Credential;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import de.tum.ase.kleo.android.client.AuthenticationException;
-import de.tum.ase.kleo.android.client.Backends;
+import de.tum.ase.kleo.android.client.BackendClient;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class LoginActivity extends Activity {
 
     private ProgressDialog logginInDialog;
+    // TODO: configure based on build variant
+    private final BackendClient backendClient = new BackendClient("http://192.168.0.11:8080/api/", "kleo-client");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +29,6 @@ public class LoginActivity extends Activity {
         logginInDialog.setMessage(getString(R.string.logging_in));
         logginInDialog.setIndeterminate(true);
         logginInDialog.setCanceledOnTouchOutside(false);
-
-        // TODO: configure based on build variant
-        Backends.init("http://192.168.0.11:8080/api/", "kleo-client");
 
         findViewById(R.id.loginSubmit).setOnClickListener(new LoginSubmitListener());
     }
@@ -54,7 +51,7 @@ public class LoginActivity extends Activity {
             new Thread(() -> {
                 try {
                     LoginActivity.this.runOnUiThread(() -> logginInDialog.show());
-                    Backends.login(email, password);
+                    backendClient.authenticate(email, password);
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
                 } catch (AuthenticationException e) {
