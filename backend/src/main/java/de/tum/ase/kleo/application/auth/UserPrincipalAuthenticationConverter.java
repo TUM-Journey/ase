@@ -1,9 +1,5 @@
 package de.tum.ase.kleo.application.auth;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.val;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,20 +7,37 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import lombok.val;
+
 public class UserPrincipalAuthenticationConverter extends DefaultUserAuthenticationConverter {
 
-    private final static String PRINCIPAL = "user";
+    private final static String PRINCIPAL_ID = "user_id";
+    private final static String PRINCIPAL_EMAIL = "user_email";
+    private final static String PRINCIPAL_NAME = "user_name";
+    private final static String PRINCIPAL_STUDENT_ID = "user_student_id";
 
     @Override
     public Map<String, ?> convertUserAuthentication(Authentication authentication) {
         val response = new LinkedHashMap<String, Object>();
-        response.put(PRINCIPAL, authentication.getPrincipal());
+        val principal = (UserPrincipal) authentication.getPrincipal();
+
+        val principalId = principal.getId();
+        val principalEmail = principal.getEmail();
+        val principalName = principal.getName();
+        val principalStudentId = principal.getStudentId();
+
+        response.put(PRINCIPAL_ID, principalId);
+        response.put(PRINCIPAL_EMAIL, principalEmail);
+        response.put(PRINCIPAL_NAME, principalName);
+
+        if (principalStudentId != null) {
+            response.put(PRINCIPAL_STUDENT_ID, principalStudentId);
+        }
 
         if (authentication.getAuthorities() != null && !authentication.getAuthorities().isEmpty()) {
             response.put(AUTHORITIES, AuthorityUtils.authorityListToSet(authentication.getAuthorities()));
@@ -33,9 +46,14 @@ public class UserPrincipalAuthenticationConverter extends DefaultUserAuthenticat
     }
 
     @Override
-    public Authentication extractAuthentication(Map<String, ?> map) {
-        val principal = map.get(PRINCIPAL);
-        val authorities = getAuthorities(map);
+    public Authentication extractAuthentication(Map<String, ?> data) {
+        val principalId = (String) data.get(PRINCIPAL_ID);
+        val principalEmail = (String) data.get(PRINCIPAL_EMAIL);
+        val principalName = (String) data.get(PRINCIPAL_NAME);
+        val principalStudentId = (String) data.get(PRINCIPAL_STUDENT_ID);
+
+        val principal = new UserPrincipal(principalId, principalEmail, principalName, principalStudentId);
+        val authorities = getAuthorities(data);
 
         return new UsernamePasswordAuthenticationToken(principal, "N/A", authorities);
     }
