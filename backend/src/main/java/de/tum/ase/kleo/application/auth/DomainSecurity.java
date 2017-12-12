@@ -25,7 +25,7 @@ public class DomainSecurity {
             return false;
 
         val userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        val userId = UserId.of(userPrincipal.id());
+        val userId = UserId.of(userPrincipal.getId());
         val groupId = GroupId.of(groupIdRaw);
 
         return groupRepository.findOptionalByIdAndTutorIdsContaining(groupId, userId).isPresent();
@@ -37,7 +37,7 @@ public class DomainSecurity {
             return false;
 
         val userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        val userId = userPrincipal.id();
+        val userId = userPrincipal.getId();
         return userId.equals(userIdRaw);
     }
 }

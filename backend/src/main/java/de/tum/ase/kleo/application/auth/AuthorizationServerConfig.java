@@ -39,9 +39,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Value("${security.oauth2.grandTypes}")
     private String[] oauth2GrandTypes;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) {
         oauthServer.tokenKeyAccess("permitAll()")
@@ -92,6 +89,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Bean
     UserAuthenticationConverter userPrincipleAuthenticationConverter() {
-        return new UserPrincipleAuthenticationConverter(objectMapper);
+        return new UserPrincipalAuthenticationConverter();
     }
 }

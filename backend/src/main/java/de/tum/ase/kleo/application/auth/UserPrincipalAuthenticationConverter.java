@@ -17,29 +17,14 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class UserPrincipleAuthenticationConverter extends DefaultUserAuthenticationConverter {
+public class UserPrincipalAuthenticationConverter extends DefaultUserAuthenticationConverter {
 
     private final static String PRINCIPAL = "user";
-
-    private final ObjectMapper objectMapper;
-
-    public UserPrincipleAuthenticationConverter(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
-    public UserPrincipleAuthenticationConverter() {
-        this(new ObjectMapper());
-    }
 
     @Override
     public Map<String, ?> convertUserAuthentication(Authentication authentication) {
         val response = new LinkedHashMap<String, Object>();
-
-        try {
-            response.put(PRINCIPAL, objectMapper.writeValueAsString(authentication.getPrincipal()));
-        } catch (JsonProcessingException e) {
-            throw new AuthenticationServiceException("Failed to convert authentication principle", e);
-        }
+        response.put(PRINCIPAL, authentication.getPrincipal());
 
         if (authentication.getAuthorities() != null && !authentication.getAuthorities().isEmpty()) {
             response.put(AUTHORITIES, AuthorityUtils.authorityListToSet(authentication.getAuthorities()));
@@ -49,19 +34,10 @@ public class UserPrincipleAuthenticationConverter extends DefaultUserAuthenticat
 
     @Override
     public Authentication extractAuthentication(Map<String, ?> map) {
-        val rawPrincipal = map.get(PRINCIPAL);
-        if (rawPrincipal != null) {
-            try {
-                val principal = objectMapper.readValue((String) rawPrincipal, UserPrincipal.class);
-                val authorities = getAuthorities(map);
+        val principal = map.get(PRINCIPAL);
+        val authorities = getAuthorities(map);
 
-                return new UsernamePasswordAuthenticationToken(principal, "N/A", authorities);
-            } catch (IOException e) {
-                throw new AuthenticationServiceException("Failed to read authentication principle", e);
-            }
-
-        }
-        return null;
+        return new UsernamePasswordAuthenticationToken(principal, "N/A", authorities);
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(Map<String, ?> map) {
