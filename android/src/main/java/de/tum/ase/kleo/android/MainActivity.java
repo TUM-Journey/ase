@@ -10,16 +10,26 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
+import de.tum.ase.kleo.android.client.BackendClient;
+import de.tum.ase.kleo.android.client.Principal;
 import de.tum.ase.kleo.android.studying.groups.StudentGroupsFragment;
+
+import static java.lang.String.format;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private BackendClient backendClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        backendClient = ((KleoApplication) getApplication()).backendClient();
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -33,7 +43,23 @@ public class MainActivity extends AppCompatActivity
         final NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        fillOutNavigationHeaderStudentInfo(navigationView.getHeaderView(0));
+
         setContent(new WelcomeFragment());
+    }
+
+    private void fillOutNavigationHeaderStudentInfo(View view) {
+        final TextView usernameView = view.findViewById(R.id.menuUserName);
+        final TextView emailView = view.findViewById(R.id.menuUserEmail);
+        final TextView studentIdView = view.findViewById(R.id.menuUserStudentId);
+
+        final Principal principal = backendClient.principal();
+
+        usernameView.setText(principal.name());
+        emailView.setText(principal.email());
+        if (principal.studentId() != null) {
+            studentIdView.setText(format("(%s)", principal.studentId()));
+        }
     }
 
     @Override
