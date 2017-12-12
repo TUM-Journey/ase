@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">kleo</string>
+    <string name="app_name">Kleo</string>
+    <string name="app_name_logo">kleo</string>
     <string name="tum_e_mail">TUM E-mail</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
@@ -23,4 +24,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="welcome_msg"><![CDATA[Welcome to Kleo! \n Kleo is an electronic attendance system that will help you to find & sign up for interesting studying groups and tutors to record your attendances.]]></string>
+    <string name="swipe_to_start">Swipe on the left to get started.</string>
 </resources>
