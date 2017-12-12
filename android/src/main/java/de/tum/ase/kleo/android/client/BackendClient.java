@@ -1,7 +1,10 @@
 package de.tum.ase.kleo.android.client;
 
+import com.auth0.android.jwt.JWT;
+
 import java.io.IOException;
 import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -26,6 +29,14 @@ public class BackendClient {
     private final String secret;
 
     private final AtomicBoolean isAuthenticated = new AtomicBoolean();
+    private OAuth oAuth;
+
+    private final static String PRINCIPAL_ID = "user_id";
+    private final static String PRINCIPAL_EMAIL = "user_email";
+    private final static String PRINCIPAL_NAME = "user_name";
+    private final static String PRINCIPAL_STUDENT_ID = "user_student_id";
+    private final static String PRINCIPAL_AUTHORITIES = "authorities";
+
     private final Map<String, Object> services = new ConcurrentHashMap<>();
 
     public BackendClient(String basePath, String clientId, String secret) {
@@ -62,12 +73,12 @@ public class BackendClient {
         }
     }
 
-    public synchronized void authenticate(String username, String password, Duration timeout) {
+    public synchronized Principal authenticate(String username, String password, Duration timeout) {
         if (isAuthenticated.get())
             throw new IllegalStateException("Backend client has been already synchronized");
 
         try {
-            final OAuth oAuth = new OAuth(okHttpClient(timeout), tokenLocation(basePath + OAUTH_TOKEN_ENDPOINT));
+            oAuth = new OAuth(okHttpClient(timeout), tokenLocation(basePath + OAUTH_TOKEN_ENDPOINT));
             oAuth.setFlow(OAuthFlow.password);
             oAuth.getTokenRequestBuilder()
                     .setClientId(clientId)
@@ -79,17 +90,32 @@ public class BackendClient {
 
             apiClient.addAuthorization(oAuth.getClass().getName(), oAuth);
             isAuthenticated.set(true);
+
+            return principal();
         } catch (IOException e) {
             throw new AuthenticationException("Failed to log in with given credentials", e);
         }
     }
 
-    public void authenticate(String username, String password) {
-        authenticate(username, password, null);
+    public Principal authenticate(String username, String password) {
+        return authenticate(username, password, null);
     }
 
     public boolean isAuthenticated() {
         return isAuthenticated.get();
+    }
+
+    public Principal principal() {
+        final JWT jwt = new JWT(oAuth.getAccessToken());
+
+        final String principalId = jwt.getClaim(PRINCIPAL_ID).asString();
+        final String principalEmail = jwt.getClaim(PRINCIPAL_EMAIL).asString();
+        final String principalName = jwt.getClaim(PRINCIPAL_NAME).asString();
+        final String principalStudentId = jwt.getClaim(PRINCIPAL_STUDENT_ID).asString();
+        final List<String> principalAuthorities = jwt.getClaim(PRINCIPAL_AUTHORITIES).asList(String.class);
+
+        return new Principal(principalId, principalEmail, principalName, principalStudentId,
+                Principal.Authority.from(principalAuthorities));
     }
 
     private static OkHttpClient okHttpClient(Duration timeout) {

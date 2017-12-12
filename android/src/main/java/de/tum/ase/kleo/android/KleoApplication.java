@@ -12,15 +12,15 @@ public class KleoApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        configureBackendClient();
+        backendClient = buildBackendClient();
     }
 
-    private void configureBackendClient() {
+    private BackendClient buildBackendClient() {
         final String baseUrl = getString(R.string.backend_baseUrl);
         final String clientId = getString(R.string.backend_clientId);
         final String clientSecret = getString(R.string.backend_clientSecret);
 
-        backendClient = new BackendClient(baseUrl, clientId, clientSecret);
+        return new BackendClient(baseUrl, clientId, clientSecret);
     }
 
     public BackendClient backendClient() {

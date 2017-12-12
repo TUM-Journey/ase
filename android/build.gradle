@@ -29,6 +29,7 @@ dependencies {
         exclude group: 'org.apache.oltu.oauth2', module: 'org.apache.oltu.oauth2.common'
     }
     implementation deps.defs.android.gsonFire
+    implementation deps.defs.android.jwtDecode
 
     testImplementation deps.defs.common.junit
     testImplementation deps.defs.common.assertj

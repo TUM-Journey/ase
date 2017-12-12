@@ -23,6 +23,7 @@ ext {
             retrofitGson: '2.3.0',
             oltuOAuth2: '1.0.1',
             gsonFire: '1.8.0',
+            jwtDecode: '1.1.1',
         ],
         backend: [
             jpaApi: '1.0.0.Final',
@@ -69,6 +70,7 @@ ext {
             retrofitGson: "com.squareup.retrofit2:converter-gson:${deps.vers.android.retrofitGson}",
             oltuOAuth2: "org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:${deps.vers.android.oltuOAuth2}",
             gsonFire: "io.gsonfire:gson-fire:${deps.vers.android.gsonFire}",
+            jwtDecode: "com.auth0.android:jwtdecode:${deps.vers.android.jwtDecode}",
         ],
         backend: [
             jpaApi: "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:${deps.vers.backend.jpaApi}",
