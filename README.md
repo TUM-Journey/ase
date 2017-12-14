@@ -1,10 +1,8 @@
 # Kleo [![Build Status](https://travis-ci.com/wingsofovnia/kleo.svg?token=ouVhGzR1YKc4zojXsBsf&branch=master)](https://travis-ci.com/wingsofovnia/kleo)
-Kleo is an NFC-enabled electronic attendance system that is designed to cope with the problems of managing attendance lists of students.
+Kleo is a Bluetooth-enabled electronic attendance system that is designed to cope with the problems of managing attendance lists of students.
 
 ## API
-Kleo provides several APIs:
- - **REST**, for Android and Web applications. The REST API is defined with OpenAPI2 (Swagger) and availale on [Swaggerhub](https://app.swaggerhub.com/apis/wingsofovnia/kleo-api/). The Postman collection is also [provided](https://www.getpostman.com/collections/f318526cfbae39df8a2e).
- - **MQTT** (under development), for a remote devices designed to accept student passes. 
+Kleo provides **REST** API for Android and Web applications. The REST API is defined with OpenAPI2 (Swagger) and availale on [Swaggerhub](https://app.swaggerhub.com/apis/wingsofovnia/kleo-api/). The Postman collection is also [provided](https://www.getpostman.com/collections/f318526cfbae39df8a2e).
 
 ## Bugs and Feedback
 For bugs, questions and discussions please use the [Github Issues](https://github.com/TUM-Journey/kleo/issues).
