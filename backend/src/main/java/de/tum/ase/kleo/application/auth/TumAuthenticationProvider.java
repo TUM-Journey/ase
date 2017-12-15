@@ -63,7 +63,7 @@ public class TumAuthenticationProvider implements AuthenticationProvider {
         val email = authentication.getName();
         val password = authentication.getCredentials().toString();
 
-        User user = userRepository.findOptinalByEmail(email).filter(usr -> {
+        User user = userRepository.findOptionalByEmail(email).filter(usr -> {
             if (!passwordEncoder.matches(password, usr.passwordHash()))
                 throw new BadCredentialsException("Password is invalid");
 

@@ -49,7 +49,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF')")
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('TUTOR')")
     public ResponseEntity<GroupDTO> addGroup(GroupDTO groupDto) {
         val group = groupFromDtoFactory.create(groupDto);
         val savedGroup = groupRepository.save(group);
@@ -59,7 +59,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF') OR @currentUser.hasUserId(#userIdRaw)")
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('TUTOR') OR @currentUser.hasUserId(#userIdRaw)")
     public ResponseEntity<Void> addGroupStudent(String groupIdRaw, String userIdRaw) {
         val groupId = GroupId.of(groupIdRaw);
         val studentId = UserId.of(userIdRaw);
@@ -79,27 +79,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF')")
-    public ResponseEntity<Void> addGroupTutor(String groupIdRaw, String userIdRaw) {
-        val groupId = GroupId.of(groupIdRaw);
-        val tutorId = UserId.of(userIdRaw);
-
-        val group = groupRepository.findOne(groupId);
-        if (group == null)
-            return ResponseEntity.notFound().build();
-
-        // TODO: Add notFound message to distinct 404 resps (relies on issue #2)
-        if (!userRepository.exists(tutorId))
-            return ResponseEntity.notFound().build();
-
-        group.addTutor(tutorId);
-
-        return ResponseEntity.ok().build();
-    }
-
-    @Override
-    @Transactional
-    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF')")
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('TUTOR')")
     public ResponseEntity<Void> deleteGroup(String groupIdRaw) {
         val groupId = GroupId.of(groupIdRaw);
 
@@ -113,8 +93,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF') " +
-            "OR @currentUser.hasUserId(#userIdRaw) OR @currentUser.isTutorOf(#groupIdRaw)")
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('TUTOR') OR @currentUser.hasUserId(#userIdRaw)")
     public ResponseEntity<Void> deleteGroupStudent(String groupIdRaw, String userIdRaw) {
         val groupId = GroupId.of(groupIdRaw);
         val studentId = UserId.of(userIdRaw);
@@ -125,24 +104,6 @@ public class GroupsService implements GroupsApiDelegate {
 
         // TODO: Add notFound message to distinct 404 resps (relies on issue #2)
         if (!group.removeStudent(studentId))
-            return ResponseEntity.notFound().build();
-
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    @Override
-    @Transactional
-    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF') OR @currentUser.hasUserId(#userIdRaw)")
-    public ResponseEntity<Void> deleteGroupTutor(String groupIdRaw, String userIdRaw) {
-        val groupId = GroupId.of(groupIdRaw);
-        val tutorId = UserId.of(userIdRaw);
-
-        val group = groupRepository.findOne(groupId);
-        if (group == null)
-            return ResponseEntity.notFound().build();
-
-        // TODO: Add notFound message to distinct 404 resps (relies on issue #2)
-        if (!group.removeTutor(tutorId))
             return ResponseEntity.notFound().build();
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -161,25 +122,13 @@ public class GroupsService implements GroupsApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<UserDTO>> getGroupTutors(String groupIdRaw) {
-        val groupId = GroupId.of(groupIdRaw);
-
-        val group = groupRepository.findOne(groupId);
-        if (group == null)
-            return ResponseEntity.notFound().build();
-
-        val tutors = userRepository.findAll(group.tutorIds());
-        return ResponseEntity.ok(userToDtoSerializer.toDto(tutors));
-    }
-
-    @Override
     public ResponseEntity<List<GroupDTO>> getGroups() {
         return ResponseEntity.ok(groupToDtoSerializer.toDto(groupRepository.findAll()));
     }
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF') OR @currentUser.isTutorOf(#groupIdRaw)")
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('TUTOR')")
     public ResponseEntity<GroupDTO> updateGroup(String groupIdRaw, GroupDTO groupDto) {
         val groupId = GroupId.of(groupIdRaw);
 
@@ -193,15 +142,12 @@ public class GroupsService implements GroupsApiDelegate {
         if (groupDto.getStudentIds() != null && !groupDto.getStudentIds().isEmpty())
             group.studentIds(groupDto.getStudentIds().stream().map(UserId::of).collect(toSet()));
 
-        if (groupDto.getTutorIds() != null && !groupDto.getTutorIds().isEmpty())
-            group.tutorIds(groupDto.getTutorIds().stream().map(UserId::of).collect(toSet()));
-
         return ResponseEntity.ok(groupToDtoSerializer.toDto(group));
     }
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('SUPERUSER') OR @currentUser.isTutorOf(#groupIdRaw)")
+    @PreAuthorize("hasRole('SUPERUSER')")
     public ResponseEntity<PassDTO> generateSessionPass(String groupIdRaw, PassDTO passDto) {
         val groupId = GroupId.of(groupIdRaw);
 
@@ -233,7 +179,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF') OR @currentUser.isTutorOf(#groupIdRaw)")
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('TUTOR')")
     public ResponseEntity<SessionDTO> addGroupSession(String groupIdRaw, SessionDTO sessDto) {
         val groupId = GroupId.of(groupIdRaw);
 
@@ -249,7 +195,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF') OR @currentUser.isTutorOf(#groupIdRaw)")
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('TUTOR')")
     public ResponseEntity<Void> deleteGroupSession(String groupIdRaw, String sessionIdRaw) {
         val groupId = GroupId.of(groupIdRaw);
         val sessionId = SessionId.of(sessionIdRaw);
@@ -267,7 +213,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF') OR @currentUser.isTutorOf(#groupIdRaw)")
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('TUTOR')")
     public ResponseEntity<Void> rescheduleGroupSession(String groupIdRaw, String sessionIdRaw, SessionDTO sessDto) {
         val groupId = GroupId.of(groupIdRaw);
         val sessionId = SessionId.of(sessionIdRaw);

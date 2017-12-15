@@ -7,8 +7,8 @@ import static java.util.stream.Collectors.toList;
 
 public class Principal {
 
-    public enum Authority {
-        SUPERUSER, STAFF, USER;
+    enum Authority {
+        SUPERUSER, TUTOR, USER;
 
         public static List<Authority> from(List<String> rawAuthorities) {
             return rawAuthorities.stream()
@@ -59,8 +59,8 @@ public class Principal {
         return authorities.contains(Authority.SUPERUSER);
     }
 
-    public boolean isStaff() {
-        return authorities.contains(Authority.STAFF);
+    public boolean isTutor() {
+        return authorities.contains(Authority.TUTOR);
     }
 
     public boolean isUser() {

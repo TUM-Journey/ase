@@ -31,10 +31,6 @@ public class Pass implements Serializable {
     private final SessionId sessionId;
 
     @Column(nullable = false)
-    @AttributeOverride(name = "id", column = @Column(name = "tutor_id"))
-    private final UserId tutorId;
-
-    @Column(nullable = false)
     @AttributeOverride(name = "id", column = @Column(name = "student_id"))
     private final UserId studentId;
 
@@ -44,15 +40,14 @@ public class Pass implements Serializable {
     @Column(name = "expires_at", nullable = false)
     private final OffsetDateTime expiresAt;
 
-    public Pass(SessionId sessionId, UserId tutorId, UserId studentId, Duration expireIn) {
+    public Pass(SessionId sessionId, UserId studentId, Duration expireIn) {
         this.sessionId = notNull(sessionId);
-        this.tutorId = notNull(tutorId);
         this.studentId = notNull(studentId);
         this.expiresAt = requestedAt.plus(expireIn);
     }
 
-    public Pass(SessionId sessionId, UserId tutorId, UserId studentId) {
-        this(sessionId, tutorId, studentId, DEFAULT_EXPIRE);
+    public Pass(SessionId sessionId, UserId studentId) {
+        this(sessionId, studentId, DEFAULT_EXPIRE);
     }
 
     public boolean isExpired() {

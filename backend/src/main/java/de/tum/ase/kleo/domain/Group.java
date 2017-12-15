@@ -32,10 +32,6 @@ public class Group {
     @CollectionTable(name = "group_students", joinColumns = @JoinColumn(name = "group_id"))
     private final Set<UserId> studentIds = new HashSet<>();
 
-    @ElementCollection
-    @CollectionTable(name = "group_tutors", joinColumns = @JoinColumn(name = "group_id"))
-    private final Set<UserId> tutorIds = new HashSet<>();
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id", referencedColumnName = "group_id")
     private final List<Session> sessions = new ArrayList<>();
@@ -83,30 +79,6 @@ public class Group {
 
     public boolean removeStudent(UserId studentId) {
         return studentIds.removeIf(sId -> sId.equals(studentId));
-    }
-
-    public boolean addTutor(UserId tutorId) {
-        return tutorIds.add(tutorId);
-    }
-
-    public boolean hasTutor(UserId tutorId) {
-        return tutorIds.stream().anyMatch(tId -> tId.equals(tutorId));
-    }
-
-    public Set<UserId> tutorIds() {
-        return Collections.unmodifiableSet(tutorIds);
-    }
-
-    public void tutorIds(Set<UserId> tutorIds) {
-        if (tutorIds == null)
-            throw new NullPointerException("Null tutorIds given");
-
-        this.tutorIds.clear();
-        this.tutorIds.addAll(tutorIds);
-    }
-
-    public boolean removeTutor(UserId tutorId) {
-        return tutorIds.removeIf(tId -> tId.equals(tutorId));
     }
 
     public SessionId addSession(SessionId sessionId, SessionType sessionType, String location, OffsetDateTime begins, OffsetDateTime ends) {
@@ -193,7 +165,7 @@ public class Group {
         val eligiblePass = validPass(passCode)
                 .orElseThrow(() -> new IllegalArgumentException("Pass with given code is expired or already used"));
 
-        val newAttendance = new Attendance(passCode, eligiblePass.sessionId(), eligiblePass.tutorId());
+        val newAttendance = new Attendance(passCode, eligiblePass.sessionId(), eligiblePass.studentId());
         attendances.add(newAttendance);
         return newAttendance;
     }

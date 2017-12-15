@@ -10,25 +10,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service("currentUser")
-public class DomainSecurity {
+public class CurrentUserSecurity {
 
     private final GroupRepository groupRepository;
 
     @Autowired
-    public DomainSecurity(GroupRepository groupRepository) {
+    public CurrentUserSecurity(GroupRepository groupRepository) {
         this.groupRepository = groupRepository;
-    }
-
-    public boolean isTutorOf(String groupIdRaw) {
-        val authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!authentication.isAuthenticated())
-            return false;
-
-        val userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        val userId = UserId.of(userPrincipal.getId());
-        val groupId = GroupId.of(groupIdRaw);
-
-        return groupRepository.findOptionalByIdAndTutorIdsContaining(groupId, userId).isPresent();
     }
 
     public boolean hasUserId(String userIdRaw) {
