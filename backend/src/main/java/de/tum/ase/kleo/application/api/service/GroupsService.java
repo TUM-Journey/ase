@@ -147,7 +147,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('SUPERUSER')")
+    @PreAuthorize("@currentUser.hasUserId(#userIdRaw)")
     public ResponseEntity<PassDTO> generateSessionPass(String groupIdRaw, PassDTO passDto) {
         val groupId = GroupId.of(groupIdRaw);
 
@@ -163,7 +163,7 @@ public class GroupsService implements GroupsApiDelegate {
 
     @Override
     @Transactional
-    @PreAuthorize("@currentUser.hasUserId(#userIdRaw)")
+    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('TUTOR')")
     public ResponseEntity<Void> utilizeSessionPass(String groupIdRaw, String passCodeRaw) {
         val groupId = GroupId.of(groupIdRaw);
         val passCode = UUID.fromString(passCodeRaw);
