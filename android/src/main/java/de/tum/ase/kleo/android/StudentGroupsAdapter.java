@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.android.studying.groups;
+package de.tum.ase.kleo.android;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.android.client.dto.GroupDTO;
 
 public class StudentGroupsAdapter extends RecyclerView.Adapter<StudentGroupsAdapter.ViewHolder> {

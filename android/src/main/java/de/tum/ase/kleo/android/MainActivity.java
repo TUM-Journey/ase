@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import de.tum.ase.kleo.android.client.BackendClient;
 import de.tum.ase.kleo.android.client.Principal;
-import de.tum.ase.kleo.android.studying.groups.StudentGroupsFragment;
 
 import static java.lang.String.format;
 
@@ -64,24 +63,30 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
         int id = item.getItemId();
 
         Fragment fragment;
-        if (id == R.id.group_scanner) {
-            fragment = new GroupScannerFragment();
-        } else if (id == R.id.student_groups) {
-            fragment = new StudentGroupsFragment();
-        } else if (id == R.id.student_registrations) {
-            fragment = new StudentRegistrationsFragment();
-        } else if (id == R.id.student_attendances) {
-            fragment = new StudentAttendancesFragment();
-        } else if (id == R.id.group_broadcaster) {
-            fragment = new GroupBroadcasterFragment();
-        } else if (id == R.id.tutoring_groups) {
-            fragment = new TutoringGroupsFragment();
-        } else {
-            throw new IllegalStateException("Unknown menu choice");
+        switch (id) {
+            case R.id.group_scanner:
+                fragment = new GroupScannerFragment();
+                break;
+            case R.id.study_group:
+                fragment = new StudyGroupsFragment();
+                break;
+            case R.id.student_registrations:
+                fragment =new StudentRegistrationsFragment();
+                break;
+            case R.id.student_attendances:
+                fragment = new StudentAttendancesFragment();
+                break;
+            case R.id.group_broadcaster:
+                fragment = new GroupBroadcasterFragment();
+                break;
+            case R.id.user_management:
+                fragment = new UserManagementFragment();
+                break;
+            default:
+                throw new IllegalStateException("Unknown menu choice");
         }
 
         setContent(fragment);

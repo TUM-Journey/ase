@@ -13,19 +13,19 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="studying">Studying</string>
     <string name="group_scanner">Group Scanner</string>
     <string name="study_groups">Study Groups</string>
     <string name="my_registrations">My Registrations</string>
     <string name="my_attendances">My Attendances</string>
-    <string name="tutoring">Tutoring</string>
     <string name="group_broadcaster">Group Broadcaster</string>
-    <string name="tutoring_groups">Tutoring Groups</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="welcome_msg"><![CDATA[Welcome to Kleo! \n Kleo is an electronic attendance system that will help you to find & sign up for interesting studying groups and tutors to record your attendances.]]></string>
+    <string name="welcome_msg"><![CDATA[Welcome 2to Kleo! \n Kleo is an electronic attendance system that will help you to find & sign up for interesting studying groups and tutors to record your attendances.]]></string>
     <string name="swipe_to_start">Swipe on the left to get started.</string>
     <string name="students">Students:</string>
     <string name="registered">Registered</string>
+    <string name="management">Management</string>
+    <string name="user_management">User management</string>
+    <string name="student">Student</string>
+    <string name="tutor">Tutor</string>
+    <string name="superuser">Superuser</string>
 </resources>
