@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -29,7 +30,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         backendClient = ((KleoApplication) getApplication()).backendClient();
+        final Principal principal = backendClient.principal();
 
+        // Init action bar and drawer layout
         final Toolbar toolbar = findViewById(R.id.toolbar);
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -39,26 +42,33 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        // Setup Navigation View
         final NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        fillOutNavigationHeaderStudentInfo(navigationView.getHeaderView(0));
+        // 1.1. Hide menu items from not eligible users in Navigation View
+        final Menu menu = navigationView.getMenu();
+        if (!principal.isSuperuser() && !principal.isTutor()) {
+            menu.findItem(R.id.menu_tutor).setVisible(false);
+        }
+        if (!principal.isSuperuser()) {
+            menu.findItem(R.id.menu_superuser).setVisible(false);
+        }
 
-        setContent(new WelcomeFragment());
-    }
-
-    private void fillOutNavigationHeaderStudentInfo(View view) {
-        final TextView usernameView = view.findViewById(R.id.menuUserName);
-        final TextView emailView = view.findViewById(R.id.menuUserEmail);
-        final TextView studentIdView = view.findViewById(R.id.menuUserStudentId);
-
-        final Principal principal = backendClient.principal();
+        // 1.2. Fill out Navigation View header with student info
+        final View headerView = navigationView.getHeaderView(0);
+        final TextView usernameView = headerView.findViewById(R.id.menuUserName);
+        final TextView emailView = headerView.findViewById(R.id.menuUserEmail);
+        final TextView studentIdView = headerView.findViewById(R.id.menuUserStudentId);
 
         usernameView.setText(principal.name());
         emailView.setText(principal.email());
         if (principal.studentId() != null) {
             studentIdView.setText(format("(%s)", principal.studentId()));
         }
+
+        // Set default view content to welcome text
+        setContent(new WelcomeFragment());
     }
 
     @Override

@@ -11,7 +11,7 @@
     </group>
 
 
-    <item android:title="@string/student">
+    <item android:title="@string/student" android:id="@+id/menu_student">
         <menu>
             <group android:checkableBehavior="single">
                 <item
@@ -31,7 +31,7 @@
         </menu>
     </item>
 
-    <item android:title="@string/tutor">
+    <item android:title="@string/tutor" android:id="@+id/menu_tutor">
         <menu>
             <group android:checkableBehavior="single">
                 <item
@@ -42,7 +42,7 @@
         </menu>
     </item>
 
-    <item android:title="@string/superuser">
+    <item android:title="@string/superuser" android:id="@+id/menu_superuser">
         <menu>
             <group android:checkableBehavior="single">
                 <item
