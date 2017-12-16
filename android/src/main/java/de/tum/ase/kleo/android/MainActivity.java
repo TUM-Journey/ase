@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity
 
         // 1.1. Hide menu items from not eligible users in Navigation View
         final Menu menu = navigationView.getMenu();
-        if (!principal.isSuperuser() && !principal.isTutor()) {
+        if (!principal.isTutor()) {
             menu.findItem(R.id.menu_tutor).setVisible(false);
         }
         if (!principal.isSuperuser()) {
