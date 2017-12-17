@@ -28,4 +28,6 @@
     <string name="student">Student</string>
     <string name="tutor">Tutor</string>
     <string name="superuser">Superuser</string>
+    <string name="broadcasting">Broadcasting</string>
+    <string name="select_group_to_broadcast">Select group to broadcast:</string>
 </resources>
