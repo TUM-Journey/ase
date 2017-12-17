@@ -19,7 +19,7 @@
     <string name="my_attendances">My Attendances</string>
     <string name="group_broadcaster">Group Broadcaster</string>
 
-    <string name="welcome_msg"><![CDATA[Welcome 2to Kleo! \n Kleo is an electronic attendance system that will help you to find & sign up for interesting studying groups and tutors to record your attendances.]]></string>
+    <string name="welcome_msg"><![CDATA[Welcome to Kleo! \n Kleo is an electronic attendance system that will help you to find & sign up for interesting studying groups and tutors to record your attendances.]]></string>
     <string name="swipe_to_start">Swipe on the left to get started.</string>
     <string name="students">Students:</string>
     <string name="registered">Registered</string>

@@ -73,10 +73,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        final int itemId = item.getItemId();
+        final CharSequence itemTitle = item.getTitle();
 
         Fragment fragment;
-        switch (id) {
+        switch (itemId) {
             case R.id.group_scanner:
                 fragment = new GroupScannerFragment();
                 break;
@@ -99,6 +100,7 @@ public class MainActivity extends AppCompatActivity
                 throw new IllegalStateException("Unknown menu choice");
         }
 
+        getSupportActionBar().setTitle(itemTitle);
         setContent(fragment);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
