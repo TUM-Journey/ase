@@ -73,7 +73,7 @@ public class BackendClient {
         }
     }
 
-    public synchronized Principal authenticate(String username, String password, Duration timeout) {
+    private synchronized Principal authenticate(String username, String password, @SuppressWarnings("SameParameterValue") Duration timeout) {
         if (isAuthenticated.get())
             throw new IllegalStateException("Backend client has been already synchronized");
 
@@ -97,6 +97,7 @@ public class BackendClient {
         }
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public Principal authenticate(String username, String password) {
         return authenticate(username, password, null);
     }

@@ -23,9 +23,10 @@
     <string name="tutoring_groups">Tutoring Groups</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome_msg"><![CDATA[Welcome to Kleo! \n Kleo is an electronic attendance system that will help you to find & sign up for interesting studying groups and tutors to record your attendances.]]></string>
     <string name="swipe_to_start">Swipe on the left to get started.</string>
     <string name="students">Students:</string>
     <string name="registered">Registered</string>
+    <string name="incorrect_email">Incorrect E-Mail address</string>
+    <string name="incorrect_password">Incorrect password</string>
 </resources>

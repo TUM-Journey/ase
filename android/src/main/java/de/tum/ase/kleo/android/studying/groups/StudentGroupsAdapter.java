@@ -15,7 +15,7 @@ public class StudentGroupsAdapter extends RecyclerView.Adapter<StudentGroupsAdap
 
     private final List<GroupDTO> groups;
 
-    public StudentGroupsAdapter(List<GroupDTO> groups) {
+    StudentGroupsAdapter(List<GroupDTO> groups) {
         this.groups = groups;
     }
 
@@ -23,7 +23,6 @@ public class StudentGroupsAdapter extends RecyclerView.Adapter<StudentGroupsAdap
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_student_groups_list_item, parent, false);
-
         return new ViewHolder(view);
     }
 
@@ -44,14 +43,13 @@ public class StudentGroupsAdapter extends RecyclerView.Adapter<StudentGroupsAdap
         return groups.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView name;
-        public TextView students;
+        TextView name;
+        TextView students;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
-
             name = view.findViewById(R.id.studentGroupsListItemName);
             students = view.findViewById(R.id.studentGroupsListItemStudents);
         }

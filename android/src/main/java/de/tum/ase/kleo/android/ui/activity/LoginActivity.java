@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.android;
+package de.tum.ase.kleo.android.ui.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -7,15 +7,21 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import de.tum.ase.kleo.android.KleoApplication;
+import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.android.client.AuthenticationException;
 import de.tum.ase.kleo.android.client.BackendClient;
-
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import de.tum.ase.kleo.android.util.UiUtils;
+import de.tum.ase.kleo.android.util.Validator;
 
 public class LoginActivity extends Activity {
 
+    // TODO: Use ProgressBar instead or some 3th party library
     private ProgressDialog loggingInDialog;
     private BackendClient backendClient;
+
+    private EditText emailView;
+    private EditText passwordView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,24 +35,34 @@ public class LoginActivity extends Activity {
             return;
         }
 
+        emailView = findViewById(R.id.loginEmail);
+        passwordView = findViewById(R.id.loginPassword);
         loggingInDialog = new ProgressDialog(LoginActivity.this);
         loggingInDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         loggingInDialog.setMessage(getString(R.string.logging_in));
         loggingInDialog.setIndeterminate(true);
         loggingInDialog.setCanceledOnTouchOutside(false);
 
-        findViewById(R.id.loginSubmit).setOnClickListener(v -> LoginActivity.this.authenticate());
+        findViewById(R.id.loginSubmit).setOnClickListener(v ->
+                LoginActivity.this.authenticate());
     }
 
     private void authenticate() {
-        final String email = ((EditText) findViewById(R.id.loginEmail)).getText().toString();
-        final String password = ((EditText) findViewById(R.id.loginPassword)).getText().toString();
+        final String email = emailView.getText().toString();
+        final String password = passwordView.getText().toString();
 
-        if (isBlank(email)) {
-            Toast.makeText(getApplicationContext(), R.string.empty_email, Toast.LENGTH_LONG).show();
-        } else if (isBlank(password)) {
-            Toast.makeText(getApplicationContext(), R.string.empty_password, Toast.LENGTH_LONG).show();
+        String emailValidationResult = Validator.validateEmail(email, getString(R.string.empty_email), getString(R.string.incorrect_email));
+        String passwordValidationResult = Validator.validatePassword(password, getString(R.string.empty_password), getString(R.string.incorrect_password));
+
+        UiUtils.hideKeyboard(LoginActivity.this, findViewById(R.id.loginSubmit));
+
+        if (emailValidationResult != null) {
+            emailView.setError(emailValidationResult);
+        } else if (passwordValidationResult != null) {
+            passwordView.setError(passwordValidationResult);
         } else {
+            // TODO: 1. Do not use threads. Instead you can use (at least) async tasks!!
+            // TODO: 2. This is potential memory leak, when user rotates a device during of the network request it will leak a activity. Thread should be interrupted!!
             new Thread(() -> {
                 try {
                     LoginActivity.this.runOnUiThread(() -> loggingInDialog.show());

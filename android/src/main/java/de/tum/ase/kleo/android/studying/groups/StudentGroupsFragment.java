@@ -2,7 +2,6 @@ package de.tum.ase.kleo.android.studying.groups;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -18,9 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 import de.tum.ase.kleo.android.KleoApplication;
-import de.tum.ase.kleo.android.LoginActivity;
 import de.tum.ase.kleo.android.R;
-import de.tum.ase.kleo.android.client.AuthenticationException;
 import de.tum.ase.kleo.android.client.BackendClient;
 import de.tum.ase.kleo.android.client.GroupsApi;
 import de.tum.ase.kleo.android.client.dto.GroupDTO;

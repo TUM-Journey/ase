@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:screenOrientation="portrait"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.tum.ase.kleo.android.LoginActivity"
+    android:screenOrientation="portrait"
     tools:layout_editor_absoluteY="25dp">
 
     <ImageView
@@ -13,9 +13,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop"
-        android:src="@drawable/tum_backgroud"
+        android:src="@drawable/tum_background"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription"/>
 
     <EditText
         android:id="@+id/loginEmail"
@@ -29,7 +30,7 @@
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/loginPassword"
         app:layout_constraintEnd_toEndOf="@+id/loginPassword"
-        app:layout_constraintStart_toStartOf="@+id/loginPassword" />
+        app:layout_constraintStart_toStartOf="@+id/loginPassword"/>
 
     <EditText
         android:id="@+id/loginPassword"
@@ -43,18 +44,17 @@
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/loginSubmit"
         app:layout_constraintEnd_toEndOf="@+id/loginSubmit"
-        app:layout_constraintStart_toStartOf="@+id/loginSubmit" />
+        app:layout_constraintStart_toStartOf="@+id/loginSubmit"/>
 
     <Button
         android:id="@+id/loginSubmit"
-        style="@android:style/Widget.Material.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="110dp"
         android:text="@string/login"
         app:layout_constraintBottom_toBottomOf="@+id/loginTumBg"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <ImageView
         android:id="@+id/loginKeloDiamond"
@@ -64,7 +64,8 @@
         android:src="@drawable/kleo_diamond"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/loginTumBg" />
+        app:layout_constraintTop_toTopOf="@+id/loginTumBg"
+        tools:ignore="ContentDescription"/>
 
     <TextView
         android:id="@+id/loginKleoName"
@@ -77,7 +78,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/loginKeloDiamond"
         app:layout_constraintStart_toStartOf="@+id/loginKeloDiamond"
-        app:layout_constraintTop_toBottomOf="@+id/loginKeloDiamond" />
+        app:layout_constraintTop_toBottomOf="@+id/loginKeloDiamond"/>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -97,20 +98,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
-            android:text="@string/login_with" />
+            android:text="@string/login_with"/>
 
         <ImageView
             android:id="@+id/loginTumLogo"
             android:layout_width="42dp"
             android:layout_height="28dp"
-            android:src="@drawable/tum_logo" />
+            android:src="@drawable/tum_logo"/>
 
         <TextView
             android:id="@+id/loginAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:text="@string/account" />
+            android:text="@string/account"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

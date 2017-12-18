@@ -1,16 +1,16 @@
 ext {
     configs = [
             compiler: [
-                    sourceCompatibility:  JavaVersion.VERSION_1_8,
-                    targetCompatibility:  JavaVersion.VERSION_1_8
+                    sourceCompatibility: JavaVersion.VERSION_1_8,
+                    targetCompatibility: JavaVersion.VERSION_1_8
             ],
-            android: [
+            android : [
                     compileSdkVersion: 26,
                     buildToolsVersion: "26.0.2",
-                    minSdkVersion: 26,
-                    targetSdkVersion: 26,
-                    minifyEnabled: false,
-                    lintEnabled: false
+                    minSdkVersion    : 21,
+                    targetSdkVersion : 26,
+                    minifyEnabled    : false,
+                    lintEnabled      : false
             ]
     ]
 }

@@ -1,8 +1,9 @@
-package de.tum.ase.kleo.android;
+package de.tum.ase.kleo.android.ui.activity;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,9 +14,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import de.tum.ase.kleo.android.KleoApplication;
+import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.android.client.BackendClient;
 import de.tum.ase.kleo.android.client.Principal;
 import de.tum.ase.kleo.android.studying.groups.StudentGroupsFragment;
+import de.tum.ase.kleo.android.ui.fragment.GroupBroadcasterFragment;
+import de.tum.ase.kleo.android.ui.fragment.GroupScannerFragment;
+import de.tum.ase.kleo.android.ui.fragment.StudentAttendancesFragment;
+import de.tum.ase.kleo.android.ui.fragment.StudentRegistrationsFragment;
+import de.tum.ase.kleo.android.ui.fragment.TutoringGroupsFragment;
+import de.tum.ase.kleo.android.ui.fragment.WelcomeFragment;
 
 import static java.lang.String.format;
 
@@ -28,8 +37,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        backendClient = ((KleoApplication) getApplication()).backendClient();
+        initBackendClient();
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -42,10 +50,13 @@ public class MainActivity extends AppCompatActivity
 
         final NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         fillOutNavigationHeaderStudentInfo(navigationView.getHeaderView(0));
 
         setContent(new WelcomeFragment());
+    }
+
+    private void initBackendClient() {
+        backendClient = ((KleoApplication) getApplication()).backendClient();
     }
 
     private void fillOutNavigationHeaderStudentInfo(View view) {
@@ -63,27 +74,30 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment;
-        if (id == R.id.group_scanner) {
-            fragment = new GroupScannerFragment();
-        } else if (id == R.id.student_groups) {
-            fragment = new StudentGroupsFragment();
-        } else if (id == R.id.student_registrations) {
-            fragment = new StudentRegistrationsFragment();
-        } else if (id == R.id.student_attendances) {
-            fragment = new StudentAttendancesFragment();
-        } else if (id == R.id.group_broadcaster) {
-            fragment = new GroupBroadcasterFragment();
-        } else if (id == R.id.tutoring_groups) {
-            fragment = new TutoringGroupsFragment();
-        } else {
-            throw new IllegalStateException("Unknown menu choice");
+        switch (item.getItemId()) {
+            case R.id.group_scanner:
+                fragment = new GroupScannerFragment();
+                break;
+            case R.id.student_groups:
+                fragment = new StudentGroupsFragment();
+                break;
+            case R.id.student_registrations:
+                fragment = new StudentRegistrationsFragment();
+                break;
+            case R.id.student_attendances:
+                fragment = new StudentAttendancesFragment();
+                break;
+            case R.id.group_broadcaster:
+                fragment = new GroupBroadcasterFragment();
+                break;
+            case R.id.tutoring_groups:
+                fragment = new TutoringGroupsFragment();
+                break;
+            default:
+                throw new IllegalStateException("Unknown menu choice");
         }
-
         setContent(fragment);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

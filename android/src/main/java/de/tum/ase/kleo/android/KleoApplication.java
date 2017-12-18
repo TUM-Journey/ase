@@ -11,7 +11,6 @@ public class KleoApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         backendClient = buildBackendClient();
     }
 
