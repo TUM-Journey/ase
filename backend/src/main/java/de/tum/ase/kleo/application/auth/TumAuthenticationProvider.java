@@ -83,7 +83,7 @@ public class TumAuthenticationProvider implements AuthenticationProvider {
         });
 
         val userPrincipal = UserPrincipal.from(user);
-        val userGrantedAthorities = grantedAuthoritiesFrom(userRoles);
+        val userGrantedAthorities = grantedAuthoritiesFrom(user.userRoles());
         return new UsernamePasswordAuthenticationToken(userPrincipal, null, userGrantedAthorities);
     }
 
