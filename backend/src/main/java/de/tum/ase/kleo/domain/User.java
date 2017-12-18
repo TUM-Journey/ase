@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableList;
 import static org.apache.commons.lang3.Validate.*;
@@ -21,7 +22,7 @@ import static org.apache.commons.lang3.Validate.*;
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
 public class User {
 
-    public static final UserRole DEFAULT_USER_ROLE = UserRole.USER;
+    public static final List<UserRole> DEFAULT_USER_ROLES = asList(UserRole.STUDENT);
 
     @Getter
     @EmbeddedId
@@ -58,7 +59,7 @@ public class User {
     }
 
     public User(String email, String passwordHash, String name, String studentId) {
-        this(email, passwordHash, singletonList(DEFAULT_USER_ROLE), name, studentId);
+        this(email, passwordHash, DEFAULT_USER_ROLES, name, studentId);
     }
 
     public void addUserRole(UserRole userRole) {

@@ -15,13 +15,13 @@ import java.util.UUID;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
-public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
+public class StaticAuthenticationProvider implements AuthenticationProvider {
 
     private final String username;
     private final String password;
     private final List<GrantedAuthority> grantedAuthorities;
 
-    public UsernamePasswordAuthenticationProvider(String username, String password, UserRole... userRoles) {
+    public StaticAuthenticationProvider(String username, String password, UserRole... userRoles) {
         this.username = username;
         this.password = password;
         this.grantedAuthorities = stream(userRoles)

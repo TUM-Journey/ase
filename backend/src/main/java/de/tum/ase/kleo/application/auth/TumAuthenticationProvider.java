@@ -6,10 +6,7 @@ import com.gargoylesoftware.htmlunit.html.DomAttr;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import de.tum.ase.kleo.domain.User;
-import de.tum.ase.kleo.domain.UserRepository;
-import de.tum.ase.kleo.domain.UserRole;
-import lombok.val;
+
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,7 +18,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import de.tum.ase.kleo.domain.User;
+import de.tum.ase.kleo.domain.UserRepository;
+import de.tum.ase.kleo.domain.UserRole;
+import lombok.val;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
@@ -46,16 +49,20 @@ public class TumAuthenticationProvider implements AuthenticationProvider {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final List<UserRole> userRoles;
+    private final List<UserRole> userRoles = new ArrayList<>();
 
-    public TumAuthenticationProvider(UserRepository userRepository, PasswordEncoder passwordEncoder, UserRole... userRoles) {
+    public TumAuthenticationProvider(UserRepository userRepository, PasswordEncoder passwordEncoder, List<UserRole> userRoles) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.userRoles = asList(userRoles);
+        this.userRoles.addAll(userRoles);
+    }
+
+    public TumAuthenticationProvider(UserRepository userRepository, PasswordEncoder passwordEncoder, UserRole... userRoles) {
+        this(userRepository, passwordEncoder, asList(userRoles));
     }
 
     public TumAuthenticationProvider(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this(userRepository, passwordEncoder, User.DEFAULT_USER_ROLE);
+        this(userRepository, passwordEncoder, User.DEFAULT_USER_ROLES);
     }
 
     @Override

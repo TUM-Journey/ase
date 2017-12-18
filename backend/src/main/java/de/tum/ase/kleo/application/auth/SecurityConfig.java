@@ -73,7 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private AuthenticationProvider superuserAuthenticationProvider() {
-        return new UsernamePasswordAuthenticationProvider(superuserUsername, superuserPassword, superuserRoles);
+        return new StaticAuthenticationProvider(superuserUsername, superuserPassword, superuserRoles);
     }
 
     private AuthenticationProvider tumAuthenticationProvider() {
