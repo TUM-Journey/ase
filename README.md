@@ -4,6 +4,26 @@ Kleo is a Bluetooth-enabled electronic attendance system that is designed to cop
 ## API
 Kleo provides **REST** API for Android and Web applications. The REST API is defined with OpenAPI2 (Swagger) and availale on [Swaggerhub](https://app.swaggerhub.com/apis/wingsofovnia/kleo-api/). The Postman collection is also [provided](https://www.getpostman.com/collections/f318526cfbae39df8a2e).
 
+## Getting Started
+### Development
+The backend default profile is DEV, populated with test data: groups and user accounts. To run the backend, execute:
+```
+$ ./gradlew bootRun
+```
+This will run the backend on `localhost:8080` with DEV profile activated.
+
+The DEV profile is populated with the following user you may use for development:
+
+| Username         | Password     | Roles                   | Configurable | Auth Provider                |
+|------------------|--------------|-------------------------|-----------------|------------------------------|
+| superuser@tum.de | c9kfgRCs2nsx | SUPERUSER, STUDENT, TUTOR | application.yml | StaticAuthenticationProvider |
+| student@tum.de   | password     | STUDENT                 | data.sql        | TumAuthenticationProvider    |
+| tutor@tum.de     | password     | TUTOR                   | data.sql        | TumAuthenticationProvider    |
+
+You still can use any valid student or staff TUM Shibboleth account.
+
+To run the android client application, make sure you have a valid IP address of the backend in `configuration.xml` config (`backend.baseUrl`) of the build variant used.
+
 ## Bugs and Feedback
 For bugs, questions and discussions please use the [Github Issues](https://github.com/TUM-Journey/kleo/issues).
 
