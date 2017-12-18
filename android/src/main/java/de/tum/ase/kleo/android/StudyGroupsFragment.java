@@ -12,12 +12,13 @@ import android.view.animation.Animation;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.List;
 
 import de.tum.ase.kleo.android.client.BackendClient;
 import de.tum.ase.kleo.android.client.GroupsApi;
 import de.tum.ase.kleo.android.client.dto.GroupDTO;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class StudyGroupsFragment extends Fragment {
 
@@ -56,62 +57,54 @@ public class StudyGroupsFragment extends Fragment {
         final LinearLayoutManager studentGroupsListLayoutManager = new LinearLayoutManager(view.getContext());
         listView.setLayoutManager(studentGroupsListLayoutManager);
 
-        showLoadingProgressBar();
-        new Thread(() -> {
-            try {
-                final List<GroupDTO> studentGroups = groupsApi.getGroups().execute().body();
-                populateStudentGroupsListView(studentGroups);
-            } catch (IOException e) {
-                getActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show());
-            } finally {
-                hideLoadingProgressBar();
-            }
-        }).start();
+        groupsApi.getGroups()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe((d) -> showLoadingProgressBar())
+                .doFinally(this::hideLoadingProgressBar)
+                .subscribe(this::populateStudentGroupsListView, this::showError);
 
         return view;
     }
 
     private void populateStudentGroupsListView(List<GroupDTO> groups) {
-        getActivity().runOnUiThread(() -> {
-            final RecyclerView.Adapter<?> studentGroupsAdapter = new StudentGroupsAdapter(groups);
-            listView.setAdapter(studentGroupsAdapter);
-        });
+        final RecyclerView.Adapter<?> studentGroupsAdapter = new StudentGroupsAdapter(groups);
+        listView.setAdapter(studentGroupsAdapter);
+    }
+
+    private void showError(Throwable e) {
+        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     private void showLoadingProgressBar() {
-        getActivity().runOnUiThread(() -> {
-            progressBar.startAnimation(progressBarFadeInAnimation);
-            progressBarFadeInAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                    progressBar.setVisibility(View.VISIBLE);
-                }
+        progressBar.startAnimation(progressBarFadeInAnimation);
+        progressBarFadeInAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                progressBar.setVisibility(View.VISIBLE);
+            }
 
-                @Override
-                public void onAnimationEnd(Animation animation) {}
+            @Override
+            public void onAnimationEnd(Animation animation) {}
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {}
-            });
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
         });
     }
 
     private void hideLoadingProgressBar() {
-        getActivity().runOnUiThread(() -> {
-            progressBar.startAnimation(progressBarFadeOutAnimation);
-            progressBarFadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
+        progressBar.startAnimation(progressBarFadeOutAnimation);
+        progressBarFadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                progressBar.setVisibility(View.INVISIBLE);
+            }
 
-                @Override
-                public void onAnimationStart(Animation animation) {}
+            @Override
+            public void onAnimationStart(Animation animation) {}
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {}
-            });
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
         });
     }
 }

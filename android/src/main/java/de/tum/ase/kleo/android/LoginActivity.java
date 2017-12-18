@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import de.tum.ase.kleo.android.client.AuthenticationException;
 import de.tum.ase.kleo.android.client.BackendClient;
+import de.tum.ase.kleo.android.client.Principal;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -47,24 +49,38 @@ public class LoginActivity extends Activity {
         } else if (isBlank(password)) {
             Toast.makeText(getApplicationContext(), R.string.empty_password, Toast.LENGTH_LONG).show();
         } else {
-            new Thread(() -> {
-                try {
-                    LoginActivity.this.runOnUiThread(() -> loggingInDialog.show());
-                    backendClient.authenticate(email, password);
-                    proceed();
-                } catch (AuthenticationException e) {
-                    LoginActivity.this.runOnUiThread(() ->
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show());
-                } finally {
-                    LoginActivity.this.runOnUiThread(() -> loggingInDialog.dismiss());
-                }
-            }).start();
+            backendClient.authenticate(email, password)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe((d) -> this.showLoggingInDialog())
+                    .doFinally(this::hideLoggingInDialog)
+                    .subscribe(this::helloAndProceed, this::showError);
         }
+    }
+
+    private void showError(Throwable e) {
+        Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    private void showLoggingInDialog() {
+        loggingInDialog.show();
+    }
+
+    private void hideLoggingInDialog() {
+        loggingInDialog.dismiss();
     }
 
     private void proceed() {
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
+
+    }
+
+    private void helloAndProceed(Principal p) {
+        final String helloToastMsg = getString(R.string.hello_toast, p.name());
+        Toast.makeText(getApplicationContext(), helloToastMsg, Toast.LENGTH_LONG).show();
+
+        proceed();
     }
 
     @Override

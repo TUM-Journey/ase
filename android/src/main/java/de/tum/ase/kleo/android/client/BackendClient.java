@@ -14,6 +14,7 @@ import de.tum.ase.kleo.android.client.invoker.ApiClient;
 import de.tum.ase.kleo.android.client.invoker.auth.OAuth;
 import de.tum.ase.kleo.android.client.invoker.auth.OAuthFlow;
 import okhttp3.OkHttpClient;
+import io.reactivex.Single;
 
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.oltu.oauth2.client.request.OAuthClientRequest.tokenLocation;
@@ -73,31 +74,33 @@ public class BackendClient {
         }
     }
 
-    public synchronized Principal authenticate(String username, String password, Duration timeout) {
+    public synchronized Single<Principal> authenticate(String username, String password, Duration timeout) {
         if (isAuthenticated.get())
             throw new IllegalStateException("Backend client has been already synchronized");
 
-        try {
-            oAuth = new OAuth(okHttpClient(timeout), tokenLocation(basePath + OAUTH_TOKEN_ENDPOINT));
-            oAuth.setFlow(OAuthFlow.password);
-            oAuth.getTokenRequestBuilder()
-                    .setClientId(clientId)
-                    .setUsername(username)
-                    .setPassword(password);
-            if (secret != null) oAuth.getTokenRequestBuilder().setClientSecret(secret);
+        return Single.create(e -> {
+            try {
+                oAuth = new OAuth(okHttpClient(timeout), tokenLocation(basePath + OAUTH_TOKEN_ENDPOINT));
+                oAuth.setFlow(OAuthFlow.password);
+                oAuth.getTokenRequestBuilder()
+                        .setClientId(clientId)
+                        .setUsername(username)
+                        .setPassword(password);
+                if (secret != null) oAuth.getTokenRequestBuilder().setClientSecret(secret);
 
-            oAuth.updateAccessToken(null);
+                oAuth.updateAccessToken(null);
 
-            apiClient.addAuthorization(oAuth.getClass().getName(), oAuth);
-            isAuthenticated.set(true);
+                apiClient.addAuthorization(oAuth.getClass().getName(), oAuth);
+                isAuthenticated.set(true);
 
-            return principal();
-        } catch (IOException e) {
-            throw new AuthenticationException("Failed to log in with given credentials", e);
-        }
+                e.onSuccess(parseJwtPrincipal(oAuth.getAccessToken()));
+            } catch (IOException ex) {
+                e.onError(new AuthenticationException("Failed to log in with given credentials", ex));
+            }
+        });
     }
 
-    public Principal authenticate(String username, String password) {
+    public Single<Principal> authenticate(String username, String password) {
         return authenticate(username, password, null);
     }
 
@@ -105,17 +108,35 @@ public class BackendClient {
         return isAuthenticated.get();
     }
 
-    public Principal principal() {
-        final JWT jwt = new JWT(oAuth.getAccessToken());
+    public Single<Principal> principal() {
+        return Single.create(e -> {
+            if (!isAuthenticated()) {
+                e.onError(new AuthenticationException("You must authenticate first"));
+                return;
+            }
+
+            final String accessToken = oAuth.getAccessToken();
+            if (accessToken == null) {
+                e.onError(new AuthenticationException("Invalid state, null access token"));
+                return;
+            }
+
+            e.onSuccess(parseJwtPrincipal(accessToken));
+        });
+    }
+
+    private Principal parseJwtPrincipal(String jwtAccessToken) {
+        final JWT jwt = new JWT(jwtAccessToken);
 
         final String principalId = jwt.getClaim(PRINCIPAL_ID).asString();
         final String principalEmail = jwt.getClaim(PRINCIPAL_EMAIL).asString();
         final String principalName = jwt.getClaim(PRINCIPAL_NAME).asString();
         final String principalStudentId = jwt.getClaim(PRINCIPAL_STUDENT_ID).asString();
-        final List<String> principalAuthorities = jwt.getClaim(PRINCIPAL_AUTHORITIES).asList(String.class);
+        final List<String> principalAuthorities = jwt.getClaim(PRINCIPAL_AUTHORITIES)
+                .asList(String.class);
 
-        return new Principal(principalId, principalEmail, principalName, principalStudentId,
-                Principal.Authority.from(principalAuthorities));
+        return new Principal(principalId, principalEmail, principalName,
+                principalStudentId, Principal.Authority.from(principalAuthorities));
     }
 
     private static OkHttpClient okHttpClient(Duration timeout) {

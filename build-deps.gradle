@@ -7,6 +7,8 @@ ext {
             apacheLang3: '3.5',
             swaggerCodegenCli: '2.3.1-SNAPSHOT',
 
+            rxJava: '2.1.1',
+
             junit: '4.+',
             assertj: '3.8.+',
             mockito: '2.12.+',
@@ -16,12 +18,14 @@ ext {
             support: '26.1.0',
             supportDesign: '26.1.0',
             constraintLayout: '1.0.2',
+
             playServicesAuth: '9.8.0',
-            swaggerAnnotations: '1.5.0',
+
+            rxAndroid: '2.0.1',
+
             retrofit: '2.3.0',
-            retrofitScalars: '2.3.0',
-            retrofitGson: '2.3.0',
             oltuOAuth2: '1.0.1',
+            swaggerAnnotations: '1.5.0',
             gsonFire: '1.8.0',
             jwtDecode: '1.1.1',
         ],
@@ -65,9 +69,16 @@ ext {
             constraintLayout: "com.android.support.constraint:constraint-layout:${deps.vers.android.constraintLayout}",
             playServicesAuth: "com.google.android.gms:play-services-auth:${deps.vers.android.playServicesAuth}",
             swaggerAnnotations: "io.swagger:swagger-annotations:${deps.vers.android.swaggerAnnotations}",
-            retrofit: "com.squareup.retrofit2:retrofit:${deps.vers.android.retrofit}",
-            retrofitScalars: "com.squareup.retrofit2:converter-scalars:${deps.vers.android.retrofitScalars}",
-            retrofitGson: "com.squareup.retrofit2:converter-gson:${deps.vers.android.retrofitGson}",
+            retrofit: [
+                "com.squareup.retrofit2:retrofit:${deps.vers.android.retrofit}",
+                "com.squareup.retrofit2:converter-scalars:${deps.vers.android.retrofit}",
+                "com.squareup.retrofit2:converter-gson:${deps.vers.android.retrofit}",
+                "com.squareup.retrofit2:adapter-rxjava2:${deps.vers.android.retrofit}",
+            ],
+            rxAndroidJava: [
+                "io.reactivex.rxjava2:rxjava:${deps.vers.common.rxJava}",
+                "io.reactivex.rxjava2:rxandroid:${deps.vers.android.rxAndroid}",
+            ],
             oltuOAuth2: "org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:${deps.vers.android.oltuOAuth2}",
             gsonFire: "io.gsonfire:gson-fire:${deps.vers.android.gsonFire}",
             jwtDecode: "com.auth0.android:jwtdecode:${deps.vers.android.jwtDecode}",
