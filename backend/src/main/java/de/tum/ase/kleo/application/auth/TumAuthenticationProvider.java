@@ -15,15 +15,21 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import de.tum.ase.kleo.domain.User;
 import de.tum.ase.kleo.domain.UserRepository;
 import de.tum.ase.kleo.domain.UserRole;
+import de.tum.ase.kleo.domain.id.UserId;
 import lombok.val;
 
 import static java.lang.String.format;
@@ -39,6 +45,7 @@ public class TumAuthenticationProvider implements AuthenticationProvider {
     private static final String SHIBBOLETH_USERNAME_INPUT_NAME = "j_username";
     private static final String SHIBBOLETH_PASSWORD_INPUT_NAME = "j_password";
     private static final String SHIBBOLETH_SUBMIT_BTN_NAME = "_eventId_proceed";
+    private static final String SHIBBOLETH_NOJS_SUBMIT_BTN_XPATH = "/html/body/form/noscript/div/input";
     private static final String SHIBBOLETH_ERROR_XPATH = "//p[contains(@class, \"form-error\")]";
 
     private static final String MOODLE_USERID_XPATH = "//*[@data-userid]/@data-userid";
@@ -88,12 +95,7 @@ public class TumAuthenticationProvider implements AuthenticationProvider {
     }
 
     private User fetchShibbolethUser(String email, String password) {
-        try (val webClient = new WebClient()) {
-            webClient.setCssErrorHandler(new SilentCssErrorHandler());
-            webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-            webClient.getOptions().setThrowExceptionOnScriptError(false);
-            webClient.getOptions().setPrintContentOnFailingStatusCode(false);
-
+        try (val webClient = setupNewWebClient()) {
             val loginPage = (HtmlPage) webClient.getPage(SHIBBOLETH_LOGIN_PAGE);
 
             val usernameInput = (HtmlInput) loginPage.getElementByName(SHIBBOLETH_USERNAME_INPUT_NAME);
@@ -103,7 +105,10 @@ public class TumAuthenticationProvider implements AuthenticationProvider {
             usernameInput.setValueAttribute(email);
             passwordInput.setValueAttribute(password);
 
-            val moodlePage = (HtmlPage) submitBtn.click();
+            val noJsRedirectPage = (HtmlPage) submitBtn.click();
+            val noJsRedirectSubmitBtn = (HtmlInput) noJsRedirectPage.getFirstByXPath(SHIBBOLETH_NOJS_SUBMIT_BTN_XPATH);
+
+            val moodlePage = (HtmlPage) noJsRedirectSubmitBtn.click();
 
             if (moodlePage.getFirstByXPath(SHIBBOLETH_ERROR_XPATH) != null)
                 throw new AuthenticationServiceException("Failed to fetch Shibboleth user " +
@@ -124,6 +129,22 @@ public class TumAuthenticationProvider implements AuthenticationProvider {
         } catch (IOException e) {
             throw new AuthenticationServiceException("Failed to navigate through Shibboleth auth page", e);
         }
+    }
+
+    private static WebClient setupNewWebClient() {
+        val webClient = new WebClient();
+        val webClientOpts = webClient.getOptions();
+
+        webClient.setCssErrorHandler(new SilentCssErrorHandler());
+        webClientOpts.setThrowExceptionOnFailingStatusCode(false);
+        webClientOpts.setThrowExceptionOnScriptError(false);
+        webClientOpts.setCssEnabled(false);
+        webClientOpts.setUseInsecureSSL(true);
+
+        webClientOpts.setCssEnabled(false);
+        webClientOpts.setJavaScriptEnabled(false);
+
+        return webClient;
     }
 
     @Override
