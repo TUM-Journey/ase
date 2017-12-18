@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.android.studying.groups;
+package de.tum.ase.kleo.android.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,7 +15,7 @@ public class StudentGroupsAdapter extends RecyclerView.Adapter<StudentGroupsAdap
 
     private final List<GroupDTO> groups;
 
-    StudentGroupsAdapter(List<GroupDTO> groups) {
+    public StudentGroupsAdapter(List<GroupDTO> groups) {
         this.groups = groups;
     }
 

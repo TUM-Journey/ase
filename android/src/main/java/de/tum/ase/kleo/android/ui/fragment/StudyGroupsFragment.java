@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.android.studying.groups;
+package de.tum.ase.kleo.android.ui.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -17,11 +17,12 @@ import java.util.List;
 
 import de.tum.ase.kleo.android.KleoApplication;
 import de.tum.ase.kleo.android.R;
+import de.tum.ase.kleo.android.adapter.StudentGroupsAdapter;
 import de.tum.ase.kleo.android.client.BackendClient;
 import de.tum.ase.kleo.android.client.GroupsApi;
 import de.tum.ase.kleo.android.client.dto.GroupDTO;
 
-public class StudentGroupsFragment extends Fragment {
+public class StudyGroupsFragment extends Fragment {
 
     private GroupsApi groupsApi;
 
@@ -29,7 +30,7 @@ public class StudentGroupsFragment extends Fragment {
     private AlphaAnimation progressBarFadeInAnimation;
     private AlphaAnimation progressBarFadeOutAnimation;
 
-    private RecyclerView studentGroupsListView;
+    private RecyclerView listView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,11 +53,11 @@ public class StudentGroupsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_student_groups, container, false);
-        progressBar = view.findViewById(R.id.studentGroupsProgressBar);
-        studentGroupsListView = view.findViewById(R.id.studentGroupsList);
+        final View view = inflater.inflate(R.layout.fragment_study_groups, container, false);
+        progressBar = view.findViewById(R.id.studyGroupsProgressBar);
+        listView = view.findViewById(R.id.studyGroupsList);
         final LinearLayoutManager studentGroupsListLayoutManager = new LinearLayoutManager(view.getContext());
-        studentGroupsListView.setLayoutManager(studentGroupsListLayoutManager);
+        listView.setLayoutManager(studentGroupsListLayoutManager);
 
         showLoadingProgressBar();
         new Thread(() -> {
@@ -77,7 +78,7 @@ public class StudentGroupsFragment extends Fragment {
     private void populateStudentGroupsListView(List<GroupDTO> groups) {
         getActivity().runOnUiThread(() -> {
             final RecyclerView.Adapter<?> studentGroupsAdapter = new StudentGroupsAdapter(groups);
-            studentGroupsListView.setAdapter(studentGroupsAdapter);
+            listView.setAdapter(studentGroupsAdapter);
         });
     }
 

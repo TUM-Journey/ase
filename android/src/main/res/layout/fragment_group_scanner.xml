@@ -10,9 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginStart="1dp"
         android:layout_marginTop="223dp"
-        android:src="@drawable/radar_icon"
+        android:src="@drawable/antenna_listen"
         app:layout_constraintBottom_toTopOf="@+id/radarCaption"
         app:layout_constraintStart_toStartOf="@+id/radarCaption"
         app:layout_constraintTop_toTopOf="parent" />

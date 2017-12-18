@@ -86,7 +86,7 @@ public class UsersService implements UsersApiDelegate {
     }
 
     @Override
-    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF') OR @currentUser.hasUserId(#userIdRaw)")
+    @PreAuthorize("hasRole('TUTOR') OR @currentUser.hasUserId(#userIdRaw)")
     public ResponseEntity<List<AttendanceDTO>> getStudentAttendances(String userIdRaw) {
         val userId = UserId.of(userIdRaw);
         val attendedGroups = groupRepository.findAllByAttendancesStudentId(userId);
@@ -101,19 +101,10 @@ public class UsersService implements UsersApiDelegate {
     }
 
     @Override
-    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF') OR @currentUser.hasUserId(#userIdRaw)")
+    @PreAuthorize("@currentUser.hasUserId(#userIdRaw)")
     public ResponseEntity<List<GroupDTO>> getStudentGroups(String userIdRaw) {
         val userId = UserId.of(userIdRaw);
         val groups = groupRepository.findAllByStudentIdsContaining(userId);
-
-        return ResponseEntity.ok(groupToDtoSerializer.toDto(groups));
-    }
-
-    @Override
-    @PreAuthorize("hasRole('SUPERUSER') OR hasRole('STAFF') OR @currentUser.hasUserId(#userIdRaw)")
-    public ResponseEntity<List<GroupDTO>> getTutorGroups(String userIdRaw) {
-        val userId = UserId.of(userIdRaw);
-        val groups = groupRepository.findAllByTutorIdsContaining(userId);
 
         return ResponseEntity.ok(groupToDtoSerializer.toDto(groups));
     }

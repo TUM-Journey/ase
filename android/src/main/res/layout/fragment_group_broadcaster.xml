@@ -3,16 +3,104 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.tum.ase.kleo.android.ui.fragment.GroupScannerFragment">
+    tools:context="de.tum.ase.kleo.android.GroupScannerFragment"
+    tools:layout_editor_absoluteY="81dp">
 
-    <TextView
-        android:id="@+id/textView"
+    <ImageView
+        android:id="@+id/listenIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Group Broadcaster will be here :)"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="223dp"
+        android:src="@drawable/antenna_broadcast"
+        app:layout_constraintBottom_toTopOf="@+id/listenChooseGroup"
+        app:layout_constraintStart_toStartOf="@+id/listenChooseGroup"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/listenChooseGroup"
+        android:layout_width="191dp"
+        android:layout_height="23dp"
+        android:layout_marginBottom="223dp"
+        android:text="@string/select_group_to_broadcast"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listenIcon" />
+
+    <Spinner
+        android:id="@+id/listenGroupChooser"
+        style="@android:style/Widget.Material.Light.Spinner.Underlined"
+        android:layout_width="237dp"
+        android:layout_height="43dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="-2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listenChooseGroup" />
+
+    <Switch
+        android:id="@+id/listenSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="21dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        android:text="@string/broadcasting"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listenGroupChooser"
+        app:layout_constraintVertical_bias="0.0" />
+    <!--
+    <Spinner
+        android:id="@+id/listenGroupChooser"
+        android:layout_width="242dp"
+        android:layout_height="34dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listenChooseGroup" />
+
+    <Switch
+        android:id="@+id/listenSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="144dp"
+        android:layout_marginTop="8dp"
+        android:text="Broadcasting"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listenGroupChooser" />
+
+    <ImageView
+        android:id="@+id/listenIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="224dp"
+        android:src="@drawable/antenna_broadcast"
+        app:layout_constraintBottom_toTopOf="@+id/listenChooseGroup"
+        app:layout_constraintEnd_toEndOf="@+id/listenChooseGroup"
+        app:layout_constraintStart_toStartOf="@+id/listenChooseGroup"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/listenChooseGroup"
+        android:layout_width="192dp"
+        android:layout_height="26dp"
+        android:text="Select group to broadcast:"
+        android:textAlignment="center"
+        tools:layout_editor_absoluteX="109dp"
+        tools:layout_editor_absoluteY="360dp" />-->
 
 </android.support.constraint.ConstraintLayout>

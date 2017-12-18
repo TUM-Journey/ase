@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: "4.1.0"
+  version: "5.0.0"
   title: Kleo Classes and Passes Management API
   description: The API provides endpoints for managing users, courses, sessions and passes.
 
@@ -8,7 +8,7 @@ basePath: /api
 schemes:
   - http
 produces:
-  - "application/vnd.tum.aes.kleo.v4.1.0+json"
+  - "application/vnd.tum.aes.kleo.v5.0.0+json"
 
 securityDefinitions:
   OAuth2Password:
@@ -105,7 +105,7 @@ paths:
             minItems: 0
             items:
               type: string
-              enum: [SUPERUSER, STAFF, USER]
+              enum: [SUPERUSER, TUTOR, STUDENT]
       responses:
         200:
           description: User roles has been updated
@@ -158,32 +158,6 @@ paths:
       responses:
         200:
           description: List of registrations for groups and courses
-          schema:
-            type: array
-            minItems: 0
-            items:
-              $ref: '#/definitions/GroupDTO'
-        500:
-          description: Internal server error, please contact support
-          schema:
-            $ref: '#/definitions/ErrorDTO'
-  /users/{userId}/tutorings:
-    get:
-      tags:
-        - users
-        - tutors
-        - groups
-      operationId: getTutorGroups
-      security:
-        - OAuth2Password: []
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: string
-      responses:
-        200:
-          description: List of groups the given user is tutor of
           schema:
             type: array
             minItems: 0
@@ -349,80 +323,6 @@ paths:
       responses:
         204:
           description: User has been removed from the Group
-        404:
-          description: Entity not found
-        500:
-          description: Internal server error, please contact support
-          schema:
-            $ref: '#/definitions/ErrorDTO'
-  /groups/{groupId}/tutors:
-    get:
-      tags:
-        - groups
-        - tutors
-      operationId: getGroupTutors
-      security:
-        - OAuth2Password: []
-      parameters:
-        - name: groupId
-          in: path
-          required: true
-          type: string
-      responses:
-        200:
-          description: A list of Tutors from the given Group
-          schema:
-            type: array
-            minItems: 0
-            items:
-              $ref: '#/definitions/UserDTO'
-        500:
-          description: Internal server error, please contact support
-          schema:
-            $ref: '#/definitions/ErrorDTO'
-  /groups/{groupId}/tutors/{userId}:
-    put:
-      tags:
-        - groups
-        - tutors
-      operationId: addGroupTutor
-      security:
-        - OAuth2Password: []
-      parameters:
-        - name: groupId
-          in: path
-          required: true
-          type: string
-        - name: userId
-          in: path
-          required: true
-          type: string
-      responses:
-        200:
-          description: Tutor has been added to the Group successfully
-        500:
-          description: Internal server error, please contact support
-          schema:
-            $ref: '#/definitions/ErrorDTO'
-    delete:
-      tags:
-        - groups
-        - tutors
-      operationId: "deleteGroupTutor"
-      security:
-        - OAuth2Password: []
-      parameters:
-        - name: groupId
-          in: path
-          required: true
-          type: string
-        - name: userId
-          in: path
-          required: true
-          type: string
-      responses:
-        204:
-          description: Tutor has been removed from the Group
         404:
           description: Entity not found
         500:
@@ -599,10 +499,6 @@ definitions:
         type: array
         items:
           type: string
-      tutorIds:
-        type: array
-        items:
-          type: string
       sessions:
         type: array
         readOnly: true
@@ -632,8 +528,6 @@ definitions:
       sessionId:
         type: string
       studentId:
-        type: string
-      tutorId:
         type: string
       requestedAt:
         type: string

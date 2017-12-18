@@ -3,17 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <item android:title="@string/studying">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/study_group"
+            android:icon="@drawable/ic_import_contacts"
+            android:title="@string/study_groups" />
+    </group>
+
+
+    <item android:title="@string/student" android:id="@+id/menu_student">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/group_scanner"
                     android:icon="@drawable/ic_explore"
                     android:title="@string/group_scanner" />
-                <item
-                    android:id="@+id/student_groups"
-                    android:icon="@drawable/ic_import_contacts"
-                    android:title="@string/study_groups" />
+
                 <item
                     android:id="@+id/student_registrations"
                     android:icon="@drawable/ic_bookmark"
@@ -26,17 +31,24 @@
         </menu>
     </item>
 
-    <item android:title="@string/tutoring">
+    <item android:title="@string/tutor" android:id="@+id/menu_tutor">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/group_broadcaster"
                     android:icon="@drawable/ic_router"
                     android:title="@string/group_broadcaster" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="@string/superuser" android:id="@+id/menu_superuser">
+        <menu>
+            <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/tutoring_groups"
-                    android:icon="@drawable/ic_work"
-                    android:title="@string/tutoring_groups" />
+                    android:id="@+id/user_management"
+                    android:icon="@drawable/ic_contacts"
+                    android:title="@string/user_management" />
             </group>
         </menu>
     </item>

@@ -4,11 +4,11 @@ import android.support.annotation.LayoutRes;
 
 import de.tum.ase.kleo.android.R;
 
-public class TutoringGroupsFragment extends BaseFragment {
+public class UserManagementFragment extends BaseFragment {
 
     @Override
     @LayoutRes
     protected int provideLayoutResourceId() {
-        return R.layout.fragment_tutoring_groups;
+        return R.layout.fragment_user_manangement;
     }
 }

@@ -32,8 +32,7 @@ public class GroupToDtoSerializer {
         val dto = new GroupDTO()
                 .id(source.id().toString())
                 .name(source.name())
-                .studentIds(source.studentIds().stream().map(Identifier::toString).collect(toList()))
-                .tutorIds(source.tutorIds().stream().map(Identifier::toString).collect(toList()));
+                .studentIds(source.studentIds().stream().map(Identifier::toString).collect(toList()));
 
         if (includeSessions)
             dto.sessions(sessionToDtoSerializer.toDto(source.sessions()));

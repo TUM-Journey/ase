@@ -17,7 +17,6 @@ public class PassDtoMapper {
         return new PassDTO()
                 .code(source.code().toString())
                 .sessionId(source.sessionId().toString())
-                .tutorId(source.tutorId().toString())
                 .studentId(source.studentId().toString())
                 .requestedAt(source.requestedAt())
                 .expiresAt(source.expiresAt());
@@ -28,7 +27,6 @@ public class PassDtoMapper {
             return null;
 
         return new Pass(SessionId.of(passDTO.getSessionId()),
-                UserId.of(passDTO.getTutorId()),
                 UserId.of(passDTO.getStudentId()),
                 Duration.ofSeconds(passDTO.getExpireIn()));
     }

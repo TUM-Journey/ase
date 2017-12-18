@@ -22,11 +22,11 @@ security:
 
   provider:
     superuser:
-      username: superuser
+      username: superuser@tum.de
       password: c9kfgRCs2nsx
-      roles: SUPERUSER
+      roles: SUPERUSER,STUDENT,TUTOR
     tum:
-      roles: USER
+      roles: STUDENT
 
   oauth2:
     resource:
