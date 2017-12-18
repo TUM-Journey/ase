@@ -40,7 +40,7 @@ ext {
             springSecurityOAuth2: '2.2.1.RELEASE',
             springSecurityJwt: '1.0.8.RELEASE',
 
-            htmlunit: '2.+',
+            htmlunit: '2.28',
 
             swaggerSpringfox: '2.7.0',
             swaggerCodegenCli: '2.3.1-SNAPSHOT',
