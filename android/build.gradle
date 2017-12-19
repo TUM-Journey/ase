@@ -23,8 +23,7 @@ dependencies {
 
     implementation deps.defs.android.swaggerAnnotations
     implementation deps.defs.android.retrofit
-    implementation deps.defs.android.retrofitScalars
-    implementation deps.defs.android.retrofitGson
+    implementation deps.defs.android.rxAndroidJava
     implementation (deps.defs.android.oltuOAuth2) {
         exclude group: 'org.apache.oltu.oauth2', module: 'org.apache.oltu.oauth2.common'
     }

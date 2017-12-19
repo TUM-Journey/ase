@@ -11,8 +11,15 @@ import de.tum.ase.kleo.android.KleoApplication;
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.android.client.AuthenticationException;
 import de.tum.ase.kleo.android.client.BackendClient;
+import de.tum.ase.kleo.android.util.NetworkUtils;
 import de.tum.ase.kleo.android.util.UiUtils;
 import de.tum.ase.kleo.android.util.Validator;
+import de.tum.ase.kleo.android.client.Principal;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class LoginActivity extends Activity {
 
@@ -22,6 +29,7 @@ public class LoginActivity extends Activity {
 
     private EditText emailView;
     private EditText passwordView;
+    private Disposable disposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,26 +69,38 @@ public class LoginActivity extends Activity {
         } else if (passwordValidationResult != null) {
             passwordView.setError(passwordValidationResult);
         } else {
-            // TODO: 1. Do not use threads. Instead you can use (at least) async tasks!!
-            // TODO: 2. This is potential memory leak, when user rotates a device during of the network request it will leak a activity. Thread should be interrupted!!
-            new Thread(() -> {
-                try {
-                    LoginActivity.this.runOnUiThread(() -> loggingInDialog.show());
-                    backendClient.authenticate(email, password);
-                    proceed();
-                } catch (AuthenticationException e) {
-                    LoginActivity.this.runOnUiThread(() ->
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show());
-                } finally {
-                    LoginActivity.this.runOnUiThread(() -> loggingInDialog.dismiss());
-                }
-            }).start();
+            disposable = backendClient.authenticate(email, password)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe((d) -> this.showLoggingInDialog())
+                    .doFinally(this::hideLoggingInDialog)
+                    .subscribe(this::helloAndProceed, this::showError);
         }
+    }
+
+    private void showError(Throwable e) {
+        Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    private void showLoggingInDialog() {
+        loggingInDialog.show();
+    }
+
+    private void hideLoggingInDialog() {
+        loggingInDialog.dismiss();
     }
 
     private void proceed() {
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
+
+    }
+
+    private void helloAndProceed(Principal p) {
+        final String helloToastMsg = getString(R.string.hello_toast, p.name());
+        Toast.makeText(getApplicationContext(), helloToastMsg, Toast.LENGTH_LONG).show();
+
+        proceed();
     }
 
     @Override
@@ -89,5 +109,6 @@ public class LoginActivity extends Activity {
         if (loggingInDialog != null && loggingInDialog.isShowing()) {
             loggingInDialog.cancel();
         }
+        NetworkUtils.unsubscribe(disposable);
     }
 }
