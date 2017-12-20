@@ -112,7 +112,8 @@ ext {
 
     plgs.vers = [
         common: [
-            swaggerCodegenPlugin: '2.9.0'
+            swaggerCodegenPlugin: '2.9.0',
+            testLogger: '1.1.2',
         ],
         android: [
             androidTools: '3.0.1'
@@ -122,7 +123,8 @@ ext {
     ]
     plgs.defs = [
         common: [
-            swaggerCodegen: "gradle.plugin.org.hidetake:gradle-swagger-generator-plugin:${plgs.vers.common.swaggerCodegenPlugin}"
+            swaggerCodegen: "gradle.plugin.org.hidetake:gradle-swagger-generator-plugin:${plgs.vers.common.swaggerCodegenPlugin}",
+            testLogger: "com.adarshr:gradle-test-logger-plugin:${plgs.vers.common.testLogger}",
         ],
         android: [
             androidTools: "com.android.tools.build:gradle:${plgs.vers.android.androidTools}"

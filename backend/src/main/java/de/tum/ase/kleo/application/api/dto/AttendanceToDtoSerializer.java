@@ -30,8 +30,7 @@ public class AttendanceToDtoSerializer {
         return new AttendanceDTO()
                 .session(sessionToDtoSerializer.toDto(group.session(attendance.sessionId()).get()))
                 .group(groupToDtoSerializer.toDto(group, false))
-                .attendedAt(attendance.attendedAt())
-                .passCode(attendance.passCode().toString());
+                .attendedAt(attendance.attendedAt());
     }
 
     public List<AttendanceDTO> toDto(Group group, Iterable<Attendance> sources) {

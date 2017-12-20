@@ -1,21 +1,32 @@
 package de.tum.ase.kleo.application.api.dto;
 
-import de.tum.ase.kleo.domain.Pass;
-import de.tum.ase.kleo.domain.id.SessionId;
-import de.tum.ase.kleo.domain.id.UserId;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
+import de.tum.ase.kleo.application.service.PassTokenizationService;
+import de.tum.ase.kleo.domain.Pass;
+import de.tum.ase.kleo.domain.id.SessionId;
+import de.tum.ase.kleo.domain.id.UserId;
+import lombok.val;
+
 @Component
 public class PassDtoMapper {
+
+    private final PassTokenizationService passTokenizationService;
+
+    public PassDtoMapper(PassTokenizationService passTokenizationService) {
+        this.passTokenizationService = passTokenizationService;
+    }
 
     public PassDTO toDto(Pass source) {
         if (source == null)
             return null;
 
+        val passCode = passTokenizationService.tokenizeToString(source);
+
         return new PassDTO()
-                .code(source.code().toString())
+                .code(passCode)
                 .sessionId(source.sessionId().toString())
                 .studentId(source.studentId().toString())
                 .requestedAt(source.requestedAt())

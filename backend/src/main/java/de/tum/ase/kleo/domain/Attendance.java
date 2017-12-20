@@ -21,9 +21,6 @@ import static org.apache.commons.lang3.Validate.notNull;
 public class Attendance implements Serializable {
 
     @Column(nullable = false)
-    private final UUID passCode;
-
-    @Column(nullable = false)
     @AttributeOverride(name = "id", column = @Column(name = "session_id"))
     private final SessionId sessionId;
 
@@ -34,8 +31,7 @@ public class Attendance implements Serializable {
     @Column(name = "attended_at", nullable = false)
     private final OffsetDateTime attendedAt = OffsetDateTime.now();
 
-    public Attendance(UUID passCode, SessionId sessionId, UserId studentId) {
-        this.passCode = notNull(passCode);
+    public Attendance(SessionId sessionId, UserId studentId) {
         this.sessionId = notNull(sessionId);
         this.studentId = notNull(studentId);
     }

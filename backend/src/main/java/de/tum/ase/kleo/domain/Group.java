@@ -1,6 +1,5 @@
 package de.tum.ase.kleo.domain;
 
-
 import de.tum.ase.kleo.domain.id.GroupId;
 import de.tum.ase.kleo.domain.id.SessionId;
 import de.tum.ase.kleo.domain.id.UserId;
@@ -35,10 +34,6 @@ public class Group {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id", referencedColumnName = "group_id")
     private final List<Session> sessions = new ArrayList<>();
-
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "group_passes", joinColumns = @JoinColumn(name = "group_id"))
-    private final Set<Pass> passes = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "group_attendances", joinColumns = @JoinColumn(name = "group_id"))
@@ -130,42 +125,14 @@ public class Group {
         return sessions.removeIf(s -> s.id().equals(sessionId));
     }
 
-    public UUID registerPass(Pass pass) {
-        if (hasPass(pass.studentId(), pass.sessionId()))
-            throw new IllegalArgumentException("Only one Pass per student & session is allowed");
+    public Attendance attend(Pass pass) {
+        if (pass.isExpired())
+            throw new IllegalArgumentException("Pass with given code is expired or already used");
+        else if (hasAttended(pass.studentId(), pass.sessionId()))
+            throw new IllegalArgumentException("User attendance for the session provided by the " +
+                    "pass has already been registered");
 
-        passes.add(pass);
-
-        return pass.code();
-    }
-
-    public boolean hasPass(UserId studentId, SessionId sessionId) {
-        return passes.stream()
-                .anyMatch(pass -> pass.studentId().equals(studentId)
-                        && pass.sessionId().equals(sessionId));
-    }
-
-    public boolean isPassUsed(UUID passCode) {
-        return attendances.stream().anyMatch(a -> a.passCode().equals(passCode));
-    }
-
-    public Set<Pass> passes() {
-        return Collections.unmodifiableSet(passes);
-    }
-
-    protected Optional<Pass> validPass(UUID passCode) {
-        return passes.stream()
-                .filter(pass -> pass.code().equals(passCode))
-                .filter(pass -> !isPassUsed(passCode))
-                .filter(Pass::notExpired)
-                .findAny();
-    }
-
-    public Attendance attend(UUID passCode) {
-        val eligiblePass = validPass(passCode)
-                .orElseThrow(() -> new IllegalArgumentException("Pass with given code is expired or already used"));
-
-        val newAttendance = new Attendance(passCode, eligiblePass.sessionId(), eligiblePass.studentId());
+        val newAttendance = new Attendance(pass.sessionId(), pass.studentId());
         attendances.add(newAttendance);
         return newAttendance;
     }

@@ -2,6 +2,7 @@ package de.tum.ase.kleo.application.api.service;
 
 import de.tum.ase.kleo.application.api.GroupsApiDelegate;
 import de.tum.ase.kleo.application.api.dto.*;
+import de.tum.ase.kleo.application.service.PassTokenizationService;
 import de.tum.ase.kleo.domain.GroupRepository;
 import de.tum.ase.kleo.domain.SessionType;
 import de.tum.ase.kleo.domain.UserRepository;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -34,17 +34,19 @@ public class GroupsService implements GroupsApiDelegate {
 
     private final UserToDtoSerializer userToDtoSerializer;
     private final PassDtoMapper passDtoMapper;
+    private final PassTokenizationService passTokenizationService;
 
     @Autowired
     public GroupsService(GroupRepository groupRepository, UserRepository userRepository,
                          UserToDtoSerializer userToDtoSerializer, GroupToDtoSerializer groupToDtoSerializer,
-                         GroupFromDtoFactory groupFromDtoFactory, PassDtoMapper passDtoMapper) {
+                         GroupFromDtoFactory groupFromDtoFactory, PassDtoMapper passDtoMapper, PassTokenizationService passTokenizationService) {
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
         this.userToDtoSerializer = userToDtoSerializer;
         this.groupToDtoSerializer = groupToDtoSerializer;
         this.groupFromDtoFactory = groupFromDtoFactory;
         this.passDtoMapper = passDtoMapper;
+        this.passTokenizationService = passTokenizationService;
     }
 
     @Override
@@ -156,7 +158,6 @@ public class GroupsService implements GroupsApiDelegate {
             return ResponseEntity.notFound().build();
 
         val pass = passDtoMapper.fromDto(passDto);
-        group.registerPass(pass);
 
         return ResponseEntity.ok(passDtoMapper.toDto(pass));
     }
@@ -164,15 +165,15 @@ public class GroupsService implements GroupsApiDelegate {
     @Override
     @Transactional
     @PreAuthorize("hasRole('TUTOR')")
-    public ResponseEntity<Void> utilizeSessionPass(String groupIdRaw, String passCodeRaw) {
+    public ResponseEntity<Void> utilizeSessionPass(String groupIdRaw, String encodedPass) {
         val groupId = GroupId.of(groupIdRaw);
-        val passCode = UUID.fromString(passCodeRaw);
+        val pass = passTokenizationService.untokenize(encodedPass);
 
         val group = groupRepository.findOne(groupId);
         if (group == null)
             return ResponseEntity.notFound().build();
 
-        group.attend(passCode);
+        group.attend(pass);
 
         return ResponseEntity.ok().build();
     }

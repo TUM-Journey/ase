@@ -38,6 +38,12 @@ security:
   jwt:
     signingKey: EZ4cyYpeHucVpWZjvRq5d6LaLjZfcjhkpg5nNBwn
 
+  passes:
+    keyAlgorithm: AES
+    key: 80,-110,-19,65,10,92,-46,-11,-61,95,22,-1,-124,22,45,-23
+    cipherAlgorithm: AES/CBC/PKCS5PADDING
+    cipherAlgorithmParameterSpec: 110,-42,-8,111,75,-60,104,14,-78,63,72,70,29,-121,35,-20
+
 ---
 
 spring:

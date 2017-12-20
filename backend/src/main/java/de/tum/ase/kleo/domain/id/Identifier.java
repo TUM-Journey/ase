@@ -9,6 +9,7 @@ import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 
 import static org.apache.commons.lang3.Validate.notBlank;
 
@@ -27,6 +28,10 @@ public abstract class Identifier implements Serializable {
     @JsonValue
     @Override
     public String toString() {
-        return id.toString();
+        return id;
+    }
+
+    public byte[] toBytes(Charset charset) {
+        return id.getBytes(charset);
     }
 }
