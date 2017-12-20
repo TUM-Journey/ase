@@ -16,11 +16,8 @@ public class KleoApplication extends Application {
     }
 
     private BackendClient buildBackendClient() {
-        final String baseUrl = getString(R.string.backend_baseUrl);
-        final String clientId = getString(R.string.backend_clientId);
-        final String clientSecret = getString(R.string.backend_clientSecret);
-
-        return new BackendClient(baseUrl, clientId, clientSecret);
+        return new BackendClient(BuildConfig.BACKEND_BASE_URL,
+                BuildConfig.BACKEND_CLIENT_ID, BuildConfig.BACKEND_CLIENT_SECRET);
     }
 
     public BackendClient backendClient() {

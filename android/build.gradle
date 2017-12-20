@@ -36,6 +36,8 @@ dependencies {
 }
 
 android {
+    flavorDimensions "default"
+
     compileOptions {
         sourceCompatibility configs.compiler.sourceCompatibility
         targetCompatibility configs.compiler.targetCompatibility
@@ -54,6 +56,20 @@ android {
         targetSdkVersion configs.android.targetSdkVersion
         versionCode 1
         versionName "1.0"
+    }
+
+    productFlavors {
+        prod {
+            buildConfigField 'String', 'BACKEND_BASE_URL', '"http://kleo.herokuapp.com:8080/api/"'
+            buildConfigField 'String', 'BACKEND_CLIENT_ID', '"kleo-client"'
+            buildConfigField 'String', 'BACKEND_CLIENT_SECRET', '""'
+        }
+
+        dev {
+            buildConfigField 'String', 'BACKEND_BASE_URL', '"http://192.168.0.11:8080/api/"'
+            buildConfigField 'String', 'BACKEND_CLIENT_ID', '"kleo-client"'
+            buildConfigField 'String', 'BACKEND_CLIENT_SECRET', '""'
+        }
     }
 
     buildTypes {
