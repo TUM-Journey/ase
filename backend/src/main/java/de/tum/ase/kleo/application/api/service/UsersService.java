@@ -56,7 +56,7 @@ public class UsersService implements UsersApiDelegate {
     @Override
     @Transactional
     @PreAuthorize("hasRole('SUPERUSER')")
-    public ResponseEntity<SessionDTO> updateUserRoles(String userIdRaw, List<String> userRolesRaw) {
+    public ResponseEntity<Void> updateUserRoles(String userIdRaw, List<String> userRolesRaw) {
         val userId = UserId.of(userIdRaw);
 
         val user = userRepository.findOne(userId);

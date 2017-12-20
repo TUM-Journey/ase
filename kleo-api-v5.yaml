@@ -8,7 +8,7 @@ basePath: /api
 schemes:
   - http
 produces:
-  - "application/vnd.tum.aes.kleo.v5.0.0+json"
+  - "application/vnd.tum.aes.kleo.v5.0.1+json"
 
 securityDefinitions:
   OAuth2Password:
@@ -109,8 +109,6 @@ paths:
       responses:
         200:
           description: User roles has been updated
-          schema:
-            $ref: '#/definitions/SessionDTO'
         500:
           description: Internal server error, please contact support
           schema:
