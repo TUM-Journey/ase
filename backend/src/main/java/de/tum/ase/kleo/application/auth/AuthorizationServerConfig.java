@@ -1,7 +1,5 @@
 package de.tum.ase.kleo.application.auth;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +17,8 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.UserAuthenticationConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
+import lombok.val;
 
 
 @Configuration

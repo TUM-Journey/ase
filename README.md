@@ -10,15 +10,15 @@ The backend default profile is DEV, populated with test data: groups and user ac
 ```
 $ ./gradlew bootRun
 ```
-This will run the backend on `localhost:8080` with DEV profile activated.
+This will run the backend on `http://localhost:8080/api` with DEV profile activated.
 
 The DEV profile is populated with the following user you may use for development:
 
-| Username         | Password     | Roles                   | Configurable | Auth Provider                |
-|------------------|--------------|-------------------------|-----------------|------------------------------|
-| superuser@tum.de | c9kfgRCs2nsx | SUPERUSER, STUDENT, TUTOR | application.yml | StaticAuthenticationProvider |
-| student@tum.de   | password     | STUDENT                 | data.sql        | TumAuthenticationProvider    |
-| tutor@tum.de     | password     | TUTOR                   | data.sql        | TumAuthenticationProvider    |
+| Username         | Password     | Roles                     | Configurable In    |
+|------------------|--------------|---------------------------|--------------------|
+| superuser@tum.de | password     | SUPERUSER, STUDENT, TUTOR | data.sql           |
+| student@tum.de   | password     | STUDENT                   | data.sql           |
+| tutor@tum.de     | password     | TUTOR                     | data.sql           |
 
 You still can use any valid student or staff TUM Shibboleth account.
 

@@ -21,10 +21,6 @@ security:
   accessTokenValidity: 3600
 
   provider:
-    superuser:
-      username: superuser@tum.de
-      password: c9kfgRCs2nsx
-      roles: SUPERUSER,STUDENT,TUTOR
     tum:
       roles: STUDENT
 

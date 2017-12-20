@@ -1,7 +1,5 @@
 package de.tum.ase.kleo.application.auth;
 
-import de.tum.ase.kleo.domain.UserRepository;
-import de.tum.ase.kleo.domain.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +16,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import de.tum.ase.kleo.application.auth.provider.TumAuthenticationProvider;
+import de.tum.ase.kleo.application.auth.provider.UserRepositoryAuthenticationProvider;
+import de.tum.ase.kleo.domain.UserRepository;
+import de.tum.ase.kleo.domain.UserRole;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -25,13 +28,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${security.realm}")
     private String realm;
-
-    @Value("${security.provider.superuser.username}")
-    private String superuserUsername;
-    @Value("${security.provider.superuser.password}")
-    private String superuserPassword;
-    @Value("${security.provider.superuser.roles}")
-    private UserRole[] superuserRoles;
 
     @Value("${security.provider.tum.roles}")
     private UserRole[] tumUserRoles;
@@ -56,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
         auth
-                .authenticationProvider(superuserAuthenticationProvider())
+                .authenticationProvider(userRepositoryAuthenticationProvider())
                 .authenticationProvider(tumAuthenticationProvider());
     }
 
@@ -72,8 +68,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    private AuthenticationProvider superuserAuthenticationProvider() {
-        return new StaticAuthenticationProvider(superuserUsername, superuserPassword, superuserRoles);
+    private AuthenticationProvider userRepositoryAuthenticationProvider() {
+        return new UserRepositoryAuthenticationProvider(userRepository, passwordEncoder());
     }
 
     private AuthenticationProvider tumAuthenticationProvider() {

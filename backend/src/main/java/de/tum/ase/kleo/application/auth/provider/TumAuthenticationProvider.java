@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.application.auth;
+package de.tum.ase.kleo.application.auth.provider;
 
 import com.gargoylesoftware.htmlunit.SilentCssErrorHandler;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -9,32 +9,22 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 import de.tum.ase.kleo.domain.User;
 import de.tum.ase.kleo.domain.UserRepository;
 import de.tum.ase.kleo.domain.UserRole;
-import de.tum.ase.kleo.domain.id.UserId;
 import lombok.val;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
 
 public class TumAuthenticationProvider implements AuthenticationProvider {
 
@@ -77,21 +67,11 @@ public class TumAuthenticationProvider implements AuthenticationProvider {
         val email = authentication.getName();
         val password = authentication.getCredentials().toString();
 
-        User user = userRepository.findOptionalByEmail(email).filter(usr -> {
-            if (!passwordEncoder.matches(password, usr.passwordHash()))
-                throw new BadCredentialsException("Password is invalid");
+        val shibbolethUser = fetchShibbolethUser(email, password);
+        userRepository.save(shibbolethUser);
 
-            return true;
-        }).orElseGet(() -> {
-            val shibbolethUser = fetchShibbolethUser(email, password);
-            userRepository.save(shibbolethUser);
-
-            return shibbolethUser;
-        });
-
-        val userPrincipal = UserPrincipal.from(user);
-        val userGrantedAthorities = grantedAuthoritiesFrom(user.userRoles());
-        return new UsernamePasswordAuthenticationToken(userPrincipal, null, userGrantedAthorities);
+        val userGrantedAthorities = UserGrantedAuthorities.fromUserRoles(shibbolethUser.userRoles());
+        return new UsernamePasswordAuthenticationToken(shibbolethUser, null, userGrantedAthorities);
     }
 
     private User fetchShibbolethUser(String email, String password) {
@@ -150,11 +130,5 @@ public class TumAuthenticationProvider implements AuthenticationProvider {
     @Override
     public boolean supports(Class<?> authentication) {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
-    }
-
-    private static List<GrantedAuthority> grantedAuthoritiesFrom(List<UserRole> userRoles) {
-        return userRoles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.name()))
-                .collect(toList());
     }
 }

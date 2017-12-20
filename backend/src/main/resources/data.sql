@@ -13,9 +13,13 @@ INSERT INTO PUBLIC.SESSION(SESSION_ID, BEGINS, ENDS, LOCATION, SESSION_TYPE, GRO
 -- Password for all users is "password"
 INSERT INTO PUBLIC.USER(USER_ID, EMAIL, NAME, PASSWORD_HASH, STUDENT_ID) VALUES
 ('ad591b51-9f6c-438a-afbd-fd19e1760c4b', 'student@tum.de', 'Student Studenter', '$2a$10$f0LW9DXHD6ku3EtjJkbiIuBeJ/V5xmQnVrwQP1OXDG/r482BpzJ0O', '123456789'),
-('3eba335f-fca5-4adc-b398-f81c748421d8', 'tutor@tum.de', 'Tum Tutor', '$2a$10$KDxTNOZVansY/QGuICPuy.0bmS2k1FnUUr8u6Xx/NrjXqJXipXud2', '123456789');
+('3eba335f-fca5-4adc-b398-f81c748421d8', 'tutor@tum.de', 'Tum Tutor', '$2a$10$KDxTNOZVansY/QGuICPuy.0bmS2k1FnUUr8u6Xx/NrjXqJXipXud2', '123456789'),
+('ad591b51-9f6c-438a-afbd-fd19e1760c4a', 'superuser@tum.de', 'Superuser Superuserer', '$2a$10$f0LW9DXHD6ku3EtjJkbiIuBeJ/V5xmQnVrwQP1OXDG/r482BpzJ0O', '123456789');
 INSERT INTO PUBLIC.USER_ROLES(USER_ID, USER_ROLES) VALUES
 ('ad591b51-9f6c-438a-afbd-fd19e1760c4b', 'STUDENT'),
-('3eba335f-fca5-4adc-b398-f81c748421d8', 'TUTOR');
+('3eba335f-fca5-4adc-b398-f81c748421d8', 'TUTOR'),
+('ad591b51-9f6c-438a-afbd-fd19e1760c4a', 'SUPERUSER'),
+('ad591b51-9f6c-438a-afbd-fd19e1760c4a', 'STUDENT'),
+('ad591b51-9f6c-438a-afbd-fd19e1760c4a', 'TUTOR');
 
 SET REFERENTIAL_INTEGRITY TRUE;
