@@ -13,6 +13,11 @@ import lombok.val;
 import static de.tum.ase.kleo.domain.Pass.DEFAULT_TEXT_CHARSET;
 import static org.apache.commons.lang3.Validate.notNull;
 
+/**
+ * {@code PassDetokenizer} domain service is responsible for {@link Pass}
+ * deserialization & decryption from tokens used as identity authenticator
+ * for attendance registering by tutor’s device.
+ */
 public class PassDetokenizer {
 
     private final Cipher cipher;

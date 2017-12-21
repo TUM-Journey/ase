@@ -1,6 +1,5 @@
 package de.tum.ase.kleo.domain;
 
-
 import de.tum.ase.kleo.domain.id.UserId;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,6 +16,11 @@ import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableList;
 import static org.apache.commons.lang3.Validate.*;
 
+/**
+ * {@code User} aggregate describes a student or tutor and holds
+ * information about his or her name, roles, email, matrik. number
+ * and login data.
+ */
 @Entity @Access(AccessType.FIELD)
 @Accessors(fluent = true) @ToString
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)

@@ -2,7 +2,7 @@
 Kleo is a Bluetooth-enabled electronic attendance system that is designed to cope with the problems of managing attendance lists of students.
 
 ## API
-Kleo provides **REST** API for Android and Web applications. The REST API is defined with OpenAPI2 (Swagger) and availale on [Swaggerhub](https://app.swaggerhub.com/apis/wingsofovnia/kleo-api/). The Postman collection is also [provided](https://www.getpostman.com/collections/f318526cfbae39df8a2e).
+Kleo provides **REST** API for Android and Web applications. The REST API is defined with OpenAPI2 (Swagger) and availale on [Swaggerhub](https://app.swaggerhub.com/apis/wingsofovnia/kleo-api/). The Postman collection is also [provided](https://www.getpostman.com/collections/f168f5deb322113dc89a).
 
 ## Getting Started
 ### Development

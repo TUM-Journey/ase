@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: "5.0.0"
+  version: "5.0.1"
   title: Kleo Classes and Passes Management API
   description: The API provides endpoints for managing users, courses, sessions and passes.
 

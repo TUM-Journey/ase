@@ -15,6 +15,10 @@ import lombok.val;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
+/**
+ * {@code Pass} value object represents a permit to visit a
+ * particular group session for a particular user.
+ */
 @ToString @EqualsAndHashCode
 @Getter @Accessors(fluent = true)
 public class Pass {

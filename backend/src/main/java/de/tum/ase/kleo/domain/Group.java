@@ -14,6 +14,10 @@ import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.Validate.notBlank;
 
+/**
+ * {@code Group} aggregate represents a study group students can sign in.
+ * It consists of sessions and holds student attendance list of each session.
+ */
 @Accessors(fluent = true) @ToString
 @Entity(name = "GR0UP") @Access(AccessType.FIELD)
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)

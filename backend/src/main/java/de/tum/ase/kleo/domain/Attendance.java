@@ -14,6 +14,10 @@ import java.util.UUID;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
+/**
+ * {@code Attendance} value object represents one visit of a {@link Session}
+ * of a {@link Group} by a student {@link User} at a specific time.
+ */
 @Embeddable
 @ToString @EqualsAndHashCode
 @Getter @Accessors(fluent = true)

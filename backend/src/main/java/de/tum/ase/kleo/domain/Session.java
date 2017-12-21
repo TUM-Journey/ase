@@ -14,6 +14,11 @@ import java.time.OffsetDateTime;
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
+/**
+ * {@code Session} entity describe one occurrence of the group’s
+ * tutorials or exercises students can visit. It consists of session type,
+ * location and begin & end date times.
+ */
 @Entity @Access(AccessType.FIELD)
 @Getter @Accessors(fluent = true) @ToString
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
