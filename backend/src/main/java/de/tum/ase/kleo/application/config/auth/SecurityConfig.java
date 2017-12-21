@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.application.auth;
+package de.tum.ase.kleo.application.config.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

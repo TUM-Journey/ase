@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.application.api;
+package de.tum.ase.kleo.application.config.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;

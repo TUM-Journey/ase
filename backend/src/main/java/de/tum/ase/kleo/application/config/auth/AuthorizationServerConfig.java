@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.application.auth;
+package de.tum.ase.kleo.application.config.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +18,8 @@ import org.springframework.security.oauth2.provider.token.UserAuthenticationConv
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
+import de.tum.ase.kleo.application.auth.ReferenceOAuth2RequestValidator;
+import de.tum.ase.kleo.application.auth.UserPrincipalAuthenticationConverter;
 import lombok.val;
 
 
