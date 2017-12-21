@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
-import de.tum.ase.kleo.application.service.PassTokenizationService;
 import de.tum.ase.kleo.domain.Pass;
+import de.tum.ase.kleo.domain.PassTokenizer;
 import de.tum.ase.kleo.domain.id.SessionId;
 import de.tum.ase.kleo.domain.id.UserId;
 import lombok.val;
@@ -13,17 +13,17 @@ import lombok.val;
 @Component
 public class PassDtoMapper {
 
-    private final PassTokenizationService passTokenizationService;
+    private final PassTokenizer passTokenizer;
 
-    public PassDtoMapper(PassTokenizationService passTokenizationService) {
-        this.passTokenizationService = passTokenizationService;
+    public PassDtoMapper(PassTokenizer passTokenizer) {
+        this.passTokenizer = passTokenizer;
     }
 
     public PassDTO toDto(Pass source) {
         if (source == null)
             return null;
 
-        val passCode = passTokenizationService.tokenizeToString(source);
+        val passCode = passTokenizer.tokenizeToString(source);
 
         return new PassDTO()
                 .code(passCode)

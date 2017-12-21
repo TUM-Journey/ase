@@ -1,15 +1,5 @@
 package de.tum.ase.kleo.application.api.service;
 
-import de.tum.ase.kleo.application.api.GroupsApiDelegate;
-import de.tum.ase.kleo.application.api.dto.*;
-import de.tum.ase.kleo.application.service.PassTokenizationService;
-import de.tum.ase.kleo.domain.GroupRepository;
-import de.tum.ase.kleo.domain.SessionType;
-import de.tum.ase.kleo.domain.UserRepository;
-import de.tum.ase.kleo.domain.id.GroupId;
-import de.tum.ase.kleo.domain.id.SessionId;
-import de.tum.ase.kleo.domain.id.UserId;
-import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +8,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import de.tum.ase.kleo.application.api.GroupsApiDelegate;
+import de.tum.ase.kleo.application.api.dto.GroupDTO;
+import de.tum.ase.kleo.application.api.dto.GroupFromDtoFactory;
+import de.tum.ase.kleo.application.api.dto.GroupToDtoSerializer;
+import de.tum.ase.kleo.application.api.dto.PassDTO;
+import de.tum.ase.kleo.application.api.dto.PassDtoMapper;
+import de.tum.ase.kleo.application.api.dto.SessionDTO;
+import de.tum.ase.kleo.application.api.dto.UserDTO;
+import de.tum.ase.kleo.application.api.dto.UserToDtoSerializer;
+import de.tum.ase.kleo.domain.GroupRepository;
+import de.tum.ase.kleo.domain.PassDetokenizer;
+import de.tum.ase.kleo.domain.SessionType;
+import de.tum.ase.kleo.domain.UserRepository;
+import de.tum.ase.kleo.domain.id.GroupId;
+import de.tum.ase.kleo.domain.id.SessionId;
+import de.tum.ase.kleo.domain.id.UserId;
+import lombok.val;
 
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -34,19 +42,19 @@ public class GroupsService implements GroupsApiDelegate {
 
     private final UserToDtoSerializer userToDtoSerializer;
     private final PassDtoMapper passDtoMapper;
-    private final PassTokenizationService passTokenizationService;
+    private final PassDetokenizer passDetokenizer;
 
     @Autowired
     public GroupsService(GroupRepository groupRepository, UserRepository userRepository,
                          UserToDtoSerializer userToDtoSerializer, GroupToDtoSerializer groupToDtoSerializer,
-                         GroupFromDtoFactory groupFromDtoFactory, PassDtoMapper passDtoMapper, PassTokenizationService passTokenizationService) {
+                         GroupFromDtoFactory groupFromDtoFactory, PassDtoMapper passDtoMapper, PassDetokenizer passDetokenizer) {
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
         this.userToDtoSerializer = userToDtoSerializer;
         this.groupToDtoSerializer = groupToDtoSerializer;
         this.groupFromDtoFactory = groupFromDtoFactory;
         this.passDtoMapper = passDtoMapper;
-        this.passTokenizationService = passTokenizationService;
+        this.passDetokenizer = passDetokenizer;
     }
 
     @Override
@@ -167,7 +175,7 @@ public class GroupsService implements GroupsApiDelegate {
     @PreAuthorize("hasRole('TUTOR')")
     public ResponseEntity<Void> utilizeSessionPass(String groupIdRaw, String encodedPass) {
         val groupId = GroupId.of(groupIdRaw);
-        val pass = passTokenizationService.untokenize(encodedPass);
+        val pass = passDetokenizer.detokenize(encodedPass);
 
         val group = groupRepository.findOne(groupId);
         if (group == null)
