@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import de.tum.ase.kleo.domain.User;
+import de.tum.ase.kleo.domain.id.UserId;
 import lombok.val;
 
 public class UserPrincipalAuthenticationConverter extends DefaultUserAuthenticationConverter {
@@ -53,7 +54,7 @@ public class UserPrincipalAuthenticationConverter extends DefaultUserAuthenticat
         val principalName = (String) data.get(PRINCIPAL_NAME);
         val principalStudentId = (String) data.get(PRINCIPAL_STUDENT_ID);
 
-        val principal = new User(principalId, principalEmail, principalName, principalStudentId);
+        val principal = new User(UserId.of(principalId), principalEmail, null, null, principalName, principalStudentId);
         val authorities = getAuthorities(data);
 
         return new UsernamePasswordAuthenticationToken(principal, "N/A", authorities);

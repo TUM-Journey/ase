@@ -8,6 +8,8 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class User {
 
     @Getter
     @EmbeddedId
-    private final UserId id = new UserId();
+    private final UserId id;
 
     @Getter
     @Column(nullable = false)
@@ -44,7 +46,7 @@ public class User {
     @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "user_roles", nullable = false)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    private final List<UserRole> userRoles;
+    private final List<UserRole> userRoles = new ArrayList<>();
 
     @Getter
     @Column(nullable = false)
@@ -54,12 +56,19 @@ public class User {
     @Column
     private final String studentId;
 
-    public User(String email, String passwordHash, List<UserRole> userRoles, String name, String studentId) {
+    public User(UserId userId, String email, String passwordHash, List<UserRole> userRoles, String name, String studentId) {
+        this.id = userId == null ? new UserId() : userId;
         this.email = notBlank(email);
-        this.passwordHash = notBlank(passwordHash);
-        this.userRoles = notEmpty(userRoles);
+        this.passwordHash = passwordHash;
         this.name = notBlank(name);
         this.studentId = studentId;
+
+        if (userRoles != null)
+            this.userRoles.addAll(userRoles);
+    }
+
+    public User(String email, String passwordHash, List<UserRole> userRoles, String name, String studentId) {
+        this(null, email, passwordHash, userRoles, name, studentId);
     }
 
     public User(String email, String passwordHash, String name, String studentId) {
