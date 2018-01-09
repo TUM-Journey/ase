@@ -5,7 +5,7 @@ ext {
     deps.vers = [
         common: [
             apacheLang3: '3.5',
-            swaggerCodegenCli: '2.3.1-SNAPSHOT',
+            swaggerCodegenCli: '2.3.0',
 
             rxJava: '2.1.1',
 
@@ -53,9 +53,7 @@ ext {
         common: [
             apacheLang3: "org.apache.commons:commons-lang3:${deps.vers.common.apacheLang3}",
 
-            //TODO: replace with stable release 2.3
-            //swaggerCodegenCli: "io.swagger:swagger-codegen-cli:${versions.gen.swaggerCodegenCli}"
-            swaggerCodegenCli: "com.github.wingsofovnia:swagger-codegen:${deps.vers.common.swaggerCodegenCli}",
+            swaggerCodegenCli: "io.swagger:swagger-codegen-cli:${deps.vers.common.swaggerCodegenCli}",
             lombok: "org.projectlombok:lombok:${deps.vers.common.lombok}",
 
             junit: "junit:junit:${deps.vers.common.junit}",
