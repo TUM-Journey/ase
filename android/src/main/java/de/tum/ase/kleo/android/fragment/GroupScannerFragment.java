@@ -1,6 +1,5 @@
-package de.tum.ase.kleo.android;
+package de.tum.ase.kleo.android.fragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,16 +7,18 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-public class GroupScannerFragment extends Fragment {
+import de.tum.ase.kleo.android.R;
+
+public class GroupScannerFragment extends LayoutFragment {
+
+    public GroupScannerFragment() {
+        super(R.layout.fragment_group_scanner);
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_group_scanner, container, false);
-
+    protected void onCreateLayout(View view, LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         final Animation shake = AnimationUtils.loadAnimation(view.getContext(), R.anim.breath);
         view.findViewById(R.id.radarIcon).startAnimation(shake);
-
-        return view;
     }
+
 }

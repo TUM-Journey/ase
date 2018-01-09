@@ -13,8 +13,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import de.tum.ase.kleo.android.client.invoker.ApiClient;
 import de.tum.ase.kleo.android.client.invoker.auth.OAuth;
 import de.tum.ase.kleo.android.client.invoker.auth.OAuthFlow;
-import okhttp3.OkHttpClient;
 import io.reactivex.Single;
+import okhttp3.OkHttpClient;
 
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.oltu.oauth2.client.request.OAuthClientRequest.tokenLocation;

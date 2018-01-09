@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.android;
+package de.tum.ase.kleo.android.activity;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -14,8 +14,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import de.tum.ase.kleo.android.KleoApplication;
+import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.android.client.BackendClient;
 import de.tum.ase.kleo.android.client.Principal;
+import de.tum.ase.kleo.android.fragment.GroupBroadcasterFragment;
+import de.tum.ase.kleo.android.fragment.GroupScannerFragment;
+import de.tum.ase.kleo.android.fragment.StudentAttendancesFragment;
+import de.tum.ase.kleo.android.fragment.StudentRegistrationsFragment;
+import de.tum.ase.kleo.android.fragment.StudyGroupsFragment;
+import de.tum.ase.kleo.android.fragment.UserManagementFragment;
+import de.tum.ase.kleo.android.fragment.WelcomeFragment;
 
 import static java.lang.String.format;
 

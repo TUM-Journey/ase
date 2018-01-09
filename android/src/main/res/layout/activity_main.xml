@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.tum.ase.kleo.android.MainActivity"
+    tools:context="de.tum.ase.kleo.android.activity.MainActivity"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
