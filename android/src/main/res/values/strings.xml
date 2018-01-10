@@ -31,4 +31,7 @@
     <string name="superuser">Superuser</string>
     <string name="broadcasting">Broadcasting</string>
     <string name="select_group_to_broadcast">Select group to broadcast:</string>
+
+    <string name="group_student_registered">You has been registered successfully</string>
+    <string name="group_student_deregistered">You has been deregistered successfully</string>
 </resources>

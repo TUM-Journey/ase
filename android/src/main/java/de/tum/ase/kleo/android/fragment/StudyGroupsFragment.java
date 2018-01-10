@@ -15,6 +15,7 @@ import de.tum.ase.kleo.android.KleoApplication;
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.android.client.BackendClient;
 import de.tum.ase.kleo.android.client.GroupsApi;
+import de.tum.ase.kleo.android.client.Principal;
 import de.tum.ase.kleo.android.client.dto.GroupDTO;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -24,6 +25,8 @@ import static de.tum.ase.kleo.android.ui.ProgressBars.fadeIn;
 import static de.tum.ase.kleo.android.ui.ProgressBars.fadeOut;
 
 public class StudyGroupsFragment extends ReactiveLayoutFragment {
+
+    private Principal currentUser;
 
     private GroupsApi groupsApi;
 
@@ -43,6 +46,7 @@ public class StudyGroupsFragment extends ReactiveLayoutFragment {
                 ((KleoApplication) getActivity().getApplication()).backendClient();
 
         groupsApi = backendClient.as(GroupsApi.class);
+        currentUser = backendClient.principal().blockingGet();
     }
 
     @Override
@@ -63,8 +67,33 @@ public class StudyGroupsFragment extends ReactiveLayoutFragment {
     }
 
     private void populateStudentGroupsListView(List<GroupDTO> groups) {
-        final RecyclerView.Adapter<?> studentGroupsAdapter = new StudentGroupsAdapter(groups);
+        final boolean currentUserStudent = currentUser.isStudent();
+        final String currentUserId = currentUser.id();
+
+        final RecyclerView.Adapter<?> studentGroupsAdapter
+                = new StudentGroupsAdapter(groups, currentUserStudent, currentUserId,
+                    this::registerStudent, this::deregisterStudent);
         listView.setAdapter(studentGroupsAdapter);
+    }
+
+    private void registerStudent(String groupId, String userId) {
+        final Disposable regStudentReq = groupsApi.addGroupStudent(groupId, userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> Toast.makeText(getContext(), getString(R.string.group_student_registered), Toast.LENGTH_LONG).show())
+                .subscribe();
+
+        disposeOnDestroy(regStudentReq);
+    }
+
+    private void deregisterStudent(String groupId, String userId) {
+        final Disposable deregStudentReq = groupsApi.deleteGroupStudent(groupId, userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> Toast.makeText(getContext(), getString(R.string.group_student_deregistered), Toast.LENGTH_LONG).show())
+                .subscribe();
+
+        disposeOnDestroy(deregStudentReq);
     }
 
     private void showError(Throwable e) {

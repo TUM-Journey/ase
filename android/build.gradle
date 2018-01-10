@@ -101,6 +101,17 @@ swaggerSources {
 
 swaggerSources.kleo.code.doLast {
     delete fileTree(dir: "$buildDir/swagger-code-kleo").exclude("src/")
+
+    // Temporary fix https://github.com/swagger-api/swagger-codegen/issues/6553
+    fileTree(dir: "$buildDir/swagger-code-kleo", include: '**/*Api.java').each {File file ->
+        String apiContent = file.getText()
+
+        apiContent = apiContent.replaceAll("Observable<Void>", "Completable")
+        apiContent = apiContent.replaceAll("import io.reactivex.Observable;",
+            "import io.reactivex.Observable;import io.reactivex.Completable;")
+
+        file.write(apiContent)
+    }
 }
 
 afterEvaluate {
