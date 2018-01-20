@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: "5.0.2"
+  version: "5.0.5"
   title: Kleo Classes and Passes Management API
   description: The API provides endpoints for managing users, courses, sessions and passes.
 
@@ -8,7 +8,7 @@ basePath: /api
 schemes:
   - http
 produces:
-  - "application/vnd.tum.aes.kleo.v5.0.2+json"
+  - "application/vnd.tum.aes.kleo.v5.0.5+json"
 
 securityDefinitions:
   OAuth2Password:
@@ -498,6 +498,9 @@ definitions:
         type: string
       name:
         type: string
+      code:
+        type: string
+        readOnly: true
       studentIds:
         type: array
         items:

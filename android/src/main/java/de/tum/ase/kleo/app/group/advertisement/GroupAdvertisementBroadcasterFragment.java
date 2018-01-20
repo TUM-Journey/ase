@@ -1,7 +1,6 @@
 package de.tum.ase.kleo.app.group.advertisement;
 
 import android.os.Bundle;
-import android.os.ParcelUuid;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.KleoApplication;
 import de.tum.ase.kleo.app.client.BackendClient;
 import de.tum.ase.kleo.app.client.GroupsApi;
-import de.tum.ase.kleo.app.client.dto.GroupDTO;
 import de.tum.ase.kleo.app.support.ui.ReactiveLayoutFragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -57,12 +55,14 @@ public class GroupAdvertisementBroadcasterFragment extends ReactiveLayoutFragmen
         final ToggleButton broadcastToggle = view.findViewById(R.id.groupAdBroadcasterSwitchBtn);
         broadcastToggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                if (!hasChosenGroup()) {
+                final Optional<String> chosenGroupCode = getChosenGroupCode();
+                if (!chosenGroupCode.isPresent()) {
                     Toast.makeText(getContext(), R.string.group_ad_select_first, Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                adBroadcaster.advertise();
+                final String groupCode = chosenGroupCode.get();
+                adBroadcaster.advertise(groupCode);
                 disableGroupChooser();
             } else {
                 adBroadcaster.stopAdvertising();
@@ -77,7 +77,7 @@ public class GroupAdvertisementBroadcasterFragment extends ReactiveLayoutFragmen
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(groups -> {
                     final List<GroupChooserItem> groupChooserItems = groups.stream()
-                            .map(group -> new GroupChooserItem(group.getId(), group.getName()))
+                            .map(group -> new GroupChooserItem(group.getCode(), group.getName()))
                             .collect(toList());
 
                     final ArrayAdapter<GroupChooserItem> adapter = new ArrayAdapter<>(getContext(),
@@ -90,17 +90,13 @@ public class GroupAdvertisementBroadcasterFragment extends ReactiveLayoutFragmen
         disposeOnDestroy(groupsReq);
     }
 
-    private Optional<String> getChosenGroupId() {
+    private Optional<String> getChosenGroupCode() {
         final Object selectedItem = spinner.getSelectedItem();
 
         if (selectedItem == null)
             return Optional.empty();
 
-        return Optional.of(((GroupChooserItem) selectedItem).groupId);
-    }
-
-    private boolean hasChosenGroup() {
-        return getChosenGroupId().isPresent();
+        return Optional.of(((GroupChooserItem) selectedItem).groupCode);
     }
 
     private void enableGroupChooser() {
@@ -116,11 +112,11 @@ public class GroupAdvertisementBroadcasterFragment extends ReactiveLayoutFragmen
     }
 
     private static class GroupChooserItem {
-        private final String groupId;
+        private final String groupCode;
         private final String name;
 
-        public GroupChooserItem(String groupId, String name) {
-            this.groupId = groupId;
+        public GroupChooserItem(String groupCode, String name) {
+            this.groupCode = groupCode;
             this.name = name;
         }
 

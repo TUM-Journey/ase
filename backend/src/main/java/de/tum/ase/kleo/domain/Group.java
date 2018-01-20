@@ -1,16 +1,37 @@
 package de.tum.ase.kleo.domain;
 
+import org.apache.commons.lang3.Validate;
+
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+
 import de.tum.ase.kleo.domain.id.GroupId;
 import de.tum.ase.kleo.domain.id.SessionId;
 import de.tum.ase.kleo.domain.id.UserId;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.apache.commons.lang3.Validate;
-
-import javax.persistence.*;
-import java.time.OffsetDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import lombok.val;
 
 import static org.apache.commons.lang3.Validate.notBlank;
 
@@ -26,6 +47,10 @@ public class Group {
     @Getter
     @EmbeddedId
     private final GroupId id;
+
+    @Getter
+    @Column(nullable = false)
+    private final GroupCode code;
 
     @Getter
     @Column(nullable = false)
@@ -46,6 +71,7 @@ public class Group {
     public Group(GroupId id, String name) {
         this.id = id == null ? new GroupId() : id;
         this.name = notBlank(name);
+        this.code = GroupCode.fromGroupName(name);
     }
 
     public Group(String name) {

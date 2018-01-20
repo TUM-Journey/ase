@@ -33,9 +33,9 @@ public class GroupAdvertisementScannerFragment extends ReactiveLayoutFragment {
         view.findViewById(R.id.radarIcon).startAnimation(shake);
 
         // TODO: imp
-        adScanner.scan().subscribe(device -> {
-            Toast.makeText(getContext(), "Device with this MAC is broadcasting: "
-                            + device.getAddress(), Toast.LENGTH_LONG).show();
+        adScanner.scan().subscribe(ad -> {
+            Toast.makeText(getContext(), "Device: " + ad.sender().getAddress()
+                    + " , group code: " + ad.message(), Toast.LENGTH_LONG).show();
         });
     }
 

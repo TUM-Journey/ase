@@ -5,16 +5,20 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.os.ParcelUuid;
 
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 
+import static de.tum.ase.kleo.app.group.advertisement.GroupAdvertisement.MESSAGE_CHARSET;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 public class GroupAdvertisementScanner {
@@ -44,16 +48,14 @@ public class GroupAdvertisementScanner {
         this.bluetoothLeScanner = BluetoothAdapter.getDefaultAdapter().getBluetoothLeScanner();
     }
 
-    public Observable<BluetoothDevice> scan() {
-        final List<ScanFilter> scanFilters = asList(createUuidFilter(uuid));
-
+    public Observable<GroupAdvertisement> scan() {
         return Observable.create(emmiter -> {
             scanCallback = createScanCallback(emmiter);
-            bluetoothLeScanner.startScan(scanFilters, scanSettings, scanCallback);
+            bluetoothLeScanner.startScan(emptyList(), scanSettings, scanCallback);
         });
     }
 
-    private ScanCallback createScanCallback(ObservableEmitter<BluetoothDevice> emmiter) {
+    private ScanCallback createScanCallback(ObservableEmitter<GroupAdvertisement> emmiter) {
         return new ScanCallback() {
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
@@ -62,11 +64,18 @@ public class GroupAdvertisementScanner {
                 if (result == null)
                     return;
 
-                final BluetoothDevice device = result.getDevice();
-                if (device == null)
+                final BluetoothDevice sender = result.getDevice();
+                if (sender == null)
                     return;
 
-                emmiter.onNext(device);
+                final ScanRecord scanRecord = result.getScanRecord();
+                final byte[] serviceData = scanRecord.getServiceData(uuid);
+
+                if (serviceData == null)
+                    return;
+
+                final String messageText = new String(serviceData, MESSAGE_CHARSET);
+                emmiter.onNext(new GroupAdvertisement(sender, messageText));
             }
 
             @Override
@@ -79,11 +88,5 @@ public class GroupAdvertisementScanner {
 
     public void stopScanning() {
         bluetoothLeScanner.stopScan(scanCallback);
-    }
-
-    private static ScanFilter createUuidFilter(ParcelUuid parcelUuid) {
-        return new ScanFilter.Builder()
-                .setServiceUuid(parcelUuid)
-                .build();
     }
 }

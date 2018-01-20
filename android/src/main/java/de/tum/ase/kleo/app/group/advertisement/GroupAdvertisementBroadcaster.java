@@ -7,6 +7,7 @@ import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.os.ParcelUuid;
 
+import static de.tum.ase.kleo.app.group.advertisement.GroupAdvertisement.MESSAGE_CHARSET;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 public class GroupAdvertisementBroadcaster {
@@ -44,9 +45,9 @@ public class GroupAdvertisementBroadcaster {
         this.advertiseSettings = defaultIfNull(advertiseSettings, defaultAdvertiseSettings);
     }
 
-    public void advertise() {
+    public void advertise(String msg) {
         final AdvertiseData adData = new AdvertiseData.Builder()
-                .addServiceUuid(uuid)
+                .addServiceData(uuid, msg.getBytes(MESSAGE_CHARSET))
                 .build();
 
         bluetoothLeAdvertiser.startAdvertising(advertiseSettings, adData, advertiseCallback);
