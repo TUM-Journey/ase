@@ -1,0 +1,24 @@
+/**
+ * Gets the site local IP address or localhost of none found
+ *
+ * @see <a href="http://jeremie-martinez.com/2015/05/05/inject-host-gradle/">
+ *     Jeremie Martinez - Inject the host IP with Gradle</a>
+ */
+ext.getIP = { ->
+    InetAddress result = null
+    Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces()
+    while (interfaces.hasMoreElements()) {
+        Enumeration<InetAddress> addresses = interfaces.nextElement().getInetAddresses()
+        while (addresses.hasMoreElements()) {
+            InetAddress address = addresses.nextElement()
+            if (!address.isLoopbackAddress()) {
+                if (address.isSiteLocalAddress()) {
+                    return address.getHostAddress()
+                } else if (result == null) {
+                    result = address
+                }
+            }
+        }
+    }
+    return (result != null ? result : InetAddress.getLocalHost()).getHostAddress()
+}

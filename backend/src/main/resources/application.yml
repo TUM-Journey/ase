@@ -10,6 +10,7 @@ spring:
 
 server:
   contextPath: /api
+  port: ${configs.backend.serverPort}
 
 logging:
   file: kleo-application.log

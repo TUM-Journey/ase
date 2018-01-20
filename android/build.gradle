@@ -9,6 +9,7 @@ def OPENAPI_SOURCE = "$rootDir/kleo-api-v5.yaml"
 
 apply plugin: 'com.android.application'
 apply plugin: 'org.hidetake.swagger.generator'
+apply from: "$rootDir/build-utils.gradle"
 
 dependencies {
     implementation deps.defs.common.apacheLang3
@@ -66,7 +67,7 @@ android {
         }
 
         dev {
-            buildConfigField 'String', 'BACKEND_BASE_URL', '"http://192.168.0.11:8080/api/"'
+            buildConfigField 'String', 'BACKEND_BASE_URL', "\"http://${getIP()}:${configs.backend.serverPort}/api/\""
             buildConfigField 'String', 'BACKEND_CLIENT_ID', '"kleo-client"'
             buildConfigField 'String', 'BACKEND_CLIENT_SECRET', '""'
         }
