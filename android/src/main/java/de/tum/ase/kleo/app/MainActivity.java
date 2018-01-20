@@ -21,7 +21,7 @@ import de.tum.ase.kleo.app.group.GroupAttendanceFragment;
 import de.tum.ase.kleo.app.group.GroupListFragment;
 import de.tum.ase.kleo.app.group.advertisement.GroupAdvertisementBroadcasterFragment;
 import de.tum.ase.kleo.app.group.advertisement.GroupAdvertisementScannerFragment;
-import de.tum.ase.kleo.app.user.UserManagementFragment;
+import de.tum.ase.kleo.app.user.UserListFragment;
 
 import static java.lang.String.format;
 
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = new GroupAdvertisementBroadcasterFragment();
                 break;
             case R.id.user_management:
-                fragment = new UserManagementFragment();
+                fragment = new UserListFragment();
                 break;
             default:
                 throw new IllegalStateException("Unknown menu choice");

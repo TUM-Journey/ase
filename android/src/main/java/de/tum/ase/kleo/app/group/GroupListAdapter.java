@@ -89,8 +89,6 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
             name = view.findViewById(R.id.studentGroupsListItemName);
             students = view.findViewById(R.id.studentGroupsListItemStudents);
             registerSwitch = view.findViewById(R.id.studentGroupsListItemRegisterSwitch);
-
-            registerSwitch.setVisibility(View.INVISIBLE);
         }
 
         void setGroupId(String groupId) {

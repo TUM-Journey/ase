@@ -28,7 +28,6 @@ import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeOut;
 public class GroupAttendanceFragment extends ReactiveLayoutFragment {
 
     private StudentsApi studentApi;
-    private ProgressBar progressBar;
     private RecyclerView listView;
     private Principal currentUser;
 
@@ -49,7 +48,7 @@ public class GroupAttendanceFragment extends ReactiveLayoutFragment {
 
     @Override
     protected void onCreateLayout(View view, LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        progressBar = view.findViewById(R.id.groupAttendanceProgressBar);
+        final ProgressBar progressBar = view.findViewById(R.id.groupAttendanceProgressBar);
         listView = view.findViewById(R.id.groupAttendance);
         listView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 

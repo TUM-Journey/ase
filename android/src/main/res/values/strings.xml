@@ -33,4 +33,9 @@
 
     <string name="group_student_registered">You has been registered successfully</string>
     <string name="group_student_deregistered">You has been deregistered successfully</string>
+    <string name="user_roles_popup_title">Update user roles</string>
+    <string name="user_removed">User has been removed from the database</string>
+    <string name="user_roles_updated">User roles have been updated</string>
+    <string name="user_list_item_is_current_user">(you)</string>
+    <string name="save">Save</string>
 </resources>

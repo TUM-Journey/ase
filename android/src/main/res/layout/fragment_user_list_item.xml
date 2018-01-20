@@ -1,0 +1,72 @@
+<android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/userListItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        android:text="aa"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/userListItemRole"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:text="aa"
+        android:id="@+id/userListItemRole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/userListItemRemove"
+        android:visibility="invisible"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_delete_forever" />
+
+    <ImageButton
+        android:id="@+id/userListItemChangeRole"
+        android:visibility="invisible"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/userListItemRemove"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_credit_card" />
+
+    <TextView
+        android:id="@+id/userListItemIsCurrent"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="@string/user_list_item_is_current_user"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/userListItemName"
+        app:layout_constraintStart_toEndOf="@+id/userListItemName"
+        app:layout_constraintTop_toTopOf="@+id/userListItemName" />
+
+</android.support.constraint.ConstraintLayout>
