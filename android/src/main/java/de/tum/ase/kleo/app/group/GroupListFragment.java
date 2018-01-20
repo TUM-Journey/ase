@@ -52,8 +52,8 @@ public class GroupListFragment extends ReactiveLayoutFragment {
 
     @Override
     protected void onCreateLayout(View view, LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        progressBar = view.findViewById(R.id.studyGroupsProgressBar);
-        listView = view.findViewById(R.id.studyGroupsList);
+        progressBar = view.findViewById(R.id.groupListProgressBar);
+        listView = view.findViewById(R.id.groupList);
         final LinearLayoutManager studentGroupsListLayoutManager = new LinearLayoutManager(view.getContext());
         listView.setLayoutManager(studentGroupsListLayoutManager);
 

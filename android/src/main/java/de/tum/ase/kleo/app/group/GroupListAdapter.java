@@ -16,7 +16,7 @@ import de.tum.ase.kleo.app.client.dto.GroupDTO;
 import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
-public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.StudentGroupListItem> {
+public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.GroupListItem> {
 
     private final List<GroupDTO> groups;
     private final boolean registerSwitchEnabled;
@@ -47,15 +47,15 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Stud
     }
 
     @Override
-    public StudentGroupListItem onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GroupListItem onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_group_list_item, parent, false);
 
-        return new StudentGroupListItem(view);
+        return new GroupListItem(view);
     }
 
     @Override
-    public void onBindViewHolder(StudentGroupListItem holder, int position) {
+    public void onBindViewHolder(GroupListItem holder, int position) {
         final GroupDTO group = groups.get(position);
 
         final List<String> groupStudentIds = defaultIfNull(group.getStudentIds(), emptyList());
@@ -76,14 +76,14 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Stud
         return groups.size();
     }
 
-    static class StudentGroupListItem extends RecyclerView.ViewHolder {
+    static class GroupListItem extends RecyclerView.ViewHolder {
 
         private String groupId;
         private TextView name;
         private TextView students;
         private Switch registerSwitch;
 
-        StudentGroupListItem(View view) {
+        GroupListItem(View view) {
             super(view);
 
             name = view.findViewById(R.id.studentGroupsListItemName);
