@@ -53,7 +53,9 @@ ext {
         common: [
             apacheLang3: "org.apache.commons:commons-lang3:${deps.vers.common.apacheLang3}",
 
-            swaggerCodegenCli: "io.swagger:swagger-codegen-cli:${deps.vers.common.swaggerCodegenCli}",
+            // TODO: Replace with stable release 2.4
+            //swaggerCodegenCli: "io.swagger:swagger-codegen-cli:${deps.vers.common.swaggerCodegenCli}",
+            swaggerCodegenCli: "com.github.wingsofovnia:swagger-codegen:642c0566de",
             lombok: "org.projectlombok:lombok:${deps.vers.common.lombok}",
 
             junit: "junit:junit:${deps.vers.common.junit}",
