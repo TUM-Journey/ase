@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.tum.ase.kleo.android">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:name="de.tum.ase.kleo.app.KleoApplication"
         android:allowBackup="true"
@@ -19,7 +24,4 @@
 
         <activity android:name="de.tum.ase.kleo.app.MainActivity" android:theme="@style/AppTheme.NoActionBar"/>
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET"/>
-
 </manifest>

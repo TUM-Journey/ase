@@ -52,14 +52,14 @@ public class GroupAttendanceFragment extends ReactiveLayoutFragment {
         listView = view.findViewById(R.id.groupAttendance);
         listView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        final Disposable groupsReq = studentApi.getStudentAttendances(currentUser.id())
+        final Disposable groupsAttendancesReq = studentApi.getStudentAttendances(currentUser.id())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe((d) -> fadeIn(progressBar))
                 .doFinally(() -> fadeOut(progressBar))
                 .subscribe(this::populateGroupAttendanceListView, this::showError);
 
-        disposeOnDestroy(groupsReq);
+        disposeOnDestroy(groupsAttendancesReq);
     }
 
     private void populateGroupAttendanceListView(List<AttendanceDTO> attendances) {
