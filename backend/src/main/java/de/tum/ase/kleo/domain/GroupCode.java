@@ -13,6 +13,7 @@ import static java.lang.String.format;
 import static java.util.Arrays.stream;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
+import static org.apache.commons.lang3.Validate.notBlank;
 
 @Embeddable
 @NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
@@ -28,11 +29,15 @@ public class GroupCode {
 
     @JsonCreator
     private GroupCode(String code) {
-        this.code = code;
+        this.code = notBlank(code);
     }
 
     public static GroupCode fromGroupName(String groupName) {
         return new GroupCode(format(CODE_FORMAT, createPrefix(groupName), randomPostfix()));
+    }
+
+    public static GroupCode fromString(String groupCodeRaw) {
+        return new GroupCode(groupCodeRaw);
     }
 
     private static String createPrefix(String text) {

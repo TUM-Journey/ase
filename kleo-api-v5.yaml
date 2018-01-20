@@ -208,7 +208,27 @@ paths:
           description: Internal server error, please contact support
           schema:
             $ref: '#/definitions/ErrorDTO'
-  /groups/{groupId}/:
+  /groups/{groupIdOrCode}/:
+    get:
+      tags:
+        - groups
+      operationId: getGroup
+      security:
+        - OAuth2Password: []
+      parameters:
+        - name: groupIdOrCode
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: A Group object
+          schema:
+            $ref: '#/definitions/GroupDTO'
+        500:
+          description: Internal server error, please contact support
+          schema:
+            $ref: '#/definitions/ErrorDTO'
     patch:
       tags:
         - groups
@@ -216,7 +236,7 @@ paths:
       security:
         - OAuth2Password: []
       parameters:
-        - name: groupId
+        - name: groupIdOrCode
           in: path
           required: true
           type: string
@@ -240,7 +260,7 @@ paths:
       security:
         - OAuth2Password: []
       parameters:
-        - name: groupId
+        - name: groupIdOrCode
           in: path
           required: true
           type: string
@@ -253,7 +273,7 @@ paths:
           description: Internal server error, please contact support
           schema:
             $ref: '#/definitions/ErrorDTO'
-  /groups/{groupId}/students:
+  /groups/{groupIdOrCode}/students:
     get:
       tags:
         - groups
@@ -262,7 +282,7 @@ paths:
       security:
         - OAuth2Password: []
       parameters:
-        - name: groupId
+        - name: groupIdOrCode
           in: path
           required: true
           type: string
@@ -278,7 +298,7 @@ paths:
           description: Internal server error, please contact support
           schema:
             $ref: '#/definitions/ErrorDTO'
-  /groups/{groupId}/students/{userId}:
+  /groups/{groupIdOrCode}/students/{userId}:
     put:
       tags:
         - groups
@@ -287,7 +307,7 @@ paths:
       security:
         - OAuth2Password: []
       parameters:
-        - name: groupId
+        - name: groupIdOrCode
           in: path
           required: true
           type: string
@@ -310,7 +330,7 @@ paths:
       security:
         - OAuth2Password: []
       parameters:
-        - name: groupId
+        - name: groupIdOrCode
           in: path
           required: true
           type: string
@@ -327,7 +347,7 @@ paths:
           description: Internal server error, please contact support
           schema:
             $ref: '#/definitions/ErrorDTO'
-  /groups/{groupId}/sessions/:
+  /groups/{groupIdOrCode}/sessions/:
     post:
       tags:
         - groups
@@ -335,7 +355,7 @@ paths:
       security:
         - OAuth2Password: []
       parameters:
-        - name: groupId
+        - name: groupIdOrCode
           in: path
           required: true
           type: string
@@ -356,7 +376,7 @@ paths:
           description: Internal server error, please contact support
           schema:
             $ref: '#/definitions/ErrorDTO'
-  /groups/{groupId}/sessions/{sessionId}:
+  /groups/{groupIdOrCode}/sessions/{sessionId}:
     put:
       tags:
         - groups
@@ -364,7 +384,7 @@ paths:
       security:
         - OAuth2Password: []
       parameters:
-        - name: groupId
+        - name: groupIdOrCode
           in: path
           required: true
           type: string
@@ -390,7 +410,7 @@ paths:
       security:
         - OAuth2Password: []
       parameters:
-        - name: groupId
+        - name: groupIdOrCode
           in: path
           required: true
           type: string
@@ -407,7 +427,7 @@ paths:
           description: Internal server error, please contact support
           schema:
             $ref: '#/definitions/ErrorDTO'
-  /groups/{groupId}/passes:
+  /groups/{groupIdOrCode}/passes:
     post:
       tags:
         - groups
@@ -416,7 +436,7 @@ paths:
       security:
         - OAuth2Password: []
       parameters:
-      - name: groupId
+      - name: groupIdOrCode
         in: path
         required: true
         type: string
@@ -437,7 +457,7 @@ paths:
           description: Internal server error, please contact support
           schema:
             $ref: '#/definitions/ErrorDTO'
-  /groups/{groupId}/passes/{passCode}:
+  /groups/{groupIdOrCode}/passes/{passCode}:
     put:
       tags:
         - groups
@@ -446,7 +466,7 @@ paths:
       security:
         - OAuth2Password: []
       parameters:
-      - name: groupId
+      - name: groupIdOrCode
         in: path
         required: true
         type: string

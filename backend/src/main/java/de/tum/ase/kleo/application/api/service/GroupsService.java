@@ -18,6 +18,8 @@ import de.tum.ase.kleo.application.api.dto.PassDtoMapper;
 import de.tum.ase.kleo.application.api.dto.SessionDTO;
 import de.tum.ase.kleo.application.api.dto.UserDTO;
 import de.tum.ase.kleo.application.api.dto.UserToDtoSerializer;
+import de.tum.ase.kleo.domain.Group;
+import de.tum.ase.kleo.domain.GroupCode;
 import de.tum.ase.kleo.domain.GroupRepository;
 import de.tum.ase.kleo.domain.PassDetokenizer;
 import de.tum.ase.kleo.domain.SessionType;
@@ -70,11 +72,10 @@ public class GroupsService implements GroupsApiDelegate {
     @Override
     @Transactional
     @PreAuthorize("@currentUser.hasUserId(#userIdRaw)")
-    public ResponseEntity<Void> addGroupStudent(String groupIdRaw, String userIdRaw) {
-        val groupId = GroupId.of(groupIdRaw);
+    public ResponseEntity<Void> addGroupStudent(String groupIdOrCodeRaw, String userIdRaw) {
         val studentId = UserId.of(userIdRaw);
 
-        val group = groupRepository.findOne(groupId);
+        val group = groupRepository.fetchGroupByIdOrCode(groupIdOrCodeRaw);
         if (group == null)
             return ResponseEntity.notFound().build();
 
@@ -90,13 +91,12 @@ public class GroupsService implements GroupsApiDelegate {
     @Override
     @Transactional
     @PreAuthorize("hasRole('TUTOR')")
-    public ResponseEntity<Void> deleteGroup(String groupIdRaw) {
-        val groupId = GroupId.of(groupIdRaw);
-
-        if (!groupRepository.exists(groupId))
+    public ResponseEntity<Void> deleteGroup(String groupIdOrCodeRaw) {
+        val group = groupRepository.fetchGroupByIdOrCode(groupIdOrCodeRaw);
+        if (group == null)
             return ResponseEntity.notFound().build();
 
-        groupRepository.delete(groupId);
+        groupRepository.delete(group);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -104,11 +104,10 @@ public class GroupsService implements GroupsApiDelegate {
     @Override
     @Transactional
     @PreAuthorize("@currentUser.hasUserId(#userIdRaw)")
-    public ResponseEntity<Void> deleteGroupStudent(String groupIdRaw, String userIdRaw) {
-        val groupId = GroupId.of(groupIdRaw);
+    public ResponseEntity<Void> deleteGroupStudent(String groupIdOrCodeRaw, String userIdRaw) {
         val studentId = UserId.of(userIdRaw);
 
-        val group = groupRepository.findOne(groupId);
+        val group = groupRepository.fetchGroupByIdOrCode(groupIdOrCodeRaw);
         if (group == null)
             return ResponseEntity.notFound().build();
 
@@ -120,10 +119,8 @@ public class GroupsService implements GroupsApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<UserDTO>> getGroupStudents(String groupIdRaw) {
-        val groupId = GroupId.of(groupIdRaw);
-
-        val group = groupRepository.findOne(groupId);
+    public ResponseEntity<List<UserDTO>> getGroupStudents(String groupIdOrCodeRaw) {
+        val group = groupRepository.fetchGroupByIdOrCode(groupIdOrCodeRaw);
         if (group == null)
             return ResponseEntity.notFound().build();
 
@@ -137,12 +134,19 @@ public class GroupsService implements GroupsApiDelegate {
     }
 
     @Override
+    public ResponseEntity<GroupDTO> getGroup(String groupIdOrCodeRaw) {
+        val group = groupRepository.fetchGroupByIdOrCode(groupIdOrCodeRaw);
+        if (group == null)
+            return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(groupToDtoSerializer.toDto(group));
+    }
+
+    @Override
     @Transactional
     @PreAuthorize("hasRole('TUTOR')")
-    public ResponseEntity<GroupDTO> updateGroup(String groupIdRaw, GroupDTO groupDto) {
-        val groupId = GroupId.of(groupIdRaw);
-
-        val group = groupRepository.findOne(groupId);
+    public ResponseEntity<GroupDTO> updateGroup(String groupIdOrCodeRaw, GroupDTO groupDto) {
+        val group = groupRepository.fetchGroupByIdOrCode(groupIdOrCodeRaw);
         if (group == null)
             return ResponseEntity.notFound().build();
 
@@ -158,10 +162,8 @@ public class GroupsService implements GroupsApiDelegate {
     @Override
     @Transactional
     @PreAuthorize("@currentUser.hasUserId(#userIdRaw)")
-    public ResponseEntity<PassDTO> generateSessionPass(String groupIdRaw, PassDTO passDto) {
-        val groupId = GroupId.of(groupIdRaw);
-
-        val group = groupRepository.findOne(groupId);
+    public ResponseEntity<PassDTO> generateSessionPass(String groupIdOrCodeRaw, PassDTO passDto) {
+        val group = groupRepository.fetchGroupByIdOrCode(groupIdOrCodeRaw);
         if (group == null)
             return ResponseEntity.notFound().build();
 
@@ -173,11 +175,10 @@ public class GroupsService implements GroupsApiDelegate {
     @Override
     @Transactional
     @PreAuthorize("hasRole('TUTOR')")
-    public ResponseEntity<Void> utilizeSessionPass(String groupIdRaw, String encodedPass) {
-        val groupId = GroupId.of(groupIdRaw);
+    public ResponseEntity<Void> utilizeSessionPass(String groupIdOrCodeRaw, String encodedPass) {
         val pass = passDetokenizer.detokenize(encodedPass);
 
-        val group = groupRepository.findOne(groupId);
+        val group = groupRepository.fetchGroupByIdOrCode(groupIdOrCodeRaw);
         if (group == null)
             return ResponseEntity.notFound().build();
 
@@ -189,10 +190,8 @@ public class GroupsService implements GroupsApiDelegate {
     @Override
     @Transactional
     @PreAuthorize("hasRole('TUTOR')")
-    public ResponseEntity<SessionDTO> addGroupSession(String groupIdRaw, SessionDTO sessDto) {
-        val groupId = GroupId.of(groupIdRaw);
-
-        val group = groupRepository.findOne(groupId);
+    public ResponseEntity<SessionDTO> addGroupSession(String groupIdOrCodeRaw, SessionDTO sessDto) {
+        val group = groupRepository.fetchGroupByIdOrCode(groupIdOrCodeRaw);
         if (group == null)
             return ResponseEntity.notFound().build();
 
@@ -205,11 +204,10 @@ public class GroupsService implements GroupsApiDelegate {
     @Override
     @Transactional
     @PreAuthorize("hasRole('TUTOR')")
-    public ResponseEntity<Void> deleteGroupSession(String groupIdRaw, String sessionIdRaw) {
-        val groupId = GroupId.of(groupIdRaw);
+    public ResponseEntity<Void> deleteGroupSession(String groupIdOrCodeRaw, String sessionIdRaw) {
         val sessionId = SessionId.of(sessionIdRaw);
 
-        val group = groupRepository.findOne(groupId);
+        val group = groupRepository.fetchGroupByIdOrCode(groupIdOrCodeRaw);
         if (group == null)
             return ResponseEntity.notFound().build();
 
@@ -223,11 +221,10 @@ public class GroupsService implements GroupsApiDelegate {
     @Override
     @Transactional
     @PreAuthorize("hasRole('TUTOR')")
-    public ResponseEntity<Void> rescheduleGroupSession(String groupIdRaw, String sessionIdRaw, SessionDTO sessDto) {
-        val groupId = GroupId.of(groupIdRaw);
+    public ResponseEntity<Void> rescheduleGroupSession(String groupIdOrCodeRaw, String sessionIdRaw, SessionDTO sessDto) {
         val sessionId = SessionId.of(sessionIdRaw);
 
-        val group = groupRepository.findOne(groupId);
+        val group = groupRepository.fetchGroupByIdOrCode(groupIdOrCodeRaw);
         if (group == null)
             return ResponseEntity.notFound().build();
 
