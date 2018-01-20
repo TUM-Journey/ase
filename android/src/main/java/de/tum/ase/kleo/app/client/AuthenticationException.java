@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.android.client;
+package de.tum.ase.kleo.app.client;
 
 public class AuthenticationException extends RuntimeException {
 

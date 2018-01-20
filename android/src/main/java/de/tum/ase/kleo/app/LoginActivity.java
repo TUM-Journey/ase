@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.android.activity;
+package de.tum.ase.kleo.app;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -7,10 +7,9 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import de.tum.ase.kleo.android.KleoApplication;
 import de.tum.ase.kleo.android.R;
-import de.tum.ase.kleo.android.client.BackendClient;
-import de.tum.ase.kleo.android.client.Principal;
+import de.tum.ase.kleo.app.client.BackendClient;
+import de.tum.ase.kleo.app.client.Principal;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 

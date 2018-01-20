@@ -1,8 +1,9 @@
-package de.tum.ase.kleo.android;
+package de.tum.ase.kleo.app;
 
 import android.app.Application;
 
-import de.tum.ase.kleo.android.client.BackendClient;
+import de.tum.ase.kleo.android.BuildConfig;
+import de.tum.ase.kleo.app.client.BackendClient;
 
 public class KleoApplication extends Application {
 

@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.android.fragment;
+package de.tum.ase.kleo.app.group;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,12 +12,12 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import de.tum.ase.kleo.android.R;
-import de.tum.ase.kleo.android.client.dto.GroupDTO;
+import de.tum.ase.kleo.app.client.dto.GroupDTO;
 
 import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
-public class StudentGroupsAdapter extends RecyclerView.Adapter<StudentGroupsAdapter.StudentGroupListItem> {
+public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.StudentGroupListItem> {
 
     private final List<GroupDTO> groups;
     private final boolean currentUserStudent;
@@ -25,8 +25,8 @@ public class StudentGroupsAdapter extends RecyclerView.Adapter<StudentGroupsAdap
     private final BiConsumer<String, String> register;
     private final BiConsumer<String, String> deregister;
 
-    public StudentGroupsAdapter(List<GroupDTO> groups, boolean currentUserStudent, String currentUserId,
-                                BiConsumer<String, String> register, BiConsumer<String, String> deregister) {
+    public GroupListAdapter(List<GroupDTO> groups, boolean currentUserStudent, String currentUserId,
+                            BiConsumer<String, String> register, BiConsumer<String, String> deregister) {
         this.groups = groups;
         this.currentUserStudent = currentUserStudent;
         this.currentUserId = currentUserId;
@@ -37,7 +37,7 @@ public class StudentGroupsAdapter extends RecyclerView.Adapter<StudentGroupsAdap
     @Override
     public StudentGroupListItem onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_student_groups_list_item, parent, false);
+                .inflate(R.layout.fragment_group_list_item, parent, false);
 
         return new StudentGroupListItem(view);
     }

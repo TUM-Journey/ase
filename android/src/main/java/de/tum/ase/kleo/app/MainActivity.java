@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.android.activity;
+package de.tum.ase.kleo.app;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -14,17 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import de.tum.ase.kleo.android.KleoApplication;
 import de.tum.ase.kleo.android.R;
-import de.tum.ase.kleo.android.client.BackendClient;
-import de.tum.ase.kleo.android.client.Principal;
-import de.tum.ase.kleo.android.fragment.GroupBroadcasterFragment;
-import de.tum.ase.kleo.android.fragment.GroupScannerFragment;
-import de.tum.ase.kleo.android.fragment.StudentAttendancesFragment;
-import de.tum.ase.kleo.android.fragment.StudentRegistrationsFragment;
-import de.tum.ase.kleo.android.fragment.StudyGroupsFragment;
-import de.tum.ase.kleo.android.fragment.UserManagementFragment;
-import de.tum.ase.kleo.android.fragment.WelcomeFragment;
+import de.tum.ase.kleo.app.client.BackendClient;
+import de.tum.ase.kleo.app.client.Principal;
+import de.tum.ase.kleo.app.group.GroupAttendanceFragment;
+import de.tum.ase.kleo.app.group.GroupListFragment;
+import de.tum.ase.kleo.app.group.advertisement.GroupAdvertisementBroadcasterFragment;
+import de.tum.ase.kleo.app.group.advertisement.GroupAdvertisementScannerFragment;
+import de.tum.ase.kleo.app.user.UserManagementFragment;
 
 import static java.lang.String.format;
 
@@ -91,19 +88,16 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment;
         switch (itemId) {
             case R.id.group_scanner:
-                fragment = new GroupScannerFragment();
+                fragment = new GroupAdvertisementScannerFragment();
                 break;
             case R.id.study_group:
-                fragment = new StudyGroupsFragment();
-                break;
-            case R.id.student_registrations:
-                fragment =new StudentRegistrationsFragment();
+                fragment = new GroupListFragment();
                 break;
             case R.id.student_attendances:
-                fragment = new StudentAttendancesFragment();
+                fragment = new GroupAttendanceFragment();
                 break;
             case R.id.group_broadcaster:
-                fragment = new GroupBroadcasterFragment();
+                fragment = new GroupAdvertisementBroadcasterFragment();
                 break;
             case R.id.user_management:
                 fragment = new UserManagementFragment();

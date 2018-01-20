@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.android.fragment;
+package de.tum.ase.kleo.app.group.advertisement;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,11 +8,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import de.tum.ase.kleo.android.R;
+import de.tum.ase.kleo.app.support.ui.LayoutFragment;
 
-public class GroupScannerFragment extends LayoutFragment {
+public class GroupAdvertisementScannerFragment extends LayoutFragment {
 
-    public GroupScannerFragment() {
-        super(R.layout.fragment_group_scanner);
+    public GroupAdvertisementScannerFragment() {
+        super(R.layout.fragment_group_advertisement_scanner);
     }
 
     @Override

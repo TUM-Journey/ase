@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.android.ui;
+package de.tum.ase.kleo.app.support.ui;
 
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -19,7 +19,7 @@ public class ProgressBars {
 
 
     private ProgressBars() {
-        throw new AssertionError("No de.tum.ase.kleo.android.ui.ProgressBars instance for you");
+        throw new AssertionError("No de.tum.ase.kleo.app.support.ui.ProgressBars instance for you");
     }
 
 

@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.android.fragment;
+package de.tum.ase.kleo.app.group;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,20 +11,21 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import de.tum.ase.kleo.android.KleoApplication;
 import de.tum.ase.kleo.android.R;
-import de.tum.ase.kleo.android.client.BackendClient;
-import de.tum.ase.kleo.android.client.GroupsApi;
-import de.tum.ase.kleo.android.client.Principal;
-import de.tum.ase.kleo.android.client.dto.GroupDTO;
+import de.tum.ase.kleo.app.KleoApplication;
+import de.tum.ase.kleo.app.client.BackendClient;
+import de.tum.ase.kleo.app.client.GroupsApi;
+import de.tum.ase.kleo.app.client.Principal;
+import de.tum.ase.kleo.app.client.dto.GroupDTO;
+import de.tum.ase.kleo.app.support.ui.ReactiveLayoutFragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-import static de.tum.ase.kleo.android.ui.ProgressBars.fadeIn;
-import static de.tum.ase.kleo.android.ui.ProgressBars.fadeOut;
+import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeIn;
+import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeOut;
 
-public class StudyGroupsFragment extends ReactiveLayoutFragment {
+public class GroupListFragment extends ReactiveLayoutFragment {
 
     private Principal currentUser;
 
@@ -34,8 +35,8 @@ public class StudyGroupsFragment extends ReactiveLayoutFragment {
 
     private RecyclerView listView;
 
-    public StudyGroupsFragment() {
-        super(R.layout.fragment_study_groups);
+    public GroupListFragment() {
+        super(R.layout.fragment_group_list);
     }
 
     @Override
@@ -71,7 +72,7 @@ public class StudyGroupsFragment extends ReactiveLayoutFragment {
         final String currentUserId = currentUser.id();
 
         final RecyclerView.Adapter<?> studentGroupsAdapter
-                = new StudentGroupsAdapter(groups, currentUserStudent, currentUserId,
+                = new GroupListAdapter(groups, currentUserStudent, currentUserId,
                     this::registerStudent, this::deregisterStudent);
         listView.setAdapter(studentGroupsAdapter);
     }

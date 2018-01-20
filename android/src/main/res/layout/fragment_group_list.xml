@@ -3,28 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.tum.ase.kleo.android.fragment.GroupScannerFragment">
+    tools:context="de.tum.ase.kleo.app.group.GroupListFragment">
 
-    <ImageView
-        android:id="@+id/radarIcon"
+    <ProgressBar
+        android:id="@+id/studyGroupsProgressBar"
+        style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="223dp"
-        android:src="@drawable/antenna_listen"
-        app:layout_constraintBottom_toTopOf="@+id/radarCaption"
-        app:layout_constraintStart_toStartOf="@+id/radarCaption"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/radarCaption"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginBottom="223dp"
-        android:text="@string/monitoring_sessions"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radarIcon" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/studyGroupsList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/fragment_group_list_item"/>
 </android.support.constraint.ConstraintLayout>

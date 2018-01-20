@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.android.client;
+package de.tum.ase.kleo.app.client;
 
 import java.util.Collections;
 import java.util.List;

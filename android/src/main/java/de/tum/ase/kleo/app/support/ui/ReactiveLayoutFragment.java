@@ -1,13 +1,13 @@
-package de.tum.ase.kleo.android.fragment;
+package de.tum.ase.kleo.app.support.ui;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-abstract class ReactiveLayoutFragment extends LayoutFragment {
+public abstract class ReactiveLayoutFragment extends LayoutFragment {
 
     private final CompositeDisposable disposables = new CompositeDisposable();
 
-    ReactiveLayoutFragment(int layoutResource) {
+    public ReactiveLayoutFragment(int layoutResource) {
         super(layoutResource);
     }
 

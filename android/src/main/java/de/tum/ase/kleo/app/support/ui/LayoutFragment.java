@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.android.fragment;
+package de.tum.ase.kleo.app.support.ui;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -7,11 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-abstract class LayoutFragment extends Fragment {
+public abstract class LayoutFragment extends Fragment {
 
     private final @LayoutRes int layoutResource;
 
-    LayoutFragment(@LayoutRes int layoutResource) {
+    public LayoutFragment(@LayoutRes int layoutResource) {
         this.layoutResource = layoutResource;
     }
 

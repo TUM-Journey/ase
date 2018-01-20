@@ -20,10 +20,6 @@
                     android:title="@string/group_scanner" />
 
                 <item
-                    android:id="@+id/student_registrations"
-                    android:icon="@drawable/ic_bookmark"
-                    android:title="@string/my_registrations" />
-                <item
                     android:id="@+id/student_attendances"
                     android:icon="@drawable/ic_assessment"
                     android:title="@string/my_attendances" />

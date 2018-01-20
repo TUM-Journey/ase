@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.android.client;
+package de.tum.ase.kleo.app.client;
 
 import com.auth0.android.jwt.JWT;
 
@@ -10,9 +10,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import de.tum.ase.kleo.android.client.invoker.ApiClient;
-import de.tum.ase.kleo.android.client.invoker.auth.OAuth;
-import de.tum.ase.kleo.android.client.invoker.auth.OAuthFlow;
+import de.tum.ase.kleo.app.client.invoker.ApiClient;
+import de.tum.ase.kleo.app.client.invoker.auth.OAuth;
+import de.tum.ase.kleo.app.client.invoker.auth.OAuthFlow;
 import io.reactivex.Single;
 import okhttp3.OkHttpClient;
 
