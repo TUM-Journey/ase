@@ -8,7 +8,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import de.tum.ase.kleo.android.R;
@@ -20,18 +19,31 @@ import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.StudentGroupListItem> {
 
     private final List<GroupDTO> groups;
-    private final boolean currentUserStudent;
+    private final boolean registerSwitchEnabled;
     private final String currentUserId;
-    private final BiConsumer<String, String> register;
-    private final BiConsumer<String, String> deregister;
+    private final Consumer<String> registrationCallback;
+    private final Consumer<String> deregistrationCallback;
 
-    public GroupListAdapter(List<GroupDTO> groups, boolean currentUserStudent, String currentUserId,
-                            BiConsumer<String, String> register, BiConsumer<String, String> deregister) {
+    private GroupListAdapter(List<GroupDTO> groups, boolean registerSwitchEnabled,
+                             String currentUserId,
+                             Consumer<String> registrationCallback,
+                             Consumer<String> deregistrationCallback) {
         this.groups = groups;
-        this.currentUserStudent = currentUserStudent;
+        this.registerSwitchEnabled = registerSwitchEnabled;
         this.currentUserId = currentUserId;
-        this.register = register;
-        this.deregister = deregister;
+        this.registrationCallback = registrationCallback;
+        this.deregistrationCallback = deregistrationCallback;
+    }
+
+    public static GroupListAdapter withRegisterSwitchDisabled(List<GroupDTO> groups) {
+        return new GroupListAdapter(groups, false, null, null, null);
+    }
+
+    public static GroupListAdapter withRegisterSwitchEnabled(List<GroupDTO> groups,
+                                                             String currentUserId,
+                                                             Consumer<String> registrationCallback,
+                                                             Consumer<String> deregistrationCallback) {
+        return new GroupListAdapter(groups, true, currentUserId, registrationCallback, deregistrationCallback);
     }
 
     @Override
@@ -51,12 +63,12 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Stud
         holder.setGroupId(group.getId());
         holder.setName(group.getName());
         holder.setStudentsCount(groupStudentIds.size());
-        holder.setRegistered(groupStudentIds.contains(currentUserId));
-        holder.setRegisterSwitchEnabled(currentUserStudent);
 
-        holder.setRegisterSwitchCallbacks(
-                (groupId) -> register.accept(groupId, currentUserId),
-                (groupId) -> deregister.accept(groupId, currentUserId));
+        if (registerSwitchEnabled) {
+            holder.enableRegisterSwitch();
+            holder.setRegistered(groupStudentIds.contains(currentUserId));
+            holder.setRegisterSwitchCallbacks(this.registrationCallback, this.deregistrationCallback);
+        }
     }
 
     @Override
@@ -64,42 +76,48 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Stud
         return groups.size();
     }
 
-    public static class StudentGroupListItem extends RecyclerView.ViewHolder {
+    static class StudentGroupListItem extends RecyclerView.ViewHolder {
 
         private String groupId;
         private TextView name;
         private TextView students;
         private Switch registerSwitch;
 
-        public StudentGroupListItem(View view) {
+        StudentGroupListItem(View view) {
             super(view);
 
             name = view.findViewById(R.id.studentGroupsListItemName);
             students = view.findViewById(R.id.studentGroupsListItemStudents);
             registerSwitch = view.findViewById(R.id.studentGroupsListItemRegisterSwitch);
+
+            registerSwitch.setVisibility(View.INVISIBLE);
         }
 
-        public void setGroupId(String groupId) {
+        void setGroupId(String groupId) {
             this.groupId = groupId;
         }
 
-        public void setName(String name) {
+        void setName(String name) {
             this.name.setText(name);
         }
 
-        public void setStudentsCount(int studentsCount) {
+        void setStudentsCount(int studentsCount) {
             this.students.setText(Integer.toString(studentsCount));
         }
 
-        public void setRegistered(boolean checked) {
+        void setRegistered(boolean checked) {
             this.registerSwitch.setChecked(checked);
         }
 
-        public void setRegisterSwitchEnabled(boolean visible) {
-            this.registerSwitch.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+        void enableRegisterSwitch() {
+            this.registerSwitch.setVisibility(View.VISIBLE);
         }
 
-        public void setRegisterSwitchCallbacks(Consumer<String> register, Consumer<String> deregister) {
+        void disableRegisterSwitch() {
+            registerSwitch.setVisibility(View.INVISIBLE);
+        }
+
+        void setRegisterSwitchCallbacks(Consumer<String> register, Consumer<String> deregister) {
             registerSwitch.setOnClickListener(v -> {
                 final Integer oldStudentsCount = Integer.valueOf(students.getText().toString());
 

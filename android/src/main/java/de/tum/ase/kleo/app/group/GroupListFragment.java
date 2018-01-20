@@ -68,17 +68,21 @@ public class GroupListFragment extends ReactiveLayoutFragment {
     }
 
     private void populateStudentGroupsListView(List<GroupDTO> groups) {
-        final boolean currentUserStudent = currentUser.isStudent();
         final String currentUserId = currentUser.id();
 
-        final RecyclerView.Adapter<?> studentGroupsAdapter
-                = new GroupListAdapter(groups, currentUserStudent, currentUserId,
-                    this::registerStudent, this::deregisterStudent);
-        listView.setAdapter(studentGroupsAdapter);
+        if (currentUser.isStudent()) {
+            final GroupListAdapter groupListAdapter
+                    = GroupListAdapter.withRegisterSwitchEnabled(groups, currentUserId,
+                        this::registerStudent, this::deregisterStudent);
+
+            listView.setAdapter(groupListAdapter);
+        } else {
+            listView.setAdapter(GroupListAdapter.withRegisterSwitchDisabled(groups));
+        }
     }
 
-    private void registerStudent(String groupId, String userId) {
-        final Disposable regStudentReq = groupsApi.addGroupStudent(groupId, userId)
+    private void registerStudent(String groupId) {
+        final Disposable regStudentReq = groupsApi.addGroupStudent(groupId, currentUser.id())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> Toast.makeText(getContext(), getString(R.string.group_student_registered), Toast.LENGTH_LONG).show())
@@ -87,8 +91,8 @@ public class GroupListFragment extends ReactiveLayoutFragment {
         disposeOnDestroy(regStudentReq);
     }
 
-    private void deregisterStudent(String groupId, String userId) {
-        final Disposable deregStudentReq = groupsApi.deleteGroupStudent(groupId, userId)
+    private void deregisterStudent(String groupId) {
+        final Disposable deregStudentReq = groupsApi.deleteGroupStudent(groupId, currentUser.id())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> Toast.makeText(getContext(), getString(R.string.group_student_deregistered), Toast.LENGTH_LONG).show())
