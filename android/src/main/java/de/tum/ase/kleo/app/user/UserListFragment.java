@@ -15,12 +15,8 @@ import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.KleoApplication;
 import de.tum.ase.kleo.app.client.BackendClient;
 import de.tum.ase.kleo.app.client.Principal;
-import de.tum.ase.kleo.app.client.StudentsApi;
 import de.tum.ase.kleo.app.client.UsersApi;
-import de.tum.ase.kleo.app.client.dto.AttendanceDTO;
 import de.tum.ase.kleo.app.client.dto.UserDTO;
-import de.tum.ase.kleo.app.group.GroupAttendanceAdapter;
-import de.tum.ase.kleo.app.support.ui.LayoutFragment;
 import de.tum.ase.kleo.app.support.ui.ReactiveLayoutFragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -28,7 +24,6 @@ import io.reactivex.schedulers.Schedulers;
 
 import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeIn;
 import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeOut;
-import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
 public class UserListFragment extends ReactiveLayoutFragment {

@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.app.group.advertisement;
+package de.tum.ase.kleo.app.group.attendance.advertisement;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,15 +22,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeIn;
-import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeOut;
 import static java.util.stream.Collectors.toList;
 
 public class GroupAdvertisementBroadcasterFragment extends ReactiveLayoutFragment {
 
     private GroupsApi groupsApi;
     private Spinner spinner;
-    private GroupAdvertisementBroadcaster adBroadcaster;
+    private AdvertisementBroadcaster adBroadcaster;
 
     public GroupAdvertisementBroadcasterFragment() {
         super(R.layout.fragment_group_advertisement_broadcaster);
@@ -44,7 +42,7 @@ public class GroupAdvertisementBroadcasterFragment extends ReactiveLayoutFragmen
                 ((KleoApplication) getActivity().getApplication()).backendClient();
 
         groupsApi = backendClient.as(GroupsApi.class);
-        adBroadcaster = new GroupAdvertisementBroadcaster(BuildConfig.BLUETOOTH_PARCEL_ID);
+        adBroadcaster = new AdvertisementBroadcaster(BuildConfig.BLUETOOTH_PARCEL_ID);
     }
 
     @Override

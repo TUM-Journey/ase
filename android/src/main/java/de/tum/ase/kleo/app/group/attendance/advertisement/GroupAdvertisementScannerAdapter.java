@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.app.group.advertisement;
+package de.tum.ase.kleo.app.group.attendance.advertisement;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.security.acl.Group;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Locale;
 
 import de.tum.ase.kleo.android.R;
-import de.tum.ase.kleo.app.client.dto.AttendanceDTO;
 import de.tum.ase.kleo.app.client.dto.GroupDTO;
 import de.tum.ase.kleo.app.client.dto.SessionDTO;
 

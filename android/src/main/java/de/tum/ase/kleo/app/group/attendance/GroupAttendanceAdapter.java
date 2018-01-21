@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.app.group;
+package de.tum.ase.kleo.app.group.attendance;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,7 +10,6 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Consumer;
 
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.client.dto.AttendanceDTO;

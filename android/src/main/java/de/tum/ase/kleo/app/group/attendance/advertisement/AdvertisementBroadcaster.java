@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.app.group.advertisement;
+package de.tum.ase.kleo.app.group.attendance.advertisement;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.AdvertiseCallback;
@@ -7,10 +7,9 @@ import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.os.ParcelUuid;
 
-import static de.tum.ase.kleo.app.group.advertisement.GroupAdvertisement.MESSAGE_CHARSET;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
-public class GroupAdvertisementBroadcaster {
+public class AdvertisementBroadcaster {
 
     private static final AdvertiseSettings defaultAdvertiseSettings
             = new AdvertiseSettings.Builder()
@@ -30,15 +29,15 @@ public class GroupAdvertisementBroadcaster {
     private final AdvertiseCallback advertiseCallback;
     private final AdvertiseSettings advertiseSettings;
 
-    public GroupAdvertisementBroadcaster(String uuid) {
+    public AdvertisementBroadcaster(String uuid) {
         this(ParcelUuid.fromString(uuid), null, null);
     }
 
-    public GroupAdvertisementBroadcaster(ParcelUuid uuid) {
+    public AdvertisementBroadcaster(ParcelUuid uuid) {
         this(uuid, null, null);
     }
 
-    public GroupAdvertisementBroadcaster(ParcelUuid uuid, AdvertiseCallback advertiseCallback, AdvertiseSettings advertiseSettings) {
+    public AdvertisementBroadcaster(ParcelUuid uuid, AdvertiseCallback advertiseCallback, AdvertiseSettings advertiseSettings) {
         this.uuid = uuid;
         this.bluetoothLeAdvertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
         this.advertiseCallback = defaultIfNull(advertiseCallback, defaultAdvertiseCallback);
@@ -47,7 +46,7 @@ public class GroupAdvertisementBroadcaster {
 
     public void advertise(String msg) {
         final AdvertiseData adData = new AdvertiseData.Builder()
-                .addServiceData(uuid, msg.getBytes(MESSAGE_CHARSET))
+                .addServiceData(uuid, msg.getBytes(Advertisement.MESSAGE_CHARSET))
                 .build();
 
         bluetoothLeAdvertiser.startAdvertising(advertiseSettings, adData, advertiseCallback);

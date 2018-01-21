@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.app.group.advertisement;
+package de.tum.ase.kleo.app.group.attendance.advertisement;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,23 +15,14 @@ import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.KleoApplication;
 import de.tum.ase.kleo.app.client.BackendClient;
 import de.tum.ase.kleo.app.client.GroupsApi;
-import de.tum.ase.kleo.app.client.StudentsApi;
-import de.tum.ase.kleo.app.client.dto.GroupDTO;
 import de.tum.ase.kleo.app.support.ui.ReactiveLayoutFragment;
-import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-
-import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeIn;
-import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeOut;
 
 public class GroupAdvertisementScannerFragment extends ReactiveLayoutFragment {
 
-    private GroupAdvertisementScanner adScanner;
+    private AdvertisementScanner adScanner;
     private GroupsApi groupsApi;
 
     public GroupAdvertisementScannerFragment() {
@@ -47,7 +38,7 @@ public class GroupAdvertisementScannerFragment extends ReactiveLayoutFragment {
 
         groupsApi = backendClient.as(GroupsApi.class);
 
-        adScanner = new GroupAdvertisementScanner(BuildConfig.BLUETOOTH_PARCEL_ID);
+        adScanner = new AdvertisementScanner(BuildConfig.BLUETOOTH_PARCEL_ID);
     }
 
     @Override
