@@ -39,4 +39,5 @@
     <string name="user_list_item_is_current_user">(you)</string>
     <string name="save">Save</string>
     <string name="group_ad_select_first">Select group first</string>
+    <string name="group_ad_scanner_list_label">Scanning ...</string>
 </resources>

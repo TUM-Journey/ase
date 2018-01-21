@@ -33,6 +33,7 @@ public class GroupAdvertisementScanner {
     private final ScanSettings scanSettings;
 
     private ScanCallback scanCallback;
+    private ObservableEmitter<GroupAdvertisement> emmiter;
 
     public GroupAdvertisementScanner(String uuid) {
         this(ParcelUuid.fromString(uuid));
@@ -50,7 +51,9 @@ public class GroupAdvertisementScanner {
 
     public Observable<GroupAdvertisement> scan() {
         return Observable.create(emmiter -> {
-            scanCallback = createScanCallback(emmiter);
+            this.emmiter = emmiter;
+            this.scanCallback = createScanCallback(emmiter);
+
             bluetoothLeScanner.startScan(emptyList(), scanSettings, scanCallback);
         });
     }
@@ -88,5 +91,6 @@ public class GroupAdvertisementScanner {
 
     public void stopScanning() {
         bluetoothLeScanner.stopScan(scanCallback);
+        this.emmiter.onComplete();
     }
 }
