@@ -1,5 +1,7 @@
 package de.tum.ase.kleo.domain;
 
+import org.apache.commons.codec.binary.Hex;
+
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
@@ -66,6 +68,6 @@ public class PassTokenizer {
     }
 
     public String tokenizeToString(Pass pass) {
-        return new String(tokenizeToBytes(pass), charset);
+        return Hex.encodeHexString(tokenizeToBytes(pass));
     }
 }

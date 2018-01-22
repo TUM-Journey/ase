@@ -1,5 +1,8 @@
 package de.tum.ase.kleo.domain;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
+
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
@@ -58,6 +61,10 @@ public class PassDetokenizer {
     }
 
     public Pass detokenize(String tokenString) {
-        return detokenize(tokenString.getBytes(charset));
+        try {
+            return detokenize(Hex.decodeHex(tokenString.toCharArray()));
+        } catch (DecoderException e) {
+            throw new PassTokenizationException("Failed to decode hexed token", e);
+        }
     }
 }
