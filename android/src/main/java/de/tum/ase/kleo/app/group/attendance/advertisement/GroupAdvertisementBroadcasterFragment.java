@@ -16,8 +16,10 @@ import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.KleoApplication;
 import de.tum.ase.kleo.app.client.BackendClient;
 import de.tum.ase.kleo.app.client.GroupsApi;
+import de.tum.ase.kleo.app.client.dto.PassDTO;
 import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.Advertisement;
 import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.AdvertisementBroadcaster;
+import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.BackendHandshakeSupplier;
 import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.HandshakeServer;
 import de.tum.ase.kleo.app.support.ui.ReactiveLayoutFragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -31,6 +33,7 @@ public class GroupAdvertisementBroadcasterFragment extends ReactiveLayoutFragmen
     private GroupsApi groupsApi;
     private Spinner spinner;
     private AdvertisementBroadcaster adBroadcaster;
+    private HandshakeServer handshakeServer;
 
     public GroupAdvertisementBroadcasterFragment() {
         super(R.layout.fragment_group_advertisement_broadcaster);
@@ -45,6 +48,7 @@ public class GroupAdvertisementBroadcasterFragment extends ReactiveLayoutFragmen
 
         groupsApi = backendClient.as(GroupsApi.class);
         adBroadcaster = AdvertisementBroadcaster.createDefault(HandshakeServer.SERVICE_UUID);
+        handshakeServer = HandshakeServer.create(getContext(), new BackendHandshakeSupplier(groupsApi));
     }
 
     @Override
@@ -63,9 +67,10 @@ public class GroupAdvertisementBroadcasterFragment extends ReactiveLayoutFragmen
 
                 final String groupCode = chosenGroupCode.get();
                 adBroadcaster.broadcast(Advertisement.from(groupCode));
-                disableGroupChooser();
+                handshakeServer.listen().subscribe(this::disableGroupChooser);
             } else {
                 adBroadcaster.stop();
+                handshakeServer.stop();
                 enableGroupChooser();
             }
         });

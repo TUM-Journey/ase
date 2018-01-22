@@ -1,8 +1,10 @@
 package de.tum.ase.kleo.app.group.attendance.advertisement;
 
+import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +16,11 @@ import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.KleoApplication;
 import de.tum.ase.kleo.app.client.BackendClient;
 import de.tum.ase.kleo.app.client.GroupsApi;
+import de.tum.ase.kleo.app.client.dto.GroupDTO;
+import de.tum.ase.kleo.app.client.dto.SessionDTO;
+import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.Advertisement;
 import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.AdvertisementScanner;
+import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.HandshakeClient;
 import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.HandshakeServer;
 import de.tum.ase.kleo.app.support.ui.ReactiveLayoutFragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -25,6 +31,8 @@ public class GroupAdvertisementScannerFragment extends ReactiveLayoutFragment {
 
     private AdvertisementScanner adScanner;
     private GroupsApi groupsApi;
+    private HandshakeClient handshakeClient;
+    private String currentUserId;
 
     public GroupAdvertisementScannerFragment() {
         super(R.layout.fragment_group_advertisement_scanner);
@@ -37,9 +45,12 @@ public class GroupAdvertisementScannerFragment extends ReactiveLayoutFragment {
         final BackendClient backendClient =
                 ((KleoApplication) getActivity().getApplication()).backendClient();
 
+        currentUserId = backendClient.principal().blockingGet().id();
+
         groupsApi = backendClient.as(GroupsApi.class);
 
         adScanner = AdvertisementScanner.createDefault(HandshakeServer.SERVICE_UUID);
+        handshakeClient = HandshakeClient.create(getContext(), HandshakeServer.SERVICE_UUID);
     }
 
     @Override
@@ -53,16 +64,32 @@ public class GroupAdvertisementScannerFragment extends ReactiveLayoutFragment {
         final GroupAdvertisementScannerAdapter adapter = new GroupAdvertisementScannerAdapter();
         listView.setAdapter(adapter);
 
+        adapter.setGroupSessionOnClickListener((blDevice, group, sessionId) -> {
+            handshakeClient.requestHandshake(blDevice, currentUserId, group.getId(), sessionId.getId())
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe((passCode) -> {
+                        groupsApi.utilizeSessionPass(group.getId(), passCode)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(() -> {
+                                    Toast.makeText(getContext(), "Nice to have you! Your attendance has been recorded!", Toast.LENGTH_SHORT).show();
+                                });
+                    });
+        });
+
         adScanner.scanUnique()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(deviceAdv -> {
-                    final String groupCode = deviceAdv.second.toString();
+                    final BluetoothDevice device = deviceAdv.first;
+                    final Advertisement advertisement = deviceAdv.second;
 
-                    Disposable disposable = groupsApi.getGroup(groupCode)
+                    Disposable disposable = groupsApi.getGroup(advertisement.toString())
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(adapter::appendGroup, this::showError);
+                            .subscribe(group -> adapter.appendAdvertisement(Pair.create(device, group)),
+                                    this::showError);
 
                     disposeOnDestroy(disposable);
                 });

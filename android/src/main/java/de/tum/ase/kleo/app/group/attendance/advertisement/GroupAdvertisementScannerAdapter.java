@@ -1,6 +1,8 @@
 package de.tum.ase.kleo.app.group.attendance.advertisement;
 
+import android.bluetooth.BluetoothDevice;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +12,12 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.client.dto.GroupDTO;
@@ -19,17 +25,12 @@ import de.tum.ase.kleo.app.client.dto.SessionDTO;
 
 public class GroupAdvertisementScannerAdapter extends RecyclerView.Adapter<GroupAdvertisementScannerAdapter.GroupAdListItem> {
 
-    private final List<GroupDTO> groups = new ArrayList<>();
+    private final List<Pair<BluetoothDevice, GroupDTO>> bluetoothDeviceGroups = new ArrayList<>();
+    private GroupSessionOnClickListener groupSessionOnClickListener;
 
-    public void appendGroup(GroupDTO groupDTO) {
-        if (!groups.contains(groupDTO)) {
-            groups.add(groupDTO);
-            notifyDataSetChanged();
-        }
-    }
-
-    public boolean hasGroup(String code) {
-        return groups.stream().anyMatch(group -> group.getCode().equals(code));
+    public void appendAdvertisement(Pair<BluetoothDevice, GroupDTO> bluetoothDeviceGroup) {
+        bluetoothDeviceGroups.add(bluetoothDeviceGroup);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -42,7 +43,9 @@ public class GroupAdvertisementScannerAdapter extends RecyclerView.Adapter<Group
 
     @Override
     public void onBindViewHolder(GroupAdListItem holder, int position) {
-        final GroupDTO group = groups.get(position);
+        final Pair<BluetoothDevice, GroupDTO> bluetoothDeviceGroup = bluetoothDeviceGroups.get(position);
+        final BluetoothDevice device = bluetoothDeviceGroup.first;
+        final GroupDTO group = bluetoothDeviceGroup.second;
 
         final OffsetDateTime now = OffsetDateTime.now();
         final SessionDTO nextNearestSession = group.getSessions().stream()
@@ -54,11 +57,21 @@ public class GroupAdvertisementScannerAdapter extends RecyclerView.Adapter<Group
                 nextNearestSession.getEnds().toLocalTime());
         holder.setSessionType(nextNearestSession.getType().toString());
         holder.setSessionLocation(nextNearestSession.getLocation());
+
+        if (groupSessionOnClickListener != null) {
+            holder.itemView.setOnClickListener(e -> {
+                groupSessionOnClickListener.onGroupSessionOnClick(device, group, nextNearestSession);
+            });
+        }
+    }
+
+    public void setGroupSessionOnClickListener(GroupSessionOnClickListener groupSessionOnClickListener) {
+        this.groupSessionOnClickListener = groupSessionOnClickListener;
     }
 
     @Override
     public int getItemCount() {
-        return groups.size();
+        return bluetoothDeviceGroups.size();
     }
 
     static class GroupAdListItem extends RecyclerView.ViewHolder {
@@ -98,5 +111,9 @@ public class GroupAdvertisementScannerAdapter extends RecyclerView.Adapter<Group
         public void setSessionType(String sessionType) {
             this.sessionType.setText(sessionType);
         }
+    }
+
+    public interface GroupSessionOnClickListener {
+        void onGroupSessionOnClick(BluetoothDevice bluetoothDevice, GroupDTO group, SessionDTO sessionId);
     }
 }

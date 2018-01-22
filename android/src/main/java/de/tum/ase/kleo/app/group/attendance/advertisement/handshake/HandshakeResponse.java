@@ -11,7 +11,7 @@ import static android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ;
 public class HandshakeResponse {
 
     private static final Charset ENCODING = Charset.forName("UTF-8");
-    public static final int MAX_BYTES = 248;
+    public static final int MAX_BYTES = 512;
     public static final UUID CHAR_UUID = UUID.fromString("2E65B0EF-4D5D-4878-9534-765A7702847B");
 
     private final byte[] handshake;
@@ -23,7 +23,8 @@ public class HandshakeResponse {
     public static HandshakeResponse from(String handshake) {
         final byte[] handshakeBytes = handshake.getBytes(ENCODING);
         if (handshakeBytes.length > MAX_BYTES) {
-            throw new IllegalArgumentException("Handshake size is too big. Max allowed = " + MAX_BYTES);
+            throw new IllegalArgumentException("Handshake size is too big. " +
+                    "Actual = " + handshakeBytes.length + ", allowed = " + MAX_BYTES);
         }
 
         return new HandshakeResponse(handshakeBytes);
