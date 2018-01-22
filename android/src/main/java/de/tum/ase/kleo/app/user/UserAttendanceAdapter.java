@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.app.group.attendance;
+package de.tum.ase.kleo.app.user;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,18 +14,18 @@ import java.util.Locale;
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.client.dto.AttendanceDTO;
 
-public class GroupAttendanceAdapter extends RecyclerView.Adapter<GroupAttendanceAdapter.GroupAttendanceListItem> {
+public class UserAttendanceAdapter extends RecyclerView.Adapter<UserAttendanceAdapter.GroupAttendanceListItem> {
 
     private final List<AttendanceDTO> attendances;
 
-    public GroupAttendanceAdapter(List<AttendanceDTO> attendances) {
+    public UserAttendanceAdapter(List<AttendanceDTO> attendances) {
         this.attendances = attendances;
     }
 
     @Override
     public GroupAttendanceListItem onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_group_attendance_item, parent, false);
+                .inflate(R.layout.fragment_user_attendance_item, parent, false);
 
         return new GroupAttendanceListItem(view);
     }

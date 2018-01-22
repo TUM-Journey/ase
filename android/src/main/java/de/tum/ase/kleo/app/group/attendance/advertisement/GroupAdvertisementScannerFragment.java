@@ -10,11 +10,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
-import de.tum.ase.kleo.android.BuildConfig;
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.KleoApplication;
 import de.tum.ase.kleo.app.client.BackendClient;
 import de.tum.ase.kleo.app.client.GroupsApi;
+import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.AdvertisementScanner;
+import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.HandshakeServer;
 import de.tum.ase.kleo.app.support.ui.ReactiveLayoutFragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -38,7 +39,7 @@ public class GroupAdvertisementScannerFragment extends ReactiveLayoutFragment {
 
         groupsApi = backendClient.as(GroupsApi.class);
 
-        adScanner = new AdvertisementScanner(BuildConfig.BLUETOOTH_PARCEL_ID);
+        adScanner = AdvertisementScanner.createDefault(HandshakeServer.SERVICE_UUID);
     }
 
     @Override
@@ -52,12 +53,11 @@ public class GroupAdvertisementScannerFragment extends ReactiveLayoutFragment {
         final GroupAdvertisementScannerAdapter adapter = new GroupAdvertisementScannerAdapter();
         listView.setAdapter(adapter);
 
-        adScanner.scan()
+        adScanner.scanUnique()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .filter(ad -> !adapter.hasGroup(ad.message()))
-                .subscribe(ad -> {
-                    final String groupCode = ad.message();
+                .subscribe(deviceAdv -> {
+                    final String groupCode = deviceAdv.second.toString();
 
                     Disposable disposable = groupsApi.getGroup(groupCode)
                             .subscribeOn(Schedulers.io())
@@ -75,7 +75,6 @@ public class GroupAdvertisementScannerFragment extends ReactiveLayoutFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        adScanner.stopScanning();
+        adScanner.stop();
     }
 }

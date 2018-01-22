@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.app.group.attendance;
+package de.tum.ase.kleo.app.user;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,14 +25,14 @@ import io.reactivex.schedulers.Schedulers;
 import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeIn;
 import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeOut;
 
-public class GroupAttendanceFragment extends ReactiveLayoutFragment {
+public class UserAttendanceFragment extends ReactiveLayoutFragment {
 
     private StudentsApi studentApi;
     private RecyclerView listView;
     private Principal currentUser;
 
-    public GroupAttendanceFragment() {
-        super(R.layout.fragment_group_attendance);
+    public UserAttendanceFragment() {
+        super(R.layout.fragment_user_attendance);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class GroupAttendanceFragment extends ReactiveLayoutFragment {
     }
 
     private void populateGroupAttendanceListView(List<AttendanceDTO> attendances) {
-        listView.setAdapter(new GroupAttendanceAdapter(attendances));
+        listView.setAdapter(new UserAttendanceAdapter(attendances));
     }
 
     private void showError(Throwable e) {

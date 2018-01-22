@@ -8,7 +8,6 @@ ext {
             targetCompatibility: JavaVersion.VERSION_1_8,
         ],
         android: [
-            parcelUuid: "1D392B53-433B-418B-A6BC-BC49EEB7B825",
             compileSdkVersion: 26,
             buildToolsVersion: "26.0.2",
             minSdkVersion: 24,

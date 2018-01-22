@@ -18,9 +18,9 @@ import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.client.BackendClient;
 import de.tum.ase.kleo.app.client.Principal;
 import de.tum.ase.kleo.app.group.GroupListFragment;
-import de.tum.ase.kleo.app.group.attendance.GroupAttendanceFragment;
 import de.tum.ase.kleo.app.group.attendance.advertisement.GroupAdvertisementBroadcasterFragment;
 import de.tum.ase.kleo.app.group.attendance.advertisement.GroupAdvertisementScannerFragment;
+import de.tum.ase.kleo.app.user.UserAttendanceFragment;
 import de.tum.ase.kleo.app.user.UserListFragment;
 
 import static java.lang.String.format;
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = new GroupListFragment();
                 break;
             case R.id.student_attendances:
-                fragment = new GroupAttendanceFragment();
+                fragment = new UserAttendanceFragment();
                 break;
             case R.id.group_broadcaster:
                 fragment = new GroupAdvertisementBroadcasterFragment();

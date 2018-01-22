@@ -12,11 +12,13 @@ import android.widget.ToggleButton;
 import java.util.List;
 import java.util.Optional;
 
-import de.tum.ase.kleo.android.BuildConfig;
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.KleoApplication;
 import de.tum.ase.kleo.app.client.BackendClient;
 import de.tum.ase.kleo.app.client.GroupsApi;
+import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.Advertisement;
+import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.AdvertisementBroadcaster;
+import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.HandshakeServer;
 import de.tum.ase.kleo.app.support.ui.ReactiveLayoutFragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -42,7 +44,7 @@ public class GroupAdvertisementBroadcasterFragment extends ReactiveLayoutFragmen
                 ((KleoApplication) getActivity().getApplication()).backendClient();
 
         groupsApi = backendClient.as(GroupsApi.class);
-        adBroadcaster = new AdvertisementBroadcaster(BuildConfig.BLUETOOTH_PARCEL_ID);
+        adBroadcaster = AdvertisementBroadcaster.createDefault(HandshakeServer.SERVICE_UUID);
     }
 
     @Override
@@ -60,10 +62,10 @@ public class GroupAdvertisementBroadcasterFragment extends ReactiveLayoutFragmen
                 }
 
                 final String groupCode = chosenGroupCode.get();
-                adBroadcaster.advertise(groupCode);
+                adBroadcaster.broadcast(Advertisement.from(groupCode));
                 disableGroupChooser();
             } else {
-                adBroadcaster.stopAdvertising();
+                adBroadcaster.stop();
                 enableGroupChooser();
             }
         });
