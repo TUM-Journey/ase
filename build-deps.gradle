@@ -22,6 +22,7 @@ ext {
             playServicesAuth: '9.8.0',
 
             rxAndroid: '2.0.1',
+            web3j: '3.1.1-android',
 
             retrofit: '2.3.0',
             oltuOAuth2: '1.0.1',
@@ -39,6 +40,8 @@ ext {
             jackson: '2.8.10',
             springSecurityOAuth2: '2.2.1.RELEASE',
             springSecurityJwt: '1.0.8.RELEASE',
+
+            web3j: '3.2.0',
 
             htmlunit: '2.28',
 
@@ -79,6 +82,7 @@ ext {
                 "io.reactivex.rxjava2:rxjava:${deps.vers.common.rxJava}",
                 "io.reactivex.rxjava2:rxandroid:${deps.vers.android.rxAndroid}",
             ],
+            web3j: "org.web3j:core:${deps.vers.android.web3j}",
             oltuOAuth2: "org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:${deps.vers.android.oltuOAuth2}",
             gsonFire: "io.gsonfire:gson-fire:${deps.vers.android.gsonFire}",
             jwtDecode: "com.auth0.android:jwtdecode:${deps.vers.android.jwtDecode}",
@@ -101,6 +105,8 @@ ext {
             springBootSecurity: "org.springframework.boot:spring-boot-starter-security:${deps.vers.backend.springBoot}",
             springSecurityOAuth2: "org.springframework.security.oauth:spring-security-oauth2:${deps.vers.backend.springSecurityOAuth2}",
             springSecurityJwt: "org.springframework.security:spring-security-jwt:${deps.vers.backend.springSecurityJwt}",
+
+            web3j: "org.web3j:core:${deps.vers.backend.web3j}",
 
             htmlUnit: "net.sourceforge.htmlunit:htmlunit:${deps.vers.backend.htmlunit}",
 

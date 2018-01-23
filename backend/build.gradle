@@ -35,6 +35,8 @@ dependencies {
     compile deps.defs.backend.springSecurityOAuth2
     compile deps.defs.backend.springSecurityJwt
 
+    compile deps.defs.backend.web3j
+
     compile deps.defs.backend.htmlUnit
 
     compile deps.defs.backend.swaggerSpringfox

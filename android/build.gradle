@@ -31,6 +31,8 @@ dependencies {
     implementation deps.defs.android.gsonFire
     implementation deps.defs.android.jwtDecode
 
+    implementation deps.defs.android.web3j
+
     testImplementation deps.defs.common.junit
     testImplementation deps.defs.common.assertj
     testImplementation deps.defs.common.mockito
