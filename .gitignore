@@ -269,3 +269,6 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 # End of https://www.gitignore.io/api/java,macos,gradle,android,intellij+all,androidstudio
+
+# attendance_tracker_gen.sh
+.solidity
