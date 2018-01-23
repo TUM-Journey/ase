@@ -41,6 +41,10 @@ security:
     cipherAlgorithm: AES/CBC/PKCS5PADDING
     cipherAlgorithmParameterSpec: 110,-42,-8,111,75,-60,104,14,-78,63,72,70,29,-121,35,-20
 
+
+ethereum:
+  attendanceTracker:
+    address: "0x324f85e86b1c42f24894c31aef1d74360ef8607e"
 ---
 
 spring:

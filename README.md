@@ -5,6 +5,14 @@ Kleo is a Bluetooth-enabled electronic attendance system that is designed to cop
 Kleo provides **REST** API for Android and Web applications. The REST API is defined with OpenAPI2 (Swagger) and availale on [Swaggerhub](https://app.swaggerhub.com/apis/wingsofovnia/kleo-api/). The Postman collection is also [provided](https://www.getpostman.com/collections/f168f5deb322113dc89a).
 
 ## Getting Started
+### Configuration
+In order to run the app, the following environment variables must be set:
+```
+ethereum.infura - an Infura endpoint to Ethereum net (e.g https://mainnet.infura.io/your_token)
+ethereum.wallet.password - a password for your wallet
+ethereum.wallet.file - a path to your wallet file
+```
+
 ### Development
 The backend default profile is DEV, populated with test data: groups and user accounts. To run the backend, execute:
 ```
