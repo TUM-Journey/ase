@@ -86,7 +86,7 @@ public class Group {
         return studentIds.add(studentId);
     }
 
-    public boolean hasStudent(UserId studentId) {
+    public boolean isStudentRegistered(UserId studentId) {
         return studentIds.stream().anyMatch(sId -> sId.equals(studentId));
     }
 
@@ -157,10 +157,12 @@ public class Group {
 
     public Attendance attend(Pass pass) {
         if (pass.isExpired())
-            throw new IllegalArgumentException("Pass with given code is expired or already used");
+            throw new IllegalArgumentException("The Pass given is expired");
         else if (hasAttended(pass.studentId(), pass.sessionId()))
-            throw new IllegalArgumentException("User attendance for the session provided by the " +
-                    "pass has already been registered");
+            throw new IllegalArgumentException("Student attendance for the session provided by " +
+                    "the pass has already been registered");
+        else if (!isStudentRegistered(pass.studentId()))
+            throw new IllegalArgumentException("Non registered student cant attend group sessions");
 
         val newAttendance = new Attendance(pass.sessionId(), pass.studentId());
         attendances.add(newAttendance);
