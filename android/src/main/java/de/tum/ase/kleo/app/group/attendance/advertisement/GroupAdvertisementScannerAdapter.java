@@ -23,6 +23,8 @@ import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.client.dto.GroupDTO;
 import de.tum.ase.kleo.app.client.dto.SessionDTO;
 
+import static de.tum.ase.kleo.app.support.DateTimeFormatters.simpleTime;
+
 public class GroupAdvertisementScannerAdapter extends RecyclerView.Adapter<GroupAdvertisementScannerAdapter.GroupAdListItem> {
 
     private final List<Pair<BluetoothDevice, GroupDTO>> bluetoothDeviceGroups = new ArrayList<>();
@@ -76,9 +78,6 @@ public class GroupAdvertisementScannerAdapter extends RecyclerView.Adapter<Group
 
     static class GroupAdListItem extends RecyclerView.ViewHolder {
 
-        private static final DateTimeFormatter sessionTimeFormat
-                = DateTimeFormatter.ofPattern("HH:mm", Locale.ENGLISH);
-
         private TextView name;
         private TextView sessionTime;
         private TextView sessionLocation;
@@ -98,8 +97,7 @@ public class GroupAdvertisementScannerAdapter extends RecyclerView.Adapter<Group
         }
 
         public void setSessionTime(LocalTime begins, LocalTime ends) {
-            final String sessionInterval = begins.format(sessionTimeFormat)
-                    + " - " + ends.format(sessionTimeFormat);
+            final String sessionInterval = simpleTime(begins) + " - " + simpleTime(ends);
 
             this.sessionTime.setText(sessionInterval);
         }

@@ -54,7 +54,7 @@ public class GroupAdvertisementScannerFragment extends ReactiveLayoutFragment {
     }
 
     @Override
-    protected void onCreateLayout(View view, LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+    protected void onFragmentCreated(View view, Bundle state) {
         final Animation shake = AnimationUtils.loadAnimation(view.getContext(), R.anim.breath);
         view.findViewById(R.id.radarIcon).startAnimation(shake);
 

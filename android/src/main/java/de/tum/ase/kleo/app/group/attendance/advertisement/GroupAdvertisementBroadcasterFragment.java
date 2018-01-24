@@ -21,6 +21,7 @@ import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.Advertisemen
 import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.AdvertisementBroadcaster;
 import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.BackendHandshakeSupplier;
 import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.HandshakeServer;
+import de.tum.ase.kleo.app.support.ui.ArrayAdapterItem;
 import de.tum.ase.kleo.app.support.ui.ReactiveLayoutFragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -52,7 +53,7 @@ public class GroupAdvertisementBroadcasterFragment extends ReactiveLayoutFragmen
     }
 
     @Override
-    protected void onCreateLayout(View view, LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+    protected void onFragmentCreated(View view, Bundle state) {
         spinner = view.findViewById(R.id.groupAdBroadcasterChooser);
         populateGroupChooser();
 
@@ -81,12 +82,13 @@ public class GroupAdvertisementBroadcasterFragment extends ReactiveLayoutFragmen
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(groups -> {
-                    final List<GroupChooserItem> groupChooserItems = groups.stream()
-                            .map(group -> new GroupChooserItem(group.getCode(), group.getName()))
+                    final List<ArrayAdapterItem<String>> groupChooserItems = groups.stream()
+                            .map(group -> ArrayAdapterItem.of(group.getName(), group.getCode()))
                             .collect(toList());
 
-                    final ArrayAdapter<GroupChooserItem> adapter = new ArrayAdapter<>(getContext(),
-                            android.R.layout.simple_spinner_item, groupChooserItems);
+                    final ArrayAdapter<ArrayAdapterItem<String>> adapter
+                            = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item,
+                                groupChooserItems);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
                     spinner.setAdapter(adapter);
@@ -95,13 +97,14 @@ public class GroupAdvertisementBroadcasterFragment extends ReactiveLayoutFragmen
         disposeOnDestroy(groupsReq);
     }
 
+    @SuppressWarnings("unchecked")
     private Optional<String> getChosenGroupCode() {
         final Object selectedItem = spinner.getSelectedItem();
 
         if (selectedItem == null)
             return Optional.empty();
 
-        return Optional.of(((GroupChooserItem) selectedItem).groupCode);
+        return Optional.of(((ArrayAdapterItem<String>) selectedItem).value());
     }
 
     private void enableGroupChooser() {
@@ -114,20 +117,5 @@ public class GroupAdvertisementBroadcasterFragment extends ReactiveLayoutFragmen
 
     private void showError(Throwable e) {
         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-    }
-
-    private static class GroupChooserItem {
-        private final String groupCode;
-        private final String name;
-
-        public GroupChooserItem(String groupCode, String name) {
-            this.groupCode = groupCode;
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
     }
 }

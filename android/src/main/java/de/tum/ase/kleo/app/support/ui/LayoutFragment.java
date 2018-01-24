@@ -3,6 +3,7 @@ package de.tum.ase.kleo.app.support.ui;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +20,19 @@ public abstract class LayoutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(layoutResource, container, false);
-        onCreateLayout(view, inflater, container, savedInstanceState);
+        onCreateLayout(view, savedInstanceState);
         return view;
     }
 
-    protected void onCreateLayout(View layoutView, LayoutInflater inflater, ViewGroup container,
-                                  Bundle bundle) {
+    protected void onCreateLayout(View view, Bundle state) {
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        onFragmentCreated(getView(), savedInstanceState);
+    }
+
+    protected void onFragmentCreated(View view, Bundle state) {
     }
 }

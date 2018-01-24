@@ -8,10 +8,20 @@ Kleo provides **REST** API for Android and Web applications. The REST API is def
 ### Configuration
 In order to run the app, the following environment variables must be set:
 ```
-ethereum.infura - an Infura endpoint to Ethereum net (e.g https://mainnet.infura.io/your_token)
-ethereum.wallet.password - a password for your wallet
-ethereum.wallet.file - a path to your wallet file
+# Common
+ETHEREUM_INFURA - an Infura endpoint to Ethereum net (e.g https://mainnet.infura.io/your_token)
+ETHEREUM_ATTENDANCE_TRACKER_ADDRESS - an address of the deployed attendance_tracker.sol smart contract
+
+# Backend specific
+ETHEREUM_WALLET_PASSWORD - a password for your wallet used to post attendances to the blockchain
+ETHEREUM_WALLET_FILE  - a path to your wallet file used to post attendances to the blockchain
 ```
+
+An example .bash_profile may look like:
+export ETHEREUM_INFURA="https://ropsten.infura.io/NoXjb7h7L0YPzNSbroLJ"
+export ETHEREUM_WALLET_PASSWORD="extremepassword"
+export ETHEREUM_WALLET_FILE="~/UTC--2018-01-11T18-58-12.059Z--0121a28a3a04a71bd11f4749ca23f2585b4844d5"
+export ETHEREUM_ATTENDANCE_TRACKER_ADDRESS = "0x324f85e86b1c42f24894c31aef1d74360ef8607e"
 
 ### Development
 The backend default profile is DEV, populated with test data: groups and user accounts. To run the backend, execute:

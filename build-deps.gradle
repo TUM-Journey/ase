@@ -22,6 +22,7 @@ ext {
             playServicesAuth: '9.8.0',
 
             rxAndroid: '2.0.1',
+            rxAndroid1: '0.23.0',
             web3j: '3.0.1-android',
 
             retrofit: '2.3.0',
@@ -82,6 +83,7 @@ ext {
                 "io.reactivex.rxjava2:rxjava:${deps.vers.common.rxJava}",
                 "io.reactivex.rxjava2:rxandroid:${deps.vers.android.rxAndroid}",
             ],
+            rxAndroidJava1: "io.reactivex:rxandroid:${deps.vers.android.rxAndroid1}",
             web3j: "org.web3j:core:${deps.vers.android.web3j}",
             oltuOAuth2: "org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:${deps.vers.android.oltuOAuth2}",
             gsonFire: "io.gsonfire:gson-fire:${deps.vers.android.gsonFire}",

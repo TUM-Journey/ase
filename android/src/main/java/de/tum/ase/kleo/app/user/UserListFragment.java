@@ -48,7 +48,7 @@ public class UserListFragment extends ReactiveLayoutFragment {
     }
 
     @Override
-    protected void onCreateLayout(View view, LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+    protected void onFragmentCreated(View view, Bundle state) {
         final ProgressBar progressBar = view.findViewById(R.id.userListProgressBar);
         listView = view.findViewById(R.id.userList);
         listView.setLayoutManager(new LinearLayoutManager(view.getContext()));

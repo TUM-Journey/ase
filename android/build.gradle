@@ -31,9 +31,8 @@ dependencies {
     implementation deps.defs.android.gsonFire
     implementation deps.defs.android.jwtDecode
 
-    implementation (deps.defs.android.web3j) {
-        exclude group: 'io.reactivex', module: 'rxjava'
-    }
+    implementation deps.defs.android.web3j
+    implementation deps.defs.android.rxAndroidJava1
 
     testImplementation deps.defs.common.junit
     testImplementation deps.defs.common.assertj
@@ -52,7 +51,8 @@ android {
     compileSdkVersion configs.android.compileSdkVersion
 
     packagingOptions {
-        pickFirst 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/rxjava.properties'
     }
 
     defaultConfig {
@@ -63,6 +63,12 @@ android {
         versionName "1.0"
 
         multiDexEnabled true
+
+        buildConfigField 'String', 'ETHEREUM_INFURA', "\"$System.env.ETHEREUM_INFURA\""
+        buildConfigField 'String', 'ETHEREUM_ATTENDANCE_TRACKER_CONTRACT_ADDRESS',
+            '"0x324f85e86b1c42f24894c31aef1d74360ef8607e"'
+        buildConfigField 'String', 'ETHEREUM_ATTENDANCE_TRACKER_CONTRACT_URL',
+            '"https://ropsten.etherscan.io/address/0x324f85e86b1c42f24894c31aef1d74360ef8607e"'
     }
 
     productFlavors {

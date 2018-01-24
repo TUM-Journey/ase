@@ -14,6 +14,8 @@ import java.util.Locale;
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.client.dto.AttendanceDTO;
 
+import static de.tum.ase.kleo.app.support.DateTimeFormatters.simpleDate;
+
 public class UserAttendanceAdapter extends RecyclerView.Adapter<UserAttendanceAdapter.GroupAttendanceListItem> {
 
     private final List<AttendanceDTO> attendances;
@@ -46,10 +48,6 @@ public class UserAttendanceAdapter extends RecyclerView.Adapter<UserAttendanceAd
 
     static class GroupAttendanceListItem extends RecyclerView.ViewHolder {
 
-        // Example: Sat, Jan 20 at 09:34
-        private static final DateTimeFormatter attendedAtTimeFormat
-                = DateTimeFormatter.ofPattern("EEE, MMM d 'at' HH:mm", Locale.ENGLISH);
-
         private TextView name;
         private TextView date;
         private TextView sessionType;
@@ -67,7 +65,7 @@ public class UserAttendanceAdapter extends RecyclerView.Adapter<UserAttendanceAd
         }
 
         public void setDate(OffsetDateTime date) {
-            this.date.setText(date.toLocalDateTime().format(attendedAtTimeFormat));
+            this.date.setText(simpleDate(date.toLocalDateTime()));
         }
 
         public void setSessionType(String sessionType) {
