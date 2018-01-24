@@ -23,7 +23,7 @@ public abstract class LayoutFragment extends Fragment {
         return view;
     }
 
-    protected void onCreateLayout(View view, Bundle state) {
+    protected void onCreateLayout(View view, Bundle savedInstanceState) {
     }
 
     @Override

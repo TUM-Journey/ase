@@ -30,7 +30,10 @@ import static java.lang.String.format;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String GOTO_MAIN_NAVIGATE_BACK_STACK = "main_navigate";
+
     private BackendClient backendClient;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity
         // Setup Navigation View
         final NavigationView navigationView = findViewById(R.id.main_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        setupFragmentManagerBackStack(navigationView);
 
         // 1.1. Hide menu items from not eligible users in Navigation View
         final Menu menu = navigationView.getMenu();
@@ -89,6 +93,9 @@ public class MainActivity extends AppCompatActivity
 
         Fragment fragment;
         switch (itemId) {
+            case R.id.menu_welcome:
+                fragment = new WelcomeFragment();
+                break;
             case R.id.menu_group_advertisement_scanner:
                 fragment = new GroupAdvertisementScannerFragment();
                 break;
@@ -127,8 +134,34 @@ public class MainActivity extends AppCompatActivity
     private void setContent(Fragment fragment) {
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                .setCustomAnimations(
+                        android.R.animator.fade_in, android.R.animator.fade_out,
+                        android.R.animator.fade_in, android.R.animator.fade_out)
                 .replace(R.id.main_container, fragment)
+                .addToBackStack(GOTO_MAIN_NAVIGATE_BACK_STACK)
                 .commit();
+    }
+
+    private void setupFragmentManagerBackStack(NavigationView navigationView) {
+        getFragmentManager().addOnBackStackChangedListener(() -> {
+            final Fragment currentFragment
+                    = getFragmentManager().findFragmentById(R.id.main_container);
+
+            if (currentFragment instanceof GroupAdvertisementScannerFragment) {
+                navigationView.setCheckedItem(R.id.menu_group_advertisement_scanner);
+            } else if (currentFragment instanceof GroupListFragment) {
+                navigationView.setCheckedItem(R.id.menu_group_list);
+            } else if (currentFragment instanceof GroupAttendanceVerifierFragment) {
+                navigationView.setCheckedItem(R.id.menu_attendance_blockchain);
+            } else if (currentFragment instanceof UserAttendanceListFragment) {
+                navigationView.setCheckedItem(R.id.menu_user_attendance);
+            } else if (currentFragment instanceof GroupAdvertisementBroadcasterFragment) {
+                navigationView.setCheckedItem(R.id.menu_group_advertisement_broadcaster);
+            } else if (currentFragment instanceof UserListFragment) {
+                navigationView.setCheckedItem(R.id.menu_user_list);
+            } else if (currentFragment instanceof WelcomeFragment) {
+                navigationView.setCheckedItem(R.id.menu_welcome);
+            }
+        });
     }
 }

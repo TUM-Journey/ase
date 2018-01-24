@@ -1,9 +1,9 @@
 package de.tum.ase.kleo.app.group;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -21,6 +21,8 @@ import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 public class GroupListFragment extends ResourceListLayoutFragment<GroupDTO> {
+
+    private static final String GOTO_GROUP_DETAILS_BACK_STACK = "group_details";
 
     public GroupListFragment() {
         super(R.layout.fragment_group_list,
@@ -88,5 +90,22 @@ public class GroupListFragment extends ResourceListLayoutFragment<GroupDTO> {
                 }
             });
         }
+
+        view.setOnClickListener(v -> openGroupDetailsFragment(group));
+    }
+
+    private void openGroupDetailsFragment(GroupDTO group) {
+        final GroupDetailsFragment groupDetailsFragment = new GroupDetailsFragment();
+        final Bundle bundle = new Bundle();
+        bundle.putSerializable(GroupDetailsFragment.ARG_BUNDLE_GROUP, group);
+        groupDetailsFragment.setArguments(bundle);
+
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(
+                        android.R.animator.fade_in, android.R.animator.fade_out,
+                        android.R.animator.fade_in, android.R.animator.fade_out)
+                .replace(R.id.main_container, groupDetailsFragment)
+                .addToBackStack(GOTO_GROUP_DETAILS_BACK_STACK)
+                .commit();
     }
 }

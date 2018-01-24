@@ -76,7 +76,7 @@ public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragme
     }
 
     @Override
-    protected void onCreateLayout(View view, Bundle state) {
+    protected void onCreateLayout(View view, Bundle savedInstanceState) {
         listView = view.findViewById(listViewResource);
         listView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         progressBar = view.findViewById(progressBarResource);

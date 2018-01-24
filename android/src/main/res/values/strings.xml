@@ -15,6 +15,7 @@
 
     <string name="main_menu_open_msg">Open navigation drawer</string>
     <string name="main_menu_close_msg">Close navigation drawer</string>
+    <string name="main_menu_welcome">Welcome message</string>
     <string name="main_menu_group_header_student">Student</string>
     <string name="main_menu_group_header_tutor">Tutor</string>
     <string name="main_menu_group_header_superuser">Superuser</string>
@@ -49,5 +50,10 @@
     <string name="group_attendance_verifier_find_tx_btn">Find transaction</string>
     <string name="group_attendance_verifier_tx_not_found">No Record*</string>
     <string name="group_attendance_verifier_tx_found">Tx Found</string>
+
     <string name="resource_list_layout_no_records_found_notice">No records found</string>
+
+    <string name="group_details_name">Group name:</string>
+    <string name="group_details_rename_action">Rename</string>
+    <string name="group_details_renaming_confirmation_toast">Group has been renamed successfully</string>
 </resources>

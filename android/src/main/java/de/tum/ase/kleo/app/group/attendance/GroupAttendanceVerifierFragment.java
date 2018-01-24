@@ -76,7 +76,7 @@ public class GroupAttendanceVerifierFragment extends ReactiveLayoutFragment {
     }
 
     @Override
-    protected void onCreateLayout(View view, Bundle state) {
+    protected void onCreateLayout(View view, Bundle savedInstanceState) {
         final Spinner groupSpinner = view.findViewById(R.id.group_attendance_verifier_group_chooser);
         final Spinner sessionSpinner = view.findViewById(R.id.group_attendance_verifier_session_chooser);
         final Spinner userSpinner = view.findViewById(R.id.group_attendance_verifier_user_chooser);

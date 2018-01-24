@@ -3,6 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
+    <group android:checkableBehavior="single" android:id="@+id/menu_etc_top">
+        <item
+            android:id="@+id/menu_welcome"
+            android:icon="@drawable/ic_home"
+            android:title="@string/main_menu_welcome" />
+    </group>
+
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/menu_group_list"
@@ -53,7 +60,7 @@
         </menu>
     </item>
 
-    <group android:checkableBehavior="single" android:id="@+id/menu_etc">
+    <group android:checkableBehavior="single" android:id="@+id/menu_etc_bottom">
         <item
             android:id="@+id/menu_logout"
             android:icon="@drawable/ic_directions_run"

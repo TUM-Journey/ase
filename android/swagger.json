@@ -6,5 +6,6 @@
   "library": "retrofit2",
   "dateLibrary": "java8",
   "useRxJava2": true,
+  "serializableModel": true,
   "hideGenerationTimestamp": true
 }
