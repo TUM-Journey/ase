@@ -1,70 +1,58 @@
 package de.tum.ase.kleo.app.user;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import java.util.List;
 
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.KleoApplication;
 import de.tum.ase.kleo.app.client.BackendClient;
-import de.tum.ase.kleo.app.client.Principal;
 import de.tum.ase.kleo.app.client.StudentsApi;
 import de.tum.ase.kleo.app.client.dto.AttendanceDTO;
-import de.tum.ase.kleo.app.support.ui.ReactiveLayoutFragment;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import de.tum.ase.kleo.app.support.ui.ResourceListLayoutFragment;
+import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
-import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeIn;
-import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeOut;
+import static de.tum.ase.kleo.app.support.DateTimeFormatters.simpleDateTime;
 
-public class UserAttendanceListFragment extends ReactiveLayoutFragment {
+public class UserAttendanceListFragment extends ResourceListLayoutFragment<AttendanceDTO, AttendanceDTO> {
 
-    private StudentsApi studentApi;
-    private RecyclerView listView;
-    private Principal currentUser;
+    private BackendClient backendClient;
 
     public UserAttendanceListFragment() {
-        super(R.layout.fragment_user_attendance_list);
+        super(R.layout.fragment_user_attendance_list,
+                R.id.user_attendance_list_view,
+                R.layout.fragment_user_attendance_list_item,
+                R.id.user_attendance_list_progressbar,
+                R.id.user_attendance_list_no_records);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final BackendClient backendClient =
-                ((KleoApplication) getActivity().getApplication()).backendClient();
-
-        studentApi = backendClient.as(StudentsApi.class);
-        currentUser = backendClient.principal().blockingGet();
+        backendClient = ((KleoApplication) getActivity().getApplication()).backendClient();
     }
 
     @Override
-    protected void onFragmentCreated(View view, Bundle state) {
-        final ProgressBar progressBar = view.findViewById(R.id.group_attendance_list_progressbar);
-        listView = view.findViewById(R.id.group_attendance_list_view);
-        listView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
-        final Disposable groupsAttendancesReq = studentApi.getStudentAttendances(currentUser.id())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe((d) -> fadeIn(progressBar))
-                .doFinally(() -> fadeOut(progressBar))
-                .subscribe(this::populateGroupAttendanceListView, this::showError);
-
-        disposeOnDestroy(groupsAttendancesReq);
+    protected Observable<List<AttendanceDTO>> fetchResources() {
+        return backendClient.principal().toObservable()
+                .subscribeOn(Schedulers.computation())
+                .flatMap(principal ->
+                        backendClient.as(StudentsApi.class)
+                                .getStudentAttendances(principal.id()));
     }
 
-    private void populateGroupAttendanceListView(List<AttendanceDTO> attendances) {
-        listView.setAdapter(new UserAttendanceListAdapter(attendances));
-    }
+    @Override
+    protected void populateListItem(View view, AttendanceDTO attendance) {
+        final TextView name = view.findViewById(R.id.group_attendance_list_item_name_txt);
+        final TextView date = view.findViewById(R.id.group_attendance_list_item_date_txt);
+        final TextView sessionType = view.findViewById(R.id.group_attendance_list_item_session_type_txt);
 
-    private void showError(Throwable e) {
-        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        name.setText(attendance.getGroup().getName());
+        date.setText(simpleDateTime(attendance.getAttendedAt()));
+        sessionType.setText(attendance.getSession().getType().toString());
     }
 }

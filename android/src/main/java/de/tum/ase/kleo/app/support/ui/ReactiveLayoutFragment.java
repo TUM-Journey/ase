@@ -1,5 +1,7 @@
 package de.tum.ase.kleo.app.support.ui;
 
+import android.support.annotation.LayoutRes;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -7,7 +9,7 @@ public abstract class ReactiveLayoutFragment extends LayoutFragment {
 
     private final CompositeDisposable disposables = new CompositeDisposable();
 
-    public ReactiveLayoutFragment(int layoutResource) {
+    public ReactiveLayoutFragment(@LayoutRes int layoutResource) {
         super(layoutResource);
     }
 
