@@ -44,7 +44,11 @@ The DEV profile is populated with the following user you may use for development
 
 You still can use any valid student or staff TUM Shibboleth account.
 
-To run the android client application, make sure you have a valid IP address of the backend in `configuration.xml` config (`backend.baseUrl`) of the build variant used.
+To run the android client application run:
+```
+$ ./gradlew :android:installDevDebug
+```
+This will build the APK and immediately install it on a running emulator or connected device. The backend API client in the app will point to local IP of the machine used to build the apk.
 
 ## Bugs and Feedback
 For bugs, questions and discussions please use the [Github Issues](https://github.com/TUM-Journey/kleo/issues).
