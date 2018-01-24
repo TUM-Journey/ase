@@ -4,6 +4,7 @@ import com.auth0.android.jwt.JWT;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -76,7 +77,7 @@ public class BackendClient {
 
     public synchronized Single<Principal> authenticate(String username, String password, Duration timeout) {
         if (isAuthenticated.get())
-            throw new IllegalStateException("Backend client has been already synchronized");
+            throw new IllegalStateException("Backend client already has valid authorization");
 
         return Single.create(e -> {
             try {
@@ -98,6 +99,15 @@ public class BackendClient {
                 e.onError(new AuthenticationException("Failed to log in with given credentials", ex));
             }
         });
+    }
+
+    public void logout() {
+        // Clean auth interceptors
+        apiClient.setApiAuthorizations(new HashMap<>());
+        apiClient.getOkBuilder().interceptors().remove(oAuth);
+        oAuth = null;
+
+        isAuthenticated.set(false);
     }
 
     public Single<Principal> authenticate(String username, String password) {

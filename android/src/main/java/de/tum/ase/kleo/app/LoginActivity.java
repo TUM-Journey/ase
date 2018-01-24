@@ -74,7 +74,6 @@ public class LoginActivity extends Activity {
     private void proceed() {
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
-
     }
 
     private void helloAndProceed(Principal p) {

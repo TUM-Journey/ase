@@ -2,6 +2,7 @@ package de.tum.ase.kleo.app;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -106,6 +107,11 @@ public class MainActivity extends AppCompatActivity
             case R.id.menu_user_list:
                 fragment = new UserListFragment();
                 break;
+            case R.id.menu_logout:
+                backendClient.logout();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+                return true;
             default:
                 throw new IllegalStateException("Unknown menu choice");
         }

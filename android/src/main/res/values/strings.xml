@@ -14,17 +14,18 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="group_scanner">Group Scanner</string>
-    <string name="study_groups">Study Groups</string>
-    <string name="my_attendances">My Attendances</string>
-    <string name="group_broadcaster">Group Broadcaster</string>
+    <string name="menu_group_advertisement_scanner">Group Scanner</string>
+    <string name="menu_group_list">Study Groups</string>
+    <string name="menu_user_attendance">My Attendances</string>
+    <string name="menu_group_advertisement_broadcaster">Group Broadcaster</string>
 
     <string name="welcome_msg"><![CDATA[Welcome to Kleo! \n Kleo is an electronic attendance system that will help you to find & sign up for interesting studying groups and tutors to record your attendances.]]></string>
     <string name="swipe_to_start">Swipe on the left to get started.</string>
     <string name="students">Students:</string>
     <string name="registered">Registered</string>
     <string name="management">Management</string>
-    <string name="user_management">User management</string>
+    <string name="menu_user_list">User management</string>
+    <string name="menu_logout">Logout</string>
     <string name="student">Student</string>
     <string name="tutor">Tutor</string>
     <string name="superuser">Superuser</string>
@@ -40,7 +41,7 @@
     <string name="save">Save</string>
     <string name="group_ad_select_first">Select group first</string>
     <string name="group_ad_scanner_list_label">Scanning ...</string>
-    <string name="attendance_blockchain">Attendance Blockchain</string>
+    <string name="menu_attendance_blockchain">Attendance Blockchain</string>
     <string name="group_attendance_verifier_tx_time_notice">* please bear in mind, that it may take up to 5 minutes to record an attendance to the blockchain</string>
     <string name="group_attendance_verifier_explanation">To enable transparency, every attendance record in Kleo is replicated to Ethereum blockchain, so that every attendance record can be verified without relying on trust.</string>
     <string name="form_select_group">Select group:</string>

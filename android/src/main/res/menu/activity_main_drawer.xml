@@ -7,11 +7,11 @@
         <item
             android:id="@+id/menu_group_list"
             android:icon="@drawable/ic_import_contacts"
-            android:title="@string/study_groups" />
+            android:title="@string/menu_group_list" />
         <item
             android:id="@+id/menu_attendance_blockchain"
             android:icon="@drawable/ic_verified_user"
-            android:title="@string/attendance_blockchain" />
+            android:title="@string/menu_attendance_blockchain" />
     </group>
 
 
@@ -21,12 +21,12 @@
                 <item
                     android:id="@+id/menu_group_advertisement_scanner"
                     android:icon="@drawable/ic_explore"
-                    android:title="@string/group_scanner" />
+                    android:title="@string/menu_group_advertisement_scanner" />
 
                 <item
                     android:id="@+id/menu_user_attendance"
                     android:icon="@drawable/ic_assessment"
-                    android:title="@string/my_attendances" />
+                    android:title="@string/menu_user_attendance" />
             </group>
         </menu>
     </item>
@@ -37,7 +37,7 @@
                 <item
                     android:id="@+id/menu_group_advertisement_broadcaster"
                     android:icon="@drawable/ic_router"
-                    android:title="@string/group_broadcaster" />
+                    android:title="@string/menu_group_advertisement_broadcaster" />
             </group>
         </menu>
     </item>
@@ -48,9 +48,15 @@
                 <item
                     android:id="@+id/menu_user_list"
                     android:icon="@drawable/ic_contacts"
-                    android:title="@string/user_management" />
+                    android:title="@string/menu_user_list" />
             </group>
         </menu>
     </item>
 
+    <group android:checkableBehavior="single" android:id="@+id/menu_etc">
+        <item
+            android:id="@+id/menu_logout"
+            android:icon="@drawable/ic_directions_run"
+            android:title="@string/menu_logout" />
+    </group>
 </menu>
