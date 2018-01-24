@@ -12,7 +12,7 @@ import java.util.List;
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.client.dto.AttendanceDTO;
 
-import static de.tum.ase.kleo.app.support.DateTimeFormatters.simpleDate;
+import static de.tum.ase.kleo.app.support.DateTimeFormatters.simpleDateTime;
 
 public class UserAttendanceListAdapter extends RecyclerView.Adapter<UserAttendanceListAdapter.GroupAttendanceListItem> {
 
@@ -63,7 +63,7 @@ public class UserAttendanceListAdapter extends RecyclerView.Adapter<UserAttendan
         }
 
         public void setDate(OffsetDateTime date) {
-            this.date.setText(simpleDate(date.toLocalDateTime()));
+            this.date.setText(simpleDateTime(date));
         }
 
         public void setSessionType(String sessionType) {

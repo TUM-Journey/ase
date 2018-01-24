@@ -1,12 +1,14 @@
 package de.tum.ase.kleo.app.group.attendance.advertisement;
 
 import android.bluetooth.BluetoothDevice;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
@@ -19,13 +21,19 @@ import de.tum.ase.kleo.app.client.dto.SessionDTO;
 
 import static de.tum.ase.kleo.app.support.DateTimeFormatters.simpleTime;
 
-public class GroupAdvertisementScannerAdapter extends RecyclerView.Adapter<GroupAdvertisementScannerAdapter.GroupAdListItem> {
+public class GroupAdvertisementScannerAdapter
+        extends RecyclerView.Adapter<GroupAdvertisementScannerAdapter.GroupAdListItem> {
 
-    private final List<Pair<BluetoothDevice, GroupDTO>> bluetoothDeviceGroups = new ArrayList<>();
+    private final List<AdvertisementRecord> advertisementRecords = new ArrayList<>();
     private GroupSessionOnClickListener groupSessionOnClickListener;
 
-    public void appendAdvertisement(Pair<BluetoothDevice, GroupDTO> bluetoothDeviceGroup) {
-        bluetoothDeviceGroups.add(bluetoothDeviceGroup);
+    public void appendActiveAdvertisement(BluetoothDevice device, GroupDTO group) {
+        advertisementRecords.add(new AdvertisementRecord(device, group, true));
+        notifyDataSetChanged();
+    }
+
+    public void appendInactiveAdvertisement(BluetoothDevice device, GroupDTO group) {
+        advertisementRecords.add(new AdvertisementRecord(device, group, false));
         notifyDataSetChanged();
     }
 
@@ -39,9 +47,10 @@ public class GroupAdvertisementScannerAdapter extends RecyclerView.Adapter<Group
 
     @Override
     public void onBindViewHolder(GroupAdListItem holder, int position) {
-        final Pair<BluetoothDevice, GroupDTO> bluetoothDeviceGroup = bluetoothDeviceGroups.get(position);
-        final BluetoothDevice device = bluetoothDeviceGroup.first;
-        final GroupDTO group = bluetoothDeviceGroup.second;
+        final AdvertisementRecord advertisementRecord = advertisementRecords.get(position);
+        final BluetoothDevice device = advertisementRecord.device;
+        final GroupDTO group = advertisementRecord.group;
+        final boolean isActive = advertisementRecord.isActive;
 
         final OffsetDateTime now = OffsetDateTime.now();
         final SessionDTO nextNearestSession = group.getSessions().stream()
@@ -54,7 +63,14 @@ public class GroupAdvertisementScannerAdapter extends RecyclerView.Adapter<Group
         holder.setSessionType(nextNearestSession.getType().toString());
         holder.setSessionLocation(nextNearestSession.getLocation());
 
-        if (groupSessionOnClickListener != null) {
+        if (!isActive) {
+            holder.grayout();
+            holder.itemView.setOnClickListener(e -> {
+                Toast.makeText(holder.itemView.getContext(),
+                        R.string.group_ad_scanner_item_warning_attend_not_registered_toast,
+                            Toast.LENGTH_LONG).show();
+            });
+        } else if (groupSessionOnClickListener != null) {
             holder.itemView.setOnClickListener(e -> {
                 groupSessionOnClickListener.onGroupSessionOnClick(device, group, nextNearestSession);
             });
@@ -67,7 +83,7 @@ public class GroupAdvertisementScannerAdapter extends RecyclerView.Adapter<Group
 
     @Override
     public int getItemCount() {
-        return bluetoothDeviceGroups.size();
+        return advertisementRecords.size();
     }
 
     static class GroupAdListItem extends RecyclerView.ViewHolder {
@@ -103,9 +119,28 @@ public class GroupAdvertisementScannerAdapter extends RecyclerView.Adapter<Group
         public void setSessionType(String sessionType) {
             this.sessionType.setText(sessionType);
         }
+
+        public void grayout() {
+            name.setTextColor(Color.GRAY);
+            sessionTime.setTextColor(Color.GRAY);
+            sessionType.setTextColor(Color.GRAY);
+            sessionLocation.setTextColor(Color.GRAY);
+        }
     }
 
     public interface GroupSessionOnClickListener {
         void onGroupSessionOnClick(BluetoothDevice bluetoothDevice, GroupDTO group, SessionDTO sessionId);
+    }
+
+    private static class AdvertisementRecord {
+        BluetoothDevice device;
+        GroupDTO group;
+        boolean isActive;
+
+        AdvertisementRecord(BluetoothDevice device, GroupDTO group, boolean isActive) {
+            this.device = device;
+            this.group = group;
+            this.isActive = isActive;
+        }
     }
 }

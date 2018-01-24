@@ -8,6 +8,8 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.List;
+
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.KleoApplication;
 import de.tum.ase.kleo.app.client.BackendClient;
@@ -27,6 +29,7 @@ public class GroupAdvertisementScannerFragment extends ReactiveLayoutFragment {
     private GroupsApi groupsApi;
     private HandshakeClient handshakeClient;
     private String currentUserId;
+    private RecyclerView listView;
 
     public GroupAdvertisementScannerFragment() {
         super(R.layout.fragment_group_advertisement_scanner);
@@ -49,7 +52,7 @@ public class GroupAdvertisementScannerFragment extends ReactiveLayoutFragment {
 
     @Override
     protected void onFragmentCreated(View view, Bundle state) {
-        final RecyclerView listView = view.findViewById(R.id.group_ad_scanner_list_view);
+        listView = view.findViewById(R.id.group_ad_scanner_list_view);
         listView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         final GroupAdvertisementScannerAdapter adapter = new GroupAdvertisementScannerAdapter();
@@ -79,8 +82,17 @@ public class GroupAdvertisementScannerFragment extends ReactiveLayoutFragment {
                     Disposable disposable = groupsApi.getGroup(advertisement.toString())
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(group -> adapter.appendAdvertisement(Pair.create(device, group)),
-                                    this::showError);
+                            .subscribe(group -> {
+                                final List<String> registeredStudentIds = group.getStudentIds();
+                                boolean isIRegistered = registeredStudentIds != null
+                                        && registeredStudentIds.contains(currentUserId);
+
+                                if (isIRegistered) {
+                                    adapter.appendActiveAdvertisement(device, group);
+                                } else {
+                                    adapter.appendInactiveAdvertisement(device, group);
+                                }
+                            }, this::showError);
 
                     disposeOnDestroy(disposable);
                 });
@@ -93,6 +105,7 @@ public class GroupAdvertisementScannerFragment extends ReactiveLayoutFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        listView.setAdapter(null);
         adScanner.stop();
     }
 }

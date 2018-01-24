@@ -15,7 +15,7 @@ public final class DateTimeFormatters {
             = DateTimeFormatter.ofPattern("HH:mm", Locale.ENGLISH);
 
     // Example: Sat, Jan 20 at 09:34
-    private static final DateTimeFormatter simpleDateFormatter
+    private static final DateTimeFormatter simpleDateTimeFormatter
             = DateTimeFormatter.ofPattern("EEE, MMM d 'at' HH:mm", Locale.ENGLISH);
 
     private DateTimeFormatters() {
@@ -38,15 +38,11 @@ public final class DateTimeFormatters {
         return simpleTime(offsetDateTime.toLocalTime());
     }
 
-    public static String simpleDate(LocalDate localDate) {
-        return localDate.format(simpleDateFormatter);
+    public static String simpleDateTime(LocalDateTime localDateTime) {
+        return localDateTime.format(simpleDateTimeFormatter);
     }
 
-    public static String simpleDate(LocalDateTime localDateTime) {
-        return simpleDate(localDateTime.toLocalDate());
-    }
-
-    public static String simpleDate(OffsetDateTime offsetDateTime) {
-        return simpleDate(offsetDateTime.toLocalDate());
+    public static String simpleDateTime(OffsetDateTime offsetDateTime) {
+        return simpleDateTime(offsetDateTime.toLocalDateTime());
     }
 }
