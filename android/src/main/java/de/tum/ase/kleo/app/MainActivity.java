@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity
         usernameView.setText(principal.name());
         emailView.setText(principal.email());
         if (principal.studentId() != null) {
-            studentIdView.setText(format("(%s)", principal.studentId()));
+            studentIdView.setText(principal.studentId());
         }
 
         // Set default view content to welcome text

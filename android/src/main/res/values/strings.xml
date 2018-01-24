@@ -15,6 +15,7 @@
 
     <string name="main_menu_open_msg">Open navigation drawer</string>
     <string name="main_menu_close_msg">Close navigation drawer</string>
+    <string name="main_menu_header_no_studentid">No matriculation number</string>
     <string name="main_menu_welcome">Welcome message</string>
     <string name="main_menu_group_header_student">Student</string>
     <string name="main_menu_group_header_tutor">Tutor</string>
