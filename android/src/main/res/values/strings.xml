@@ -31,8 +31,6 @@
 
     <string name="group_list_item_students">Students:</string>
     <string name="group_list_item_register_switch_label">Registered</string>
-    <string name="group_list_item_registration_confirmation_toast">You has been registered successfully</string>
-    <string name="group_list_item_deregistration_confirmation_toast">You has been deregistered successfully</string>
 
     <string name="group_ad_broadcast_group_chooser_label">Select group to broadcast:</string>
     <string name="group_ad_broadcaster_warning_choose_group_first_toast">Select group first</string>

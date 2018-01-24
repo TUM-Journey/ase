@@ -33,6 +33,9 @@ public class BackendClient {
     private final AtomicBoolean isAuthenticated = new AtomicBoolean();
     private OAuth oAuth;
 
+    private String lastAccessToken;
+    private Principal principal;
+
     private final static String PRINCIPAL_ID = "user_id";
     private final static String PRINCIPAL_EMAIL = "user_email";
     private final static String PRINCIPAL_NAME = "user_name";
@@ -107,6 +110,9 @@ public class BackendClient {
         apiClient.getOkBuilder().interceptors().remove(oAuth);
         oAuth = null;
 
+        lastAccessToken = null;
+        principal = null;
+
         isAuthenticated.set(false);
     }
 
@@ -118,21 +124,24 @@ public class BackendClient {
         return isAuthenticated.get();
     }
 
-    public Single<Principal> principal() {
-        return Single.create(e -> {
-            if (!isAuthenticated()) {
-                e.onError(new AuthenticationException("You must authenticate first"));
-                return;
-            }
+    public Principal principal() {
+        if (!isAuthenticated()) {
+            throw new AuthenticationException("You must authenticate first");
+        }
 
-            final String accessToken = oAuth.getAccessToken();
-            if (accessToken == null) {
-                e.onError(new AuthenticationException("Invalid state, null access token"));
-                return;
-            }
+        final String accessToken = oAuth.getAccessToken();
+        if (accessToken == null) {
+            throw new AuthenticationException("Invalid state, null access token");
+        }
 
-            e.onSuccess(parseJwtPrincipal(accessToken));
-        });
+        if (!accessToken.equals(lastAccessToken)) {
+            lastAccessToken = accessToken;
+            principal = parseJwtPrincipal(accessToken);
+        } else if (principal == null) {
+            throw new IllegalStateException("Principal is null but must have decoded jwt");
+        }
+
+        return principal;
     }
 
     private Principal parseJwtPrincipal(String jwtAccessToken) {

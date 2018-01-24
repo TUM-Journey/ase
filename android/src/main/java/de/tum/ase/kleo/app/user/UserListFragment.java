@@ -42,7 +42,7 @@ public class UserListFragment extends ReactiveLayoutFragment {
                 ((KleoApplication) getActivity().getApplication()).backendClient();
 
         userApi = backendClient.as(UsersApi.class);
-        currentUser = backendClient.principal().blockingGet();
+        currentUser = backendClient.principal();
     }
 
     @Override

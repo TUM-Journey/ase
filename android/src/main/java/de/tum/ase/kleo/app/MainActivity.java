@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         backendClient = ((KleoApplication) getApplication()).backendClient();
-        final Principal principal = backendClient.principal().blockingGet();
+        final Principal principal = backendClient.principal();
 
         // Init action bar and drawer layout
         final Toolbar toolbar = findViewById(R.id.main_toolbar);

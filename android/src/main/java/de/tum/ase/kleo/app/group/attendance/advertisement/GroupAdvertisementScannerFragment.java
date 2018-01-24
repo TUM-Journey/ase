@@ -42,7 +42,7 @@ public class GroupAdvertisementScannerFragment extends ReactiveLayoutFragment {
         final BackendClient backendClient =
                 ((KleoApplication) getActivity().getApplication()).backendClient();
 
-        currentUserId = backendClient.principal().blockingGet().id();
+        currentUserId = backendClient.principal().id();
 
         groupsApi = backendClient.as(GroupsApi.class);
 

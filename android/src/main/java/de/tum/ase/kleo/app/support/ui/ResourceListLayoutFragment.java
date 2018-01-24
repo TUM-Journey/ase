@@ -3,6 +3,7 @@ package de.tum.ase.kleo.app.support.ui;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import java.util.List;
 
 import de.tum.ase.kleo.android.R;
+import de.tum.ase.kleo.app.KleoApplication;
+import de.tum.ase.kleo.app.client.BackendClient;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -25,7 +28,7 @@ import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeOut;
 import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
-public abstract class ResourceListLayoutFragment<T, V> extends ReactiveLayoutFragment {
+public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragment {
 
     protected final @IdRes int listViewResource;
     protected RecyclerView listView;
@@ -39,6 +42,8 @@ public abstract class ResourceListLayoutFragment<T, V> extends ReactiveLayoutFra
 
     private final Integer noResourcesNotice;
     private View noResourcesNoticeView;
+
+    protected BackendClient backendClient;
 
     protected ResourceListLayoutFragment(@LayoutRes int layout,
                                       @IdRes int layoutListView,
@@ -60,6 +65,12 @@ public abstract class ResourceListLayoutFragment<T, V> extends ReactiveLayoutFra
                                          @IdRes int layoutProgressBar,
                                          int noResourcesNotice) {
         this(layout, layoutListView, listItemLayout, layoutProgressBar, noResourcesNotice, true);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        backendClient = ((KleoApplication) getActivity().getApplication()).backendClient();
     }
 
     @Override
@@ -85,7 +96,7 @@ public abstract class ResourceListLayoutFragment<T, V> extends ReactiveLayoutFra
         final Disposable disposable = fetchResources()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe((r) -> fadeIn(progressBar))
+                .doOnSubscribe((r) -> this.showProgressBar())
                 .doOnTerminate(this::hideProgressBar)
                 .subscribe(resources -> {
                     if (resources == null || resources.isEmpty()) {
