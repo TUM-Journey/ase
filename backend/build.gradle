@@ -46,14 +46,6 @@ dependencies {
     testCompile deps.defs.common.mockito
 }
 
-processResources {
-    inputs.properties(["configs": configs])
-
-    filesMatching('*.yml') {
-        expand(project.properties)
-    }
-}
-
 swaggerSources {
     kleo {
         inputFile = file(OPENAPI_SOURCE)

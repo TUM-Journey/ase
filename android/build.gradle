@@ -66,9 +66,9 @@ android {
 
         buildConfigField 'String', 'ETHEREUM_INFURA', "\"$System.env.ETHEREUM_INFURA\""
         buildConfigField 'String', 'ETHEREUM_ATTENDANCE_TRACKER_CONTRACT_ADDRESS',
-            '"0x324f85e86b1c42f24894c31aef1d74360ef8607e"'
+            "\"$System.env.ETHEREUM_ATTENDANCE_TRACKER_ADDRESS\""
         buildConfigField 'String', 'ETHEREUM_ATTENDANCE_TRACKER_CONTRACT_URL',
-            '"https://ropsten.etherscan.io/address/0x324f85e86b1c42f24894c31aef1d74360ef8607e"'
+            "\"$System.env.ETHEREUM_ATTENDANCE_TRACKER_URL\""
     }
 
     productFlavors {
@@ -79,7 +79,7 @@ android {
         }
 
         dev {
-            buildConfigField 'String', 'BACKEND_BASE_URL', "\"http://${getIP()}:${configs.backend.serverPort}/api/\""
+            buildConfigField 'String', 'BACKEND_BASE_URL', "\"http://${getIP()}:8080/api/\""
             buildConfigField 'String', 'BACKEND_CLIENT_ID', '"kleo-client"'
             buildConfigField 'String', 'BACKEND_CLIENT_SECRET', '""'
         }

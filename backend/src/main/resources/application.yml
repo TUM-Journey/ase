@@ -10,7 +10,6 @@ spring:
 
 server:
   contextPath: /api
-  port: ${configs.backend.serverPort}
 
 logging:
   file: kleo-application.log
@@ -43,8 +42,12 @@ security:
 
 
 ethereum:
+  infura: ${ETHEREUM_INFURA}
+  wallet:
+    password: ${ETHEREUM_WALLET_PASSWORD}
+    file: ${ETHEREUM_WALLET_FILE}
   attendanceTracker:
-    address: "0x324f85e86b1c42f24894c31aef1d74360ef8607e"
+    address: ${ETHEREUM_ATTENDANCE_TRACKER_ADDRESS}
 ---
 
 spring:
