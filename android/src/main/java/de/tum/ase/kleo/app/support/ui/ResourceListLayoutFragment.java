@@ -14,8 +14,10 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
-import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.KleoApplication;
 import de.tum.ase.kleo.app.client.BackendClient;
 import io.reactivex.Observable;
@@ -102,7 +104,7 @@ public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragme
                     if (resources == null || resources.isEmpty()) {
                         showNoResourcesNotice();
                     } else {
-                        updateResourceList(resources);
+                        changeResources(resources);
                     }
                 }, this::showErrorMessage);
 
@@ -110,12 +112,22 @@ public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragme
     }
 
     @SuppressWarnings("unchecked")
-    protected void updateResourceList(List<T> resources) {
-        if (listView.getAdapter() != null) {
-            ((ResourceListAdapter) listView.getAdapter()).refreshResourceList(resources);
+    protected void changeResources(List<T> resources) {
+        final Optional<ResourceListAdapter> currentListViewAdapterOpt = getCurrentListViewAdapter();
+
+        if (currentListViewAdapterOpt.isPresent()) {
+            currentListViewAdapterOpt.get().changeResources(resources);
         } else {
             listView.setAdapter(new ResourceListAdapter(resources));
         }
+    }
+
+    protected void removeResourceIf(Predicate<T> predicate) {
+        getCurrentListViewAdapter().ifPresent(a -> a.removeResourceIf(predicate));
+    }
+
+    protected void updateResource(Consumer<T> updater) {
+        getCurrentListViewAdapter().ifPresent(a -> a.updateResource(updater));
     }
 
     protected void clearResourceList() {
@@ -154,6 +166,15 @@ public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragme
         }
     }
 
+    @SuppressWarnings("unchecked")
+    private Optional<ResourceListAdapter> getCurrentListViewAdapter() {
+        if (listView.getAdapter() == null) {
+            return Optional.empty();
+        }
+
+        return Optional.of((ResourceListAdapter) listView.getAdapter());
+    }
+
     private class ResourceListAdapter extends RecyclerView.Adapter<ResourceListItemHolder> {
 
         private List<T> resources;
@@ -174,8 +195,19 @@ public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragme
             populateListItem(holder.itemView, resources.get(position));
         }
 
-        public void refreshResourceList(List<T> resources) {
-            this.resources = defaultIfNull(resources, emptyList());;
+        void changeResources(List<T> resources) {
+            this.resources = defaultIfNull(resources, emptyList());
+            this.notifyDataSetChanged();
+        }
+
+        void removeResourceIf(Predicate<T> predicate) {
+            if (this.resources.removeIf(predicate)) {
+                this.notifyDataSetChanged();
+            }
+        }
+
+        void updateResource(Consumer<T> updater) {
+            this.resources.forEach(updater);
             this.notifyDataSetChanged();
         }
 

@@ -27,4 +27,34 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/fragment_user_list_item"/>
 
+    <LinearLayout
+        android:id="@+id/user_list_no_records"
+        android:layout_width="250dp"
+        android:layout_height="85dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible">
+
+        <ImageView
+            android:layout_width="93dp"
+            android:layout_height="60dp"
+            android:alpha="0.4"
+            android:src="@drawable/ic_block" />
+
+        <TextView
+            android:layout_width="159dp"
+            android:layout_height="wrap_content"
+            android:text="@string/resource_list_layout_no_records_found_notice"
+            android:textAlignment="center" />
+
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

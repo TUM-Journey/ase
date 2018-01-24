@@ -37,8 +37,6 @@
 
     <string name="user_list_item_roles_change_popup_title">Update user roles</string>
     <string name="user_list_item_roles_change_popup_title_save_changes">Save</string>
-    <string name="user_list_item_roles_change_confirmation_toast">User roles have been updated</string>
-    <string name="user_list_item_removed_confirmation_toast">User has been removed from the database</string>
     <string name="user_list_item_iscurrentuser_label">(you)</string>
 
     <string name="group_ad_scanner_inprogress_notice">Scanning …</string>
