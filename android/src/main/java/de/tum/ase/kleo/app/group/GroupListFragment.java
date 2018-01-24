@@ -3,9 +3,7 @@ package de.tum.ase.kleo.app.group;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -52,8 +50,8 @@ public class GroupListFragment extends ReactiveLayoutFragment {
 
     @Override
     protected void onFragmentCreated(View view, Bundle state) {
-        progressBar = view.findViewById(R.id.groupListProgressBar);
-        listView = view.findViewById(R.id.groupList);
+        progressBar = view.findViewById(R.id.group_list_progressbar);
+        listView = view.findViewById(R.id.group_list_view);
         final LinearLayoutManager studentGroupsListLayoutManager = new LinearLayoutManager(view.getContext());
         listView.setLayoutManager(studentGroupsListLayoutManager);
 
@@ -85,7 +83,7 @@ public class GroupListFragment extends ReactiveLayoutFragment {
         final Disposable regStudentReq = groupsApi.addGroupStudent(groupId, currentUser.id())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> Toast.makeText(getContext(), getString(R.string.group_student_registered), Toast.LENGTH_LONG).show())
+                .doFinally(() -> Toast.makeText(getContext(), getString(R.string.group_list_item_registration_confirmation_toast), Toast.LENGTH_LONG).show())
                 .subscribe();
 
         disposeOnDestroy(regStudentReq);
@@ -95,7 +93,7 @@ public class GroupListFragment extends ReactiveLayoutFragment {
         final Disposable deregStudentReq = groupsApi.deleteGroupStudent(groupId, currentUser.id())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> Toast.makeText(getContext(), getString(R.string.group_student_deregistered), Toast.LENGTH_LONG).show())
+                .doFinally(() -> Toast.makeText(getContext(), getString(R.string.group_list_item_deregistration_confirmation_toast), Toast.LENGTH_LONG).show())
                 .subscribe();
 
         disposeOnDestroy(deregStudentReq);

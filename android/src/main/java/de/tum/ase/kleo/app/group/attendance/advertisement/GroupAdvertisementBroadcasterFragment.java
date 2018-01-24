@@ -1,9 +1,7 @@
 package de.tum.ase.kleo.app.group.attendance.advertisement;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -16,7 +14,6 @@ import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.KleoApplication;
 import de.tum.ase.kleo.app.client.BackendClient;
 import de.tum.ase.kleo.app.client.GroupsApi;
-import de.tum.ase.kleo.app.client.dto.PassDTO;
 import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.Advertisement;
 import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.AdvertisementBroadcaster;
 import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.BackendHandshakeSupplier;
@@ -54,15 +51,15 @@ public class GroupAdvertisementBroadcasterFragment extends ReactiveLayoutFragmen
 
     @Override
     protected void onFragmentCreated(View view, Bundle state) {
-        spinner = view.findViewById(R.id.groupAdBroadcasterChooser);
+        spinner = view.findViewById(R.id.group_ad_broadcaster_group_chooser);
         populateGroupChooser();
 
-        final ToggleButton broadcastToggle = view.findViewById(R.id.groupAdBroadcasterSwitchBtn);
+        final ToggleButton broadcastToggle = view.findViewById(R.id.group_ad_broadcaster_switch_btn);
         broadcastToggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 final Optional<String> chosenGroupCode = getChosenGroupCode();
                 if (!chosenGroupCode.isPresent()) {
-                    Toast.makeText(getContext(), R.string.group_ad_select_first, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), R.string.group_ad_broadcaster_warning_choose_group_first_toast, Toast.LENGTH_LONG).show();
                     return;
                 }
 

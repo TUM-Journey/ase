@@ -3,9 +3,7 @@ package de.tum.ase.kleo.app.user;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -49,8 +47,8 @@ public class UserListFragment extends ReactiveLayoutFragment {
 
     @Override
     protected void onFragmentCreated(View view, Bundle state) {
-        final ProgressBar progressBar = view.findViewById(R.id.userListProgressBar);
-        listView = view.findViewById(R.id.userList);
+        final ProgressBar progressBar = view.findViewById(R.id.user_list_progressbar);
+        listView = view.findViewById(R.id.user_list_view);
         listView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         final Disposable groupsReq = userApi.getUsers()
@@ -73,7 +71,7 @@ public class UserListFragment extends ReactiveLayoutFragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> Toast.makeText(getContext(),
-                        getString(R.string.user_removed), Toast.LENGTH_LONG).show())
+                        getString(R.string.user_list_item_removed_confirmation_toast), Toast.LENGTH_LONG).show())
                 .subscribe();
 
         disposeOnDestroy(deleteUser);
@@ -84,7 +82,7 @@ public class UserListFragment extends ReactiveLayoutFragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> Toast.makeText(getContext(),
-                        getString(R.string.user_roles_updated), Toast.LENGTH_LONG).show())
+                        getString(R.string.user_list_item_roles_change_confirmation_toast), Toast.LENGTH_LONG).show())
                 .subscribe();
 
         disposeOnDestroy(deleteUser);

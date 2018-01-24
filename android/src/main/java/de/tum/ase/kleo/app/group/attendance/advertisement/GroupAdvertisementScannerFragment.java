@@ -5,19 +5,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.KleoApplication;
 import de.tum.ase.kleo.app.client.BackendClient;
 import de.tum.ase.kleo.app.client.GroupsApi;
-import de.tum.ase.kleo.app.client.dto.GroupDTO;
-import de.tum.ase.kleo.app.client.dto.SessionDTO;
 import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.Advertisement;
 import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.AdvertisementScanner;
 import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.HandshakeClient;
@@ -55,10 +49,7 @@ public class GroupAdvertisementScannerFragment extends ReactiveLayoutFragment {
 
     @Override
     protected void onFragmentCreated(View view, Bundle state) {
-        final Animation shake = AnimationUtils.loadAnimation(view.getContext(), R.anim.breath);
-        view.findViewById(R.id.radarIcon).startAnimation(shake);
-
-        final RecyclerView listView = view.findViewById(R.id.group_ad_scanner_list);
+        final RecyclerView listView = view.findViewById(R.id.group_ad_scanner_list_view);
         listView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         final GroupAdvertisementScannerAdapter adapter = new GroupAdvertisementScannerAdapter();

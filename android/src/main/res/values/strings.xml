@@ -1,52 +1,55 @@
 <resources>
     <string name="app_name">Kleo</string>
-    <string name="app_name_logo">kleo</string>
-    <string name="tum_e_mail">TUM E-mail</string>
-    <string name="password">Password</string>
-    <string name="login">Login</string>
-    <string name="empty_email">Please type your TUM email first</string>
-    <string name="empty_password">Please type your password first</string>
-    <string name="logging_in">Logging in…</string>
-    <string name="monitoring_sessions">Monitoring sessions</string>
-    <string name="login_with">Login with</string>
-    <string name="account">account</string>
-    <string name="hello_toast">Hello, %1$s!</string>
+    <string name="app_name_lowercase">kleo</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="menu_group_advertisement_scanner">Group Scanner</string>
-    <string name="menu_group_list">Study Groups</string>
-    <string name="menu_user_attendance">My Attendances</string>
-    <string name="menu_group_advertisement_broadcaster">Group Broadcaster</string>
+    <string name="login_tum_email_label">TUM E-mail</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_submit_btn">Login</string>
+    <string name="login_warning_empty_email">Please type your TUM email first</string>
+    <string name="login_warning_empty_password">Please type your password first</string>
+    <string name="login_popup_process_label">Logging in…</string>
+    <string name="login_with_tum_account_prefix">Login with</string>
+    <string name="login_with_tum_account_postfix">account</string>
 
-    <string name="welcome_msg"><![CDATA[Welcome to Kleo! \n Kleo is an electronic attendance system that will help you to find & sign up for interesting studying groups and tutors to record your attendances.]]></string>
-    <string name="swipe_to_start">Swipe on the left to get started.</string>
-    <string name="students">Students:</string>
-    <string name="registered">Registered</string>
-    <string name="management">Management</string>
-    <string name="menu_user_list">User management</string>
-    <string name="menu_logout">Logout</string>
-    <string name="student">Student</string>
-    <string name="tutor">Tutor</string>
-    <string name="superuser">Superuser</string>
-    <string name="broadcasting">Broadcasting</string>
-    <string name="select_group_to_broadcast">Select group to broadcast:</string>
+    <string name="main_hello_toast">Hello, %1$s!</string>
 
-    <string name="group_student_registered">You has been registered successfully</string>
-    <string name="group_student_deregistered">You has been deregistered successfully</string>
-    <string name="user_roles_popup_title">Update user roles</string>
-    <string name="user_removed">User has been removed from the database</string>
-    <string name="user_roles_updated">User roles have been updated</string>
-    <string name="user_list_item_is_current_user">(you)</string>
-    <string name="save">Save</string>
-    <string name="group_ad_select_first">Select group first</string>
-    <string name="group_ad_scanner_list_label">Scanning ...</string>
-    <string name="menu_attendance_blockchain">Attendance Blockchain</string>
+    <string name="main_menu_open_msg">Open navigation drawer</string>
+    <string name="main_menu_close_msg">Close navigation drawer</string>
+    <string name="main_menu_group_header_student">Student</string>
+    <string name="main_menu_group_header_tutor">Tutor</string>
+    <string name="main_menu_group_header_superuser">Superuser</string>
+    <string name="main_menu_group_advertisement_scanner">Group Scanner</string>
+    <string name="main_menu_group_list">Study Groups</string>
+    <string name="main_menu_user_attendance_list">My Attendances</string>
+    <string name="main_menu_group_ad_broadcaster">Group Broadcaster</string>
+    <string name="main_menu_attendance_blockchain">Attendance Blockchain</string>
+    <string name="main_menu_user_list">User management</string>
+    <string name="main_menu_logout">Logout</string>
+
+    <string name="welcome_message"><![CDATA[Welcome to Kleo! \n Kleo is an electronic attendance system that will help you to find & sign up for interesting studying groups and tutors to record your attendances.]]></string>
+    <string name="welcome_swipe_to_start_notice">Swipe on the left to get started.</string>
+
+    <string name="group_list_item_students">Students:</string>
+    <string name="group_list_item_register_switch_label">Registered</string>
+    <string name="group_list_item_registration_confirmation_toast">You has been registered successfully</string>
+    <string name="group_list_item_deregistration_confirmation_toast">You has been deregistered successfully</string>
+
+    <string name="group_ad_broadcast_group_chooser_label">Select group to broadcast:</string>
+    <string name="group_ad_broadcaster_warning_choose_group_first_toast">Select group first</string>
+
+    <string name="user_list_item_roles_change_popup_title">Update user roles</string>
+    <string name="user_list_item_roles_change_popup_title_save_changes">Save</string>
+    <string name="user_list_item_roles_change_confirmation_toast">User roles have been updated</string>
+    <string name="user_list_item_removed_confirmation_toast">User has been removed from the database</string>
+    <string name="user_list_item_iscurrentuser_label">(you)</string>
+
+    <string name="group_ad_scanner_inprogress_notice">Scanning …</string>
+
     <string name="group_attendance_verifier_tx_time_notice">* please bear in mind, that it may take up to 5 minutes to record an attendance to the blockchain</string>
     <string name="group_attendance_verifier_explanation">To enable transparency, every attendance record in Kleo is replicated to Ethereum blockchain, so that every attendance record can be verified without relying on trust.</string>
-    <string name="form_select_group">Select group:</string>
-    <string name="form_select_session">Select session:</string>
-    <string name="form_find_transaction">Find transaction</string>
+    <string name="group_attendance_verifier_group_chooser_label">Select group:</string>
+    <string name="group_attendance_verifier_session_chooser_label">Select session:</string>
+    <string name="group_attendance_verifier_find_tx_btn">Find transaction</string>
     <string name="group_attendance_verifier_tx_not_found">No Record*</string>
     <string name="group_attendance_verifier_tx_found">Tx Found</string>
 </resources>

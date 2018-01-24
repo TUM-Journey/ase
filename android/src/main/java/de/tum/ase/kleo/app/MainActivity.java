@@ -22,7 +22,7 @@ import de.tum.ase.kleo.app.group.GroupListFragment;
 import de.tum.ase.kleo.app.group.attendance.GroupAttendanceVerifierFragment;
 import de.tum.ase.kleo.app.group.attendance.advertisement.GroupAdvertisementBroadcasterFragment;
 import de.tum.ase.kleo.app.group.attendance.advertisement.GroupAdvertisementScannerFragment;
-import de.tum.ase.kleo.app.user.UserAttendanceFragment;
+import de.tum.ase.kleo.app.user.UserAttendanceListFragment;
 import de.tum.ase.kleo.app.user.UserListFragment;
 
 import static java.lang.String.format;
@@ -41,17 +41,17 @@ public class MainActivity extends AppCompatActivity
         final Principal principal = backendClient.principal().blockingGet();
 
         // Init action bar and drawer layout
-        final Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.main_toolbar);
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.main_menu_open_msg, R.string.main_menu_close_msg);
 
         setSupportActionBar(toolbar);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         // Setup Navigation View
-        final NavigationView navigationView = findViewById(R.id.nav_view);
+        final NavigationView navigationView = findViewById(R.id.main_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         // 1.1. Hide menu items from not eligible users in Navigation View
@@ -68,9 +68,9 @@ public class MainActivity extends AppCompatActivity
 
         // 1.2. Fill out Navigation View header with student info
         final View headerView = navigationView.getHeaderView(0);
-        final TextView usernameView = headerView.findViewById(R.id.menuUserName);
-        final TextView emailView = headerView.findViewById(R.id.menuUserEmail);
-        final TextView studentIdView = headerView.findViewById(R.id.menuUserStudentId);
+        final TextView usernameView = headerView.findViewById(R.id.main_menu_header_user_name_txt);
+        final TextView emailView = headerView.findViewById(R.id.main_menu_header_user_email_txt);
+        final TextView studentIdView = headerView.findViewById(R.id.main_menu_header_user_studentid_txt);
 
         usernameView.setText(principal.name());
         emailView.setText(principal.email());
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = new GroupAttendanceVerifierFragment();
                 break;
             case R.id.menu_user_attendance:
-                fragment = new UserAttendanceFragment();
+                fragment = new UserAttendanceListFragment();
                 break;
             case R.id.menu_group_advertisement_broadcaster:
                 fragment = new GroupAdvertisementBroadcasterFragment();

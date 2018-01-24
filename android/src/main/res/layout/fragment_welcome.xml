@@ -3,12 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.tum.ase.kleo.app.WelcomeFragment"
-    tools:layout_editor_absoluteY="81dp">
-
+    tools:context="de.tum.ase.kleo.app.WelcomeFragment">
 
     <LinearLayout
-        android:id="@+id/welcomeLinearLayout"
         android:layout_width="0dp"
         android:layout_height="300dp"
         android:layout_marginBottom="8dp"
@@ -21,33 +18,28 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/welcomeKleoDiamond"
             android:layout_width="221dp"
             android:layout_height="100dp"
             android:layout_margin="15dp"
             android:src="@drawable/kleo_diamond" />
 
         <TextView
-            android:id="@+id/welcomeText"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="@string/welcome_msg"
+            android:text="@string/welcome_message"
             android:textAlignment="center"
-            android:textSize="18sp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="82dp" />
+            android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/welcomeAskAction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="@string/swipe_to_start"
+            android:text="@string/welcome_swipe_to_start_notice"
             android:textAlignment="center"
             android:textSize="18sp"
-            android:textStyle="bold"
-            tools:layout_editor_absoluteX="77dp"
-            tools:layout_editor_absoluteY="439dp" />
+            android:textStyle="bold" />
+
     </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

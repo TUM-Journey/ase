@@ -7,27 +7,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.client.dto.AttendanceDTO;
 
 import static de.tum.ase.kleo.app.support.DateTimeFormatters.simpleDate;
 
-public class UserAttendanceAdapter extends RecyclerView.Adapter<UserAttendanceAdapter.GroupAttendanceListItem> {
+public class UserAttendanceListAdapter extends RecyclerView.Adapter<UserAttendanceListAdapter.GroupAttendanceListItem> {
 
     private final List<AttendanceDTO> attendances;
 
-    public UserAttendanceAdapter(List<AttendanceDTO> attendances) {
+    public UserAttendanceListAdapter(List<AttendanceDTO> attendances) {
         this.attendances = attendances;
     }
 
     @Override
     public GroupAttendanceListItem onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_user_attendance_item, parent, false);
+                .inflate(R.layout.fragment_user_attendance_list_item, parent, false);
 
         return new GroupAttendanceListItem(view);
     }
@@ -55,9 +53,9 @@ public class UserAttendanceAdapter extends RecyclerView.Adapter<UserAttendanceAd
         GroupAttendanceListItem(View view) {
             super(view);
 
-            name = view.findViewById(R.id.groupAttendanceName);
-            date = view.findViewById(R.id.groupAttendanceDate);
-            sessionType = view.findViewById(R.id.groupAttendanceSessionType);
+            name = view.findViewById(R.id.group_attendance_list_item_name_txt);
+            date = view.findViewById(R.id.group_attendance_list_item_date_txt);
+            sessionType = view.findViewById(R.id.group_attendance_list_item_session_type_txt);
         }
 
         public void setName(String name) {

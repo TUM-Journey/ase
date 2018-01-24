@@ -7,7 +7,7 @@
     tools:layout_editor_absoluteY="81dp">
 
     <ImageView
-        android:id="@+id/radarIcon"
+        android:id="@+id/group_ad_scanner_radar_img"
         android:layout_width="80dp"
         android:layout_height="71dp"
         android:layout_marginEnd="8dp"
@@ -19,25 +19,25 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/group_ad_scanner_list_label"
+        android:id="@+id/group_ad_scanner_list_label_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="@string/group_ad_scanner_list_label"
+        android:text="@string/group_ad_scanner_inprogress_notice"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radarIcon" />
+        app:layout_constraintTop_toBottomOf="@+id/group_ad_scanner_radar_img" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/group_ad_scanner_list"
+        android:id="@+id/group_ad_scanner_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/group_ad_scanner_list_label"
+        app:layout_constraintTop_toBottomOf="@+id/group_ad_scanner_list_label_txt"
         tools:listitem="@layout/fragment_group_advertisement_scanner_item" />
 
 </android.support.constraint.ConstraintLayout>

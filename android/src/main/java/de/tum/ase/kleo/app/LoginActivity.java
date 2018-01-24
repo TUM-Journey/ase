@@ -34,21 +34,21 @@ public class LoginActivity extends Activity {
 
         loggingInDialog = new ProgressDialog(LoginActivity.this);
         loggingInDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        loggingInDialog.setMessage(getString(R.string.logging_in));
+        loggingInDialog.setMessage(getString(R.string.login_popup_process_label));
         loggingInDialog.setIndeterminate(true);
         loggingInDialog.setCanceledOnTouchOutside(false);
 
-        findViewById(R.id.loginSubmit).setOnClickListener(v -> LoginActivity.this.authenticate());
+        findViewById(R.id.login_submit_btn).setOnClickListener(v -> LoginActivity.this.authenticate());
     }
 
     private void authenticate() {
-        final String email = ((EditText) findViewById(R.id.loginEmail)).getText().toString();
-        final String password = ((EditText) findViewById(R.id.loginPassword)).getText().toString();
+        final String email = ((EditText) findViewById(R.id.login_email_input)).getText().toString();
+        final String password = ((EditText) findViewById(R.id.login_password_input)).getText().toString();
 
         if (isBlank(email)) {
-            Toast.makeText(getApplicationContext(), R.string.empty_email, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.login_warning_empty_email, Toast.LENGTH_LONG).show();
         } else if (isBlank(password)) {
-            Toast.makeText(getApplicationContext(), R.string.empty_password, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.login_warning_empty_password, Toast.LENGTH_LONG).show();
         } else {
             backendClient.authenticate(email, password)
                     .subscribeOn(Schedulers.io())
@@ -77,7 +77,7 @@ public class LoginActivity extends Activity {
     }
 
     private void helloAndProceed(Principal p) {
-        final String helloToastMsg = getString(R.string.hello_toast, p.name());
+        final String helloToastMsg = getString(R.string.main_hello_toast, p.name());
         Toast.makeText(getApplicationContext(), helloToastMsg, Toast.LENGTH_LONG).show();
 
         proceed();

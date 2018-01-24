@@ -1,27 +1,25 @@
-<android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="70dp">
 
     <TextView
-        android:text="aa"
-        android:id="@+id/group_ad_scanner_list_item_name"
+        android:id="@+id/group_ad_scanner_list_item_name_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:text="aa"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/group_ad_scanner_list_item_session_time"
+        app:layout_constraintBottom_toTopOf="@+id/group_ad_scanner_list_item_session_time_txt"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:text="aa"
-        android:id="@+id/group_ad_scanner_list_item_session_time"
+        android:id="@+id/group_ad_scanner_list_item_session_time_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -30,8 +28,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:text="aa"
-        android:id="@+id/group_ad_scanner_list_item_session_type"
+        android:id="@+id/group_ad_scanner_list_item_session_type_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -47,9 +44,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         android:text="at"
-        app:layout_constraintBottom_toBottomOf="@+id/group_ad_scanner_list_item_session_time"
-        app:layout_constraintStart_toEndOf="@+id/group_ad_scanner_list_item_session_time"
-        app:layout_constraintTop_toTopOf="@+id/group_ad_scanner_list_item_session_time" />
+        app:layout_constraintBottom_toBottomOf="@+id/group_ad_scanner_list_item_session_time_txt"
+        app:layout_constraintStart_toEndOf="@+id/group_ad_scanner_list_item_session_time_txt"
+        app:layout_constraintTop_toTopOf="@+id/group_ad_scanner_list_item_session_time_txt" />
 
     <TextView
         android:id="@+id/group_ad_scanner_list_item_session_location"

@@ -10,14 +10,8 @@ import android.widget.TextView;
 
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.client.dto.GroupDTO;
@@ -86,9 +80,9 @@ public class GroupAdvertisementScannerAdapter extends RecyclerView.Adapter<Group
         GroupAdListItem(View view) {
             super(view);
 
-            name = view.findViewById(R.id.group_ad_scanner_list_item_name);
-            sessionTime = view.findViewById(R.id.group_ad_scanner_list_item_session_time);
-            sessionType = view.findViewById(R.id.group_ad_scanner_list_item_session_type);
+            name = view.findViewById(R.id.group_ad_scanner_list_item_name_txt);
+            sessionTime = view.findViewById(R.id.group_ad_scanner_list_item_session_time_txt);
+            sessionType = view.findViewById(R.id.group_ad_scanner_list_item_session_type_txt);
             sessionLocation = view.findViewById(R.id.group_ad_scanner_list_item_session_location);
         }
 

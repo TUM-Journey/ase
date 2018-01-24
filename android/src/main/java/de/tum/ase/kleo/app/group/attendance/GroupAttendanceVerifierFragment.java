@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.http.HttpService;
@@ -30,8 +28,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 import de.tum.ase.kleo.android.BuildConfig;
 import de.tum.ase.kleo.android.R;
@@ -42,7 +38,6 @@ import de.tum.ase.kleo.app.client.UsersApi;
 import de.tum.ase.kleo.app.client.dto.GroupDTO;
 import de.tum.ase.kleo.app.client.dto.SessionDTO;
 import de.tum.ase.kleo.app.client.dto.UserDTO;
-import de.tum.ase.kleo.app.support.ethereum.AndroidWalletUtils;
 import de.tum.ase.kleo.app.support.ui.ArrayAdapterItem;
 import de.tum.ase.kleo.app.support.ui.ReactiveLayoutFragment;
 import de.tum.ase.kleo.ethereum.AttendanceTracker;
@@ -82,11 +77,11 @@ public class GroupAttendanceVerifierFragment extends ReactiveLayoutFragment {
 
     @Override
     protected void onCreateLayout(View view, Bundle state) {
-        final Spinner groupSpinner = view.findViewById(R.id.groupAttendanceVerifierGroupChooser);
-        final Spinner sessionSpinner = view.findViewById(R.id.groupAttendanceVerifierSessionChooser);
-        final Spinner userSpinner = view.findViewById(R.id.groupAttendanceVerifierUserChooser);
-        final Button findBtn = view.findViewById(R.id.groupAttendanceVerifierFindTransactionBtn);
-        final Button walletFileFindBtn = view.findViewById(R.id.groupAttendanceVerifierWalletFileChooserBtn);
+        final Spinner groupSpinner = view.findViewById(R.id.group_attendance_verifier_group_chooser);
+        final Spinner sessionSpinner = view.findViewById(R.id.group_attendance_verifier_session_chooser);
+        final Spinner userSpinner = view.findViewById(R.id.group_attendance_verifier_user_chooser);
+        final Button findBtn = view.findViewById(R.id.group_attendance_verifier_find_tx_btn);
+        final Button walletFileFindBtn = view.findViewById(R.id.group_attendance_verifier_wallet_chooser_btn);
 
         groupSpinner.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
@@ -272,17 +267,17 @@ public class GroupAttendanceVerifierFragment extends ReactiveLayoutFragment {
     }
 
     private String getWalletPassword() {
-        final TextView pass = getView().findViewById(R.id.groupAttendanceVerifierWalletPassoword);
+        final TextView pass = getView().findViewById(R.id.group_attendance_verifier_wallet_password_input);
         return pass.getText().toString();
     }
 
     private void showSessionValidationLoadingCircle() {
-        getView().findViewById(R.id.groupAttendanceVerifierProgressBar)
+        getView().findViewById(R.id.group_attendance_verifier_progressbar)
                 .setVisibility(View.VISIBLE);
     }
 
     private void hideSessionValidationLoadingCircle() {
-        getView().findViewById(R.id.groupAttendanceVerifierProgressBar)
+        getView().findViewById(R.id.group_attendance_verifier_progressbar)
                 .setVisibility(View.INVISIBLE);
     }
 
@@ -294,28 +289,28 @@ public class GroupAttendanceVerifierFragment extends ReactiveLayoutFragment {
     private void showSessionIsValidResult() {
         hideSessionIsNotValidResult();
 
-        getView().findViewById(R.id.groupAttendanceVerifierResultOk)
+        getView().findViewById(R.id.group_attendance_verifier_result_txok_txt)
                 .setVisibility(View.VISIBLE);
     }
 
     private void hideSessionIsValidResult() {
-        getView().findViewById(R.id.groupAttendanceVerifierResultOk)
+        getView().findViewById(R.id.group_attendance_verifier_result_txok_txt)
                 .setVisibility(View.INVISIBLE);
     }
 
     private void showSessionIsNotValidResult() {
         hideSessionIsValidResult();
-        getView().findViewById(R.id.groupAttendanceVerifierResultNoRecord)
+        getView().findViewById(R.id.group_attendance_verifier_result_notx_txt)
                 .setVisibility(View.VISIBLE);
     }
 
     private void hideSessionIsNotValidResult() {
-        getView().findViewById(R.id.groupAttendanceVerifierResultNoRecord)
+        getView().findViewById(R.id.group_attendance_verifier_result_notx_txt)
                 .setVisibility(View.INVISIBLE);
     }
 
     private void setBlockchainExternalLink(String txHash, String link) {
-        final TextView linkTxt = getView().findViewById(R.id.groupAttendanceVerifierContractLink);
+        final TextView linkTxt = getView().findViewById(R.id.group_attendance_verifier_contract_link_txt);
         linkTxt.setText(Html.fromHtml("<a href=\""+ link + "\">" + txHash + "</a>"));
         linkTxt.setLinkTextColor(Color.BLUE);
         linkTxt.setClickable(true);

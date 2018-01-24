@@ -7,48 +7,48 @@
         <item
             android:id="@+id/menu_group_list"
             android:icon="@drawable/ic_import_contacts"
-            android:title="@string/menu_group_list" />
+            android:title="@string/main_menu_group_list" />
         <item
             android:id="@+id/menu_attendance_blockchain"
             android:icon="@drawable/ic_verified_user"
-            android:title="@string/menu_attendance_blockchain" />
+            android:title="@string/main_menu_attendance_blockchain" />
     </group>
 
 
-    <item android:title="@string/student" android:id="@+id/menu_student">
+    <item android:title="@string/main_menu_group_header_student" android:id="@+id/menu_student">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/menu_group_advertisement_scanner"
                     android:icon="@drawable/ic_explore"
-                    android:title="@string/menu_group_advertisement_scanner" />
+                    android:title="@string/main_menu_group_advertisement_scanner" />
 
                 <item
                     android:id="@+id/menu_user_attendance"
                     android:icon="@drawable/ic_assessment"
-                    android:title="@string/menu_user_attendance" />
+                    android:title="@string/main_menu_user_attendance_list" />
             </group>
         </menu>
     </item>
 
-    <item android:title="@string/tutor" android:id="@+id/menu_tutor">
+    <item android:title="@string/main_menu_group_header_tutor" android:id="@+id/menu_tutor">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/menu_group_advertisement_broadcaster"
                     android:icon="@drawable/ic_router"
-                    android:title="@string/menu_group_advertisement_broadcaster" />
+                    android:title="@string/main_menu_group_ad_broadcaster" />
             </group>
         </menu>
     </item>
 
-    <item android:title="@string/superuser" android:id="@+id/menu_superuser">
+    <item android:title="@string/main_menu_group_header_superuser" android:id="@+id/menu_superuser">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/menu_user_list"
                     android:icon="@drawable/ic_contacts"
-                    android:title="@string/menu_user_list" />
+                    android:title="@string/main_menu_user_list" />
             </group>
         </menu>
     </item>
@@ -57,6 +57,6 @@
         <item
             android:id="@+id/menu_logout"
             android:icon="@drawable/ic_directions_run"
-            android:title="@string/menu_logout" />
+            android:title="@string/main_menu_logout" />
     </group>
 </menu>

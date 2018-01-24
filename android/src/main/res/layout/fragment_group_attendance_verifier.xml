@@ -3,11 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.tum.ase.kleo.app.group.attendance.GroupAttendanceVerifierFragment"
-    tools:layout_editor_absoluteY="81dp">
+    tools:context="de.tum.ase.kleo.app.group.attendance.GroupAttendanceVerifierFragment">
 
     <LinearLayout
-        android:id="@+id/groupAttendanceVerifierFormLayout"
         android:layout_width="380dp"
         android:layout_height="601dp"
         android:layout_marginBottom="8dp"
@@ -23,10 +21,9 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:layout_width="119dp"
+            android:layout_width="120dp"
             android:layout_height="97dp"
             android:src="@drawable/logo_ethereum" />
-
 
         <TextView
             android:layout_width="match_parent"
@@ -43,7 +40,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/groupAttendanceVerifierWalletFileChooserBtn"
+                android:id="@+id/group_attendance_verifier_wallet_chooser_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Wallet File"
@@ -51,7 +48,7 @@
                 tools:layout_editor_absoluteY="0dp" />
 
             <EditText
-                android:id="@+id/groupAttendanceVerifierWalletPassoword"
+                android:id="@+id/group_attendance_verifier_wallet_password_input"
                 android:layout_width="176dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -62,14 +59,13 @@
                 tools:layout_editor_absoluteY="0dp" />
         </LinearLayout>
 
-
         <TextView
             android:layout_width="208dp"
             android:layout_height="wrap_content"
-            android:text="@string/form_select_group" />
+            android:text="@string/group_attendance_verifier_group_chooser_label" />
 
         <Spinner
-            android:id="@+id/groupAttendanceVerifierGroupChooser"
+            android:id="@+id/group_attendance_verifier_group_chooser"
             style="@android:style/Widget.Material.Light.Spinner.Underlined"
             android:layout_width="208dp"
             android:layout_height="43dp" />
@@ -77,10 +73,10 @@
         <TextView
             android:layout_width="208dp"
             android:layout_height="wrap_content"
-            android:text="@string/form_select_session" />
+            android:text="@string/group_attendance_verifier_session_chooser_label" />
 
         <Spinner
-            android:id="@+id/groupAttendanceVerifierSessionChooser"
+            android:id="@+id/group_attendance_verifier_session_chooser"
             style="@android:style/Widget.Material.Light.Spinner.Underlined"
             android:layout_width="208dp"
             android:layout_height="43dp" />
@@ -92,23 +88,23 @@
             android:text="Select user:" />
 
         <Spinner
-            android:id="@+id/groupAttendanceVerifierUserChooser"
+            android:id="@+id/group_attendance_verifier_user_chooser"
             style="@android:style/Widget.Material.Light.Spinner.Underlined"
             android:layout_width="208dp"
             android:layout_height="43dp" />
 
         <Button
-            android:id="@+id/groupAttendanceVerifierFindTransactionBtn"
+            android:id="@+id/group_attendance_verifier_find_tx_btn"
             android:layout_width="208dp"
             android:layout_height="wrap_content"
-            android:text="@string/form_find_transaction" />
+            android:text="@string/group_attendance_verifier_find_tx_btn" />
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="208dp"
             android:layout_height="36dp">
 
             <TextView
-                android:id="@+id/groupAttendanceVerifierResultNoRecord"
+                android:id="@+id/group_attendance_verifier_result_notx_txt"
                 android:layout_width="192dp"
                 android:layout_height="36dp"
                 android:layout_marginBottom="8dp"
@@ -127,7 +123,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/groupAttendanceVerifierResultOk"
+                android:id="@+id/group_attendance_verifier_result_txok_txt"
                 android:layout_width="192dp"
                 android:layout_height="36dp"
                 android:layout_marginBottom="8dp"
@@ -146,7 +142,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ProgressBar
-                android:id="@+id/groupAttendanceVerifierProgressBar"
+                android:id="@+id/group_attendance_verifier_progressbar"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="31dp"
                 android:layout_height="23dp"
@@ -155,16 +151,14 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/groupAttendanceVerifierResultOk"
+                app:layout_constraintBottom_toBottomOf="@+id/group_attendance_verifier_result_txok_txt"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/groupAttendanceVerifierResultOk" />
-
+                app:layout_constraintTop_toTopOf="@+id/group_attendance_verifier_result_txok_txt" />
 
         </android.support.constraint.ConstraintLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout2"
             android:layout_width="380dp"
             android:layout_height="61dp"
             android:layout_marginBottom="8dp"
@@ -176,7 +170,6 @@
 
 
             <TextView
-                android:id="@+id/groupAttendanceVerifierTxTimeWarning"
                 android:layout_width="273dp"
                 android:layout_height="wrap_content"
                 android:text="@string/group_attendance_verifier_tx_time_notice"
@@ -186,12 +179,11 @@
                 tools:layout_editor_absoluteY="532dp" />
 
             <TextView
-                android:id="@+id/groupAttendanceVerifierContractLink"
+                android:id="@+id/group_attendance_verifier_contract_link_txt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center" />
         </LinearLayout>
-
 
     </LinearLayout>
 

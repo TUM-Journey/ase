@@ -3,9 +3,7 @@ package de.tum.ase.kleo.app.user;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -25,14 +23,14 @@ import io.reactivex.schedulers.Schedulers;
 import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeIn;
 import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeOut;
 
-public class UserAttendanceFragment extends ReactiveLayoutFragment {
+public class UserAttendanceListFragment extends ReactiveLayoutFragment {
 
     private StudentsApi studentApi;
     private RecyclerView listView;
     private Principal currentUser;
 
-    public UserAttendanceFragment() {
-        super(R.layout.fragment_user_attendance);
+    public UserAttendanceListFragment() {
+        super(R.layout.fragment_user_attendance_list);
     }
 
     @Override
@@ -48,8 +46,8 @@ public class UserAttendanceFragment extends ReactiveLayoutFragment {
 
     @Override
     protected void onFragmentCreated(View view, Bundle state) {
-        final ProgressBar progressBar = view.findViewById(R.id.groupAttendanceProgressBar);
-        listView = view.findViewById(R.id.groupAttendance);
+        final ProgressBar progressBar = view.findViewById(R.id.group_attendance_list_progressbar);
+        listView = view.findViewById(R.id.group_attendance_list_view);
         listView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         final Disposable groupsAttendancesReq = studentApi.getStudentAttendances(currentUser.id())
@@ -63,7 +61,7 @@ public class UserAttendanceFragment extends ReactiveLayoutFragment {
     }
 
     private void populateGroupAttendanceListView(List<AttendanceDTO> attendances) {
-        listView.setAdapter(new UserAttendanceAdapter(attendances));
+        listView.setAdapter(new UserAttendanceListAdapter(attendances));
     }
 
     private void showError(Throwable e) {

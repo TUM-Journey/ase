@@ -82,12 +82,12 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
         UserListItem(View view) {
             super(view);
 
-            name = view.findViewById(R.id.userListItemName);
-            isCurrentUser = view.findViewById(R.id.userListItemIsCurrent);
-            role = view.findViewById(R.id.userListItemRole);
+            name = view.findViewById(R.id.user_list_item_user_name_txt);
+            isCurrentUser = view.findViewById(R.id.user_list_item_user_is_current_label_txt);
+            role = view.findViewById(R.id.user_list_item_user_role_txt);
 
-            changeRoleButton = view.findViewById(R.id.userListItemChangeRole);
-            removeButton = view.findViewById(R.id.userListItemRemove);
+            changeRoleButton = view.findViewById(R.id.user_list_item_role_change_img_btn);
+            removeButton = view.findViewById(R.id.user_list_item_remove_img_btn);
         }
 
         void setIsCurrentUserLabelVisible(boolean isVisible) {
@@ -137,7 +137,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
             final ArrayList<UserDTO.RolesEnum> newUserRoles = new ArrayList<>(userRoles);
 
             new AlertDialog.Builder(itemView.getContext())
-                    .setTitle(R.string.user_roles_popup_title)
+                    .setTitle(R.string.user_list_item_roles_change_popup_title)
                     .setMultiChoiceItems(roleEnumValues, toPrimitive(currentUserRolesChecked),
                             (dialog, which, isChecked) -> {
                                 final UserDTO.RolesEnum userRoleChanged
@@ -149,7 +149,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
                                     newUserRoles.add(userRoleChanged);
                                 }
                             })
-                    .setPositiveButton(R.string.save, (dialog, which) -> {
+                    .setPositiveButton(R.string.user_list_item_roles_change_popup_title_save_changes, (dialog, which) -> {
                         setRoles(newUserRoles);
                         callback.accept(userId, newUserRoles);
                     }).show();

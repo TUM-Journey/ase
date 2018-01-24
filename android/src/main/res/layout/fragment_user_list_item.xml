@@ -1,11 +1,10 @@
-<android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="70dp">
 
     <TextView
-        android:id="@+id/userListItemName"
+        android:id="@+id/user_list_item_user_name_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -13,15 +12,13 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:textSize="18sp"
-        android:text="aa"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/userListItemRole"
+        app:layout_constraintBottom_toTopOf="@+id/user_list_item_user_role_txt"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:text="aa"
-        android:id="@+id/userListItemRole"
+        android:id="@+id/user_list_item_user_role_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -30,43 +27,43 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
-        android:id="@+id/userListItemRemove"
-        android:visibility="invisible"
-        android:background="?attr/selectableItemBackgroundBorderless"
+        android:id="@+id/user_list_item_remove_img_btn"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_delete_forever" />
 
     <ImageButton
-        android:id="@+id/userListItemChangeRole"
-        android:visibility="invisible"
+        android:id="@+id/user_list_item_role_change_img_btn"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/userListItemRemove"
+        app:layout_constraintEnd_toStartOf="@+id/user_list_item_remove_img_btn"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_credit_card" />
 
     <TextView
-        android:id="@+id/userListItemIsCurrent"
-        android:visibility="invisible"
+        android:id="@+id/user_list_item_user_is_current_label_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
-        android:text="@string/user_list_item_is_current_user"
+        android:text="@string/user_list_item_iscurrentuser_label"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/userListItemName"
-        app:layout_constraintStart_toEndOf="@+id/userListItemName"
-        app:layout_constraintTop_toTopOf="@+id/userListItemName" />
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/user_list_item_user_name_txt"
+        app:layout_constraintStart_toEndOf="@+id/user_list_item_user_name_txt"
+        app:layout_constraintTop_toTopOf="@+id/user_list_item_user_name_txt" />
 
 </android.support.constraint.ConstraintLayout>

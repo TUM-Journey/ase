@@ -12,7 +12,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import io.reactivex.Single;
-import io.reactivex.functions.Action;
 
 import static android.bluetooth.BluetoothGatt.GATT_SUCCESS;
 import static java.lang.Math.max;

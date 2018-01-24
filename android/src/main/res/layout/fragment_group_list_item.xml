@@ -1,10 +1,10 @@
-<android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="70dp">
 
     <TextView
-        android:id="@+id/studentGroupsListItemName"
+        android:id="@+id/group_list_item_name_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -13,41 +13,41 @@
         android:layout_marginTop="8dp"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/studentGroupsListItemStudentsLabel"
+        app:layout_constraintBottom_toTopOf="@+id/group_list_item_students_label_txt"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/studentGroupsListItemStudents"
+        android:id="@+id/group_list_item_student_count_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/studentGroupsListItemName"
-        android:layout_below="@+id/studentGroupsListItemName"
+        android:layout_alignEnd="@+id/group_list_item_name_txt"
+        android:layout_below="@+id/group_list_item_name_txt"
         android:layout_marginStart="2dp"
-        app:layout_constraintBottom_toBottomOf="@+id/studentGroupsListItemStudentsLabel"
-        app:layout_constraintStart_toEndOf="@+id/studentGroupsListItemStudentsLabel"
-        app:layout_constraintTop_toTopOf="@+id/studentGroupsListItemStudentsLabel" />
+        app:layout_constraintBottom_toBottomOf="@+id/group_list_item_students_label_txt"
+        app:layout_constraintStart_toEndOf="@+id/group_list_item_students_label_txt"
+        app:layout_constraintTop_toTopOf="@+id/group_list_item_students_label_txt" />
 
     <Switch
-        android:id="@+id/studentGroupsListItemRegisterSwitch"
+        android:id="@+id/group_list_item_registration_switch"
         android:layout_width="wrap_content"
         android:layout_height="23dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
-        android:text="@string/registered"
+        android:text="@string/group_list_item_register_switch_label"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/studentGroupsListItemStudentsLabel"
+        android:id="@+id/group_list_item_students_label_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
-        android:text="@string/students"
+        android:text="@string/group_list_item_students"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

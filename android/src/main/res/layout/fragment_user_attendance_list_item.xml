@@ -1,10 +1,10 @@
-<android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="70dp">
 
     <TextView
-        android:id="@+id/groupAttendanceName"
+        android:id="@+id/group_attendance_list_item_name_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -13,12 +13,12 @@
         android:layout_marginTop="8dp"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/groupAttendanceDate"
+        app:layout_constraintBottom_toTopOf="@+id/group_attendance_list_item_date_txt"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/groupAttendanceDate"
+        android:id="@+id/group_attendance_list_item_date_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/groupAttendanceSessionType"
+        android:id="@+id/group_attendance_list_item_session_type_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

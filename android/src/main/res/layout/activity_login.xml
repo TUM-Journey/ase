@@ -2,85 +2,83 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:screenOrientation="portrait"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.tum.ase.kleo.app.LoginActivity"
-    tools:layout_editor_absoluteY="25dp">
+    android:screenOrientation="portrait"
+    tools:context="de.tum.ase.kleo.app.LoginActivity">
 
     <ImageView
-        android:id="@+id/loginTumBg"
+        android:id="@+id/login_tum_bg_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop"
-        android:src="@drawable/tum_backgroud"
+        android:src="@drawable/tum_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/loginEmail"
+        android:id="@+id/login_email_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:ems="10"
-        android:hint="@string/tum_e_mail"
+        android:hint="@string/login_tum_email_label"
         android:inputType="textEmailAddress"
         android:singleLine="true"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/loginPassword"
-        app:layout_constraintEnd_toEndOf="@+id/loginPassword"
-        app:layout_constraintStart_toStartOf="@+id/loginPassword" />
+        app:layout_constraintBottom_toTopOf="@+id/login_password_input"
+        app:layout_constraintEnd_toEndOf="@+id/login_password_input"
+        app:layout_constraintStart_toStartOf="@+id/login_password_input" />
 
     <EditText
-        android:id="@+id/loginPassword"
+        android:id="@+id/login_password_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:ems="10"
-        android:hint="@string/password"
+        android:hint="@string/login_password_label"
         android:inputType="textPassword"
         android:singleLine="true"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/loginSubmit"
-        app:layout_constraintEnd_toEndOf="@+id/loginSubmit"
-        app:layout_constraintStart_toStartOf="@+id/loginSubmit" />
+        app:layout_constraintBottom_toTopOf="@+id/login_submit_btn"
+        app:layout_constraintEnd_toEndOf="@+id/login_submit_btn"
+        app:layout_constraintStart_toStartOf="@+id/login_submit_btn" />
 
     <Button
-        android:id="@+id/loginSubmit"
+        android:id="@+id/login_submit_btn"
         style="@android:style/Widget.Material.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="110dp"
-        android:text="@string/login"
-        app:layout_constraintBottom_toBottomOf="@+id/loginTumBg"
+        android:text="@string/login_submit_btn"
+        app:layout_constraintBottom_toBottomOf="@+id/login_tum_bg_img"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/loginKeloDiamond"
+        android:id="@+id/login_kleo_logo_img"
         android:layout_width="127dp"
         android:layout_height="131dp"
         android:layout_marginTop="100dp"
         android:src="@drawable/kleo_diamond"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/loginTumBg" />
+        app:layout_constraintTop_toTopOf="@+id/login_tum_bg_img" />
 
     <TextView
-        android:id="@+id/loginKleoName"
+        android:id="@+id/login_kleo_logo_name_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/satisfy"
-        android:text="@string/app_name_logo"
+        android:text="@string/app_name_lowercase"
         android:textAlignment="center"
         android:textSize="36sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/loginKeloDiamond"
-        app:layout_constraintStart_toStartOf="@+id/loginKeloDiamond"
-        app:layout_constraintTop_toBottomOf="@+id/loginKeloDiamond" />
+        app:layout_constraintEnd_toEndOf="@+id/login_kleo_logo_img"
+        app:layout_constraintStart_toStartOf="@+id/login_kleo_logo_img"
+        app:layout_constraintTop_toBottomOf="@+id/login_kleo_logo_img" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -93,24 +91,22 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/loginWith"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
-            android:text="@string/login_with" />
+            android:text="@string/login_with_tum_account_prefix" />
 
         <ImageView
-            android:id="@+id/loginTumLogo"
             android:layout_width="42dp"
             android:layout_height="28dp"
             android:src="@drawable/tum_logo" />
 
         <TextView
-            android:id="@+id/loginAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:text="@string/account" />
+            android:text="@string/login_with_tum_account_postfix" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

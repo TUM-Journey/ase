@@ -6,7 +6,7 @@
     tools:context="de.tum.ase.kleo.app.group.GroupListFragment">
 
     <ProgressBar
-        android:id="@+id/groupListProgressBar"
+        android:id="@+id/group_list_progressbar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/groupList"
+        android:id="@+id/group_list_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scrollbars="vertical"
@@ -25,5 +25,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/fragment_group_list_item"/>
+        tools:listitem="@layout/fragment_group_list_item" />
+
 </android.support.constraint.ConstraintLayout>

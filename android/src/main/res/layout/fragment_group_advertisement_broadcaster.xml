@@ -3,13 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.tum.ase.kleo.app.group.attendance.advertisement.GroupAdvertisementBroadcasterFragment"
-    tools:layout_editor_absoluteY="81dp">
+    tools:context="de.tum.ase.kleo.app.group.attendance.advertisement.GroupAdvertisementBroadcasterFragment">
 
 
     <LinearLayout
-        android:layout_width="318dp"
-        android:layout_height="254dp"
+        android:layout_width="320dp"
+        android:layout_height="255dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -22,37 +21,26 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/groupAdBroadcasterIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/antenna_broadcast"
-            tools:layout_editor_absoluteX="141dp"
-            tools:layout_editor_absoluteY="164dp" />
+            android:src="@drawable/antenna_broadcast" />
 
         <TextView
-            android:id="@+id/groupAdBroadcasterChooserLabel"
-            android:layout_width="191dp"
+            android:layout_width="190dp"
             android:layout_height="23dp"
-            android:text="@string/select_group_to_broadcast"
-            android:textAlignment="center"
-            tools:layout_editor_absoluteX="110dp"
-            tools:layout_editor_absoluteY="164dp" />
+            android:text="@string/group_ad_broadcast_group_chooser_label"
+            android:textAlignment="center" />
 
         <Spinner
-            android:id="@+id/groupAdBroadcasterChooser"
+            android:id="@+id/group_ad_broadcaster_group_chooser"
             style="@android:style/Widget.Material.Light.Spinner.Underlined"
-            android:layout_width="208dp"
-            android:layout_height="43dp"
-            tools:layout_editor_absoluteX="87dp"
-            tools:layout_editor_absoluteY="380dp" />
+            android:layout_width="190dp"
+            android:layout_height="43dp" />
 
         <ToggleButton
-            android:id="@+id/groupAdBroadcasterSwitchBtn"
+            android:id="@+id/group_ad_broadcaster_switch_btn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ToggleButton"
-            tools:layout_editor_absoluteX="161dp"
-            tools:layout_editor_absoluteY="429dp" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
