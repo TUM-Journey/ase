@@ -31,7 +31,9 @@ dependencies {
     implementation deps.defs.android.gsonFire
     implementation deps.defs.android.jwtDecode
 
-    implementation deps.defs.android.web3j
+    implementation (deps.defs.android.web3j) {
+        exclude group: 'io.reactivex', module: 'rxjava'
+    }
 
     testImplementation deps.defs.common.junit
     testImplementation deps.defs.common.assertj
@@ -59,6 +61,8 @@ android {
         targetSdkVersion configs.android.targetSdkVersion
         versionCode 1
         versionName "1.0"
+
+        multiDexEnabled true
     }
 
     productFlavors {

@@ -1,13 +1,18 @@
 package de.tum.ase.kleo.application.api.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.web3j.protocol.core.RemoteCall;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import de.tum.ase.kleo.application.api.GroupsApiDelegate;
 import de.tum.ase.kleo.application.api.dto.GroupDTO;
@@ -18,15 +23,13 @@ import de.tum.ase.kleo.application.api.dto.PassDtoMapper;
 import de.tum.ase.kleo.application.api.dto.SessionDTO;
 import de.tum.ase.kleo.application.api.dto.UserDTO;
 import de.tum.ase.kleo.application.api.dto.UserToDtoSerializer;
-import de.tum.ase.kleo.domain.Group;
-import de.tum.ase.kleo.domain.GroupCode;
 import de.tum.ase.kleo.domain.GroupRepository;
 import de.tum.ase.kleo.domain.PassDetokenizer;
 import de.tum.ase.kleo.domain.SessionType;
 import de.tum.ase.kleo.domain.UserRepository;
-import de.tum.ase.kleo.domain.id.GroupId;
 import de.tum.ase.kleo.domain.id.SessionId;
 import de.tum.ase.kleo.domain.id.UserId;
+import de.tum.ase.kleo.ethereum.AttendanceTracker;
 import lombok.val;
 
 import static java.util.stream.Collectors.toSet;
@@ -34,7 +37,10 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Service
 @Transactional(readOnly = true)
+@Deprecated // TODO Refactor see UserResource
 public class GroupsService implements GroupsApiDelegate {
+
+    private final Logger logger = LoggerFactory.getLogger(GroupsService.class);
 
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
@@ -46,10 +52,13 @@ public class GroupsService implements GroupsApiDelegate {
     private final PassDtoMapper passDtoMapper;
     private final PassDetokenizer passDetokenizer;
 
+    private final AttendanceTracker attendanceTracker;
+
     @Autowired
     public GroupsService(GroupRepository groupRepository, UserRepository userRepository,
                          UserToDtoSerializer userToDtoSerializer, GroupToDtoSerializer groupToDtoSerializer,
-                         GroupFromDtoFactory groupFromDtoFactory, PassDtoMapper passDtoMapper, PassDetokenizer passDetokenizer) {
+                         GroupFromDtoFactory groupFromDtoFactory, PassDtoMapper passDtoMapper,
+                         PassDetokenizer passDetokenizer, AttendanceTracker attendanceTracker) {
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
         this.userToDtoSerializer = userToDtoSerializer;
@@ -57,6 +66,7 @@ public class GroupsService implements GroupsApiDelegate {
         this.groupFromDtoFactory = groupFromDtoFactory;
         this.passDtoMapper = passDtoMapper;
         this.passDetokenizer = passDetokenizer;
+        this.attendanceTracker = attendanceTracker;
     }
 
     @Override
@@ -182,7 +192,15 @@ public class GroupsService implements GroupsApiDelegate {
         if (group == null)
             return ResponseEntity.notFound().build();
 
-        group.attend(pass);
+        val attendanceRecord = group.attend(pass);
+        val futureTxReceipt = attendanceTracker.recordAttendance(
+                attendanceRecord.sessionId().toString(),
+                attendanceRecord.studentId().toString()).sendAsync();
+
+        futureTxReceipt.thenAccept((txReceipt) -> {
+            logger.info("Attendance has been recorded to the blockchain." +
+                    "TxHash = {}", txReceipt.getTransactionHash());
+        });
 
         return ResponseEntity.ok().build();
     }

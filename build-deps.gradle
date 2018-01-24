@@ -22,7 +22,7 @@ ext {
             playServicesAuth: '9.8.0',
 
             rxAndroid: '2.0.1',
-            web3j: '3.1.1-android',
+            web3j: '3.0.1-android',
 
             retrofit: '2.3.0',
             oltuOAuth2: '1.0.1',
