@@ -104,7 +104,7 @@ public class BackendClient {
         });
     }
 
-    public void logout() {
+    public synchronized void logout() {
         // Clean auth interceptors
         apiClient.setApiAuthorizations(new HashMap<>());
         apiClient.getOkBuilder().interceptors().remove(oAuth);
@@ -112,6 +112,7 @@ public class BackendClient {
 
         lastAccessToken = null;
         principal = null;
+        services.clear();
 
         isAuthenticated.set(false);
     }
@@ -129,19 +130,21 @@ public class BackendClient {
             throw new AuthenticationException("You must authenticate first");
         }
 
-        final String accessToken = oAuth.getAccessToken();
-        if (accessToken == null) {
-            throw new AuthenticationException("Invalid state, null access token");
-        }
+        synchronized (this) {
+            final String accessToken = oAuth.getAccessToken();
+            if (accessToken == null) {
+                throw new AuthenticationException("Invalid state, null access token");
+            }
 
-        if (!accessToken.equals(lastAccessToken)) {
-            lastAccessToken = accessToken;
-            principal = parseJwtPrincipal(accessToken);
-        } else if (principal == null) {
-            throw new IllegalStateException("Principal is null but must have decoded jwt");
-        }
+            if (!accessToken.equals(lastAccessToken)) {
+                lastAccessToken = accessToken;
+                principal = parseJwtPrincipal(accessToken);
+            } else if (principal == null) {
+                throw new IllegalStateException("Principal is null but must have decoded jwt");
+            }
 
-        return principal;
+            return principal;
+        }
     }
 
     private Principal parseJwtPrincipal(String jwtAccessToken) {
