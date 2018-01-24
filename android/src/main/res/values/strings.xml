@@ -40,4 +40,12 @@
     <string name="save">Save</string>
     <string name="group_ad_select_first">Select group first</string>
     <string name="group_ad_scanner_list_label">Scanning ...</string>
+    <string name="attendance_blockchain">Attendance Blockchain</string>
+    <string name="group_attendance_verifier_tx_time_notice">* please bear in mind, that it may take up to 5 minutes to record an attendance to the blockchain</string>
+    <string name="group_attendance_verifier_explanation">To enable transparency, every attendance record in Kleo is replicated to Ethereum blockchain, so that every attendance record can be verified without relying on trust.</string>
+    <string name="form_select_group">Select group:</string>
+    <string name="form_select_session">Select session:</string>
+    <string name="form_find_transaction">Find transaction</string>
+    <string name="group_attendance_verifier_tx_not_found">No Record*</string>
+    <string name="group_attendance_verifier_tx_found">Tx Found</string>
 </resources>

@@ -1,0 +1,141 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="de.tum.ase.kleo.app.group.attendance.GroupAttendanceVerifierFragment"
+    tools:layout_editor_absoluteY="81dp">
+
+
+    <TextView
+        android:id="@+id/groupAttendanceVerifierTxTimeWarning"
+        android:layout_width="273dp"
+        android:layout_height="39dp"
+        android:layout_margin="5dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/group_attendance_verifier_tx_time_notice"
+        android:textAlignment="center"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/groupAttendanceVerifierFormLayout" />
+
+    <LinearLayout
+        android:id="@+id/groupAttendanceVerifierFormLayout"
+        android:layout_width="379dp"
+        android:layout_height="427dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="141dp"
+            android:layout_height="90dp"
+            android:src="@drawable/logo_ethereum" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/group_attendance_verifier_explanation"
+            android:textAlignment="center"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="208dp"
+            android:layout_height="wrap_content"
+            android:text="@string/form_select_group" />
+
+        <Spinner
+            android:id="@+id/groupAttendanceVerifierGroupChooser"
+            style="@android:style/Widget.Material.Light.Spinner.Underlined"
+            android:layout_width="208dp"
+            android:layout_height="43dp" />
+
+        <TextView
+            android:layout_width="208dp"
+            android:layout_height="wrap_content"
+            android:text="@string/form_select_session" />
+
+        <Spinner
+            android:id="@+id/groupAttendanceVerifierSessionChooser"
+            style="@android:style/Widget.Material.Light.Spinner.Underlined"
+            android:layout_width="208dp"
+            android:layout_height="43dp" />
+
+        <Button
+            android:layout_width="209dp"
+            android:layout_height="wrap_content"
+            android:text="@string/form_find_transaction" />
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="331dp"
+            android:layout_height="54dp">
+
+            <TextView
+                android:id="@+id/groupAttendanceVerifierResultNoRecord"
+                android:layout_width="192dp"
+                android:layout_height="36dp"
+                android:layout_marginBottom="24dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/group_attendance_verifier_tx_not_found"
+                android:textAlignment="center"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/groupAttendanceVerifierResultOk"
+                android:layout_width="192dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/group_attendance_verifier_tx_found"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/groupAttendanceVerifierResultOkTxHash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:text="0xf1fc6aa1ebf09a1f05d2be5a067f0a02b7afa37facdec67685fe5e7f129549ba"
+                android:textSize="9sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/groupAttendanceVerifierResultNoRecord" />
+
+
+        </android.support.constraint.ConstraintLayout>
+
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

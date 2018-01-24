@@ -18,6 +18,7 @@ import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.client.BackendClient;
 import de.tum.ase.kleo.app.client.Principal;
 import de.tum.ase.kleo.app.group.GroupListFragment;
+import de.tum.ase.kleo.app.group.attendance.GroupAttendanceVerifierFragment;
 import de.tum.ase.kleo.app.group.attendance.advertisement.GroupAdvertisementBroadcasterFragment;
 import de.tum.ase.kleo.app.group.attendance.advertisement.GroupAdvertisementScannerFragment;
 import de.tum.ase.kleo.app.user.UserAttendanceFragment;
@@ -87,19 +88,22 @@ public class MainActivity extends AppCompatActivity
 
         Fragment fragment;
         switch (itemId) {
-            case R.id.group_scanner:
+            case R.id.menu_group_advertisement_scanner:
                 fragment = new GroupAdvertisementScannerFragment();
                 break;
-            case R.id.study_group:
+            case R.id.menu_group_list:
                 fragment = new GroupListFragment();
                 break;
-            case R.id.student_attendances:
+            case R.id.menu_attendance_blockchain:
+                fragment = new GroupAttendanceVerifierFragment();
+                break;
+            case R.id.menu_user_attendance:
                 fragment = new UserAttendanceFragment();
                 break;
-            case R.id.group_broadcaster:
+            case R.id.menu_group_advertisement_broadcaster:
                 fragment = new GroupAdvertisementBroadcasterFragment();
                 break;
-            case R.id.user_management:
+            case R.id.menu_user_list:
                 fragment = new UserListFragment();
                 break;
             default:
