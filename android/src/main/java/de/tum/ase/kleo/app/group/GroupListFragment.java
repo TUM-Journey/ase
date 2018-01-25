@@ -72,7 +72,7 @@ public class GroupListFragment extends ResourceListLayoutFragment<GroupDTO> {
 
     @Override
     protected void onFragmentCreated(View view, Bundle state) {
-        final FloatingActionButton createNewBtn = view.findViewById(R.id.group_list_new_record);
+        final FloatingActionButton createNewBtn = view.findViewById(R.id.group_list_new_record_btn);
 
         createNewBtn.setOnClickListener(l ->
                 askForNewGroupName()

@@ -2,13 +2,17 @@ package de.tum.ase.kleo.app.group;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.KleoApplication;
@@ -29,6 +33,8 @@ import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<SessionDTO> {
+
+    private static final String GOTO_DATE_TIME_PICKER = "date_time_picker";
 
     public static final String ARG_BUNDLE_GROUP = "group_details";
 
@@ -57,6 +63,18 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
 
         group = (GroupDTO) rawGroup;
         backendClient = ((KleoApplication) getActivity().getApplication()).backendClient();
+    }
+
+    @Override
+    protected void onFragmentCreated(View view, Bundle state) {
+        final FloatingActionButton createSessionFab
+                = view.findViewById(R.id.group_details_session_list_new_record_btn);
+
+        createSessionFab.setOnClickListener(l ->
+                askForNewSession()
+                        .subscribe(newSession ->
+                                createNewSession(group.getId(), newSession)
+                                        .subscribe(this::appendResource, this::showErrorMessage)));
     }
 
     @Override
@@ -159,6 +177,73 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
                     .setOnDismissListener(dialog -> emitter.onComplete())
                     .show();
         });
+    }
+
+    private Maybe<SessionDTO> askForNewSession() {
+        return Maybe.create(emitter -> {
+            final GroupDetailsSessionListNewRecordViewHolder viewHolder
+                    = GroupDetailsSessionListNewRecordViewHolder.within(this);
+
+            final AlertDialog dialog = new AlertDialog.Builder(getContext())
+                    .setTitle(R.string.group_details_session_list_new_record_popup_title)
+                    .setView(viewHolder.getView())
+                    .setPositiveButton(R.string.create, (d, which) -> {})
+                    .setNeutralButton(R.string.cancel, (d, which) -> d.dismiss())
+                    .setCancelable(false)
+                    .setOnDismissListener(d -> emitter.onComplete())
+                    .create();
+
+            dialog.show();
+
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(l -> {
+                final Optional<OffsetDateTime> beginsTimeOpt
+                        = viewHolder.getSessionBeginsTime();
+                final Optional<OffsetDateTime> endsTimeOpt
+                        = viewHolder.getSessionEndsTime();
+                final Optional<String> sessionLocationOpt
+                        = viewHolder.getSessionLocation();
+                final Optional<SessionDTO.TypeEnum> sessionTypeOpt
+                        = viewHolder.getSessionType();
+
+                if (!beginsTimeOpt.isPresent()) {
+                    Toast.makeText(getContext(),
+                            R.string.group_details_session_list_new_record_warn_start_time_blank,
+                            Toast.LENGTH_SHORT).show();
+                } else if (!endsTimeOpt.isPresent()) {
+                    Toast.makeText(getContext(),
+                            R.string.group_details_session_list_new_record_warn_ends_time_blank,
+                            Toast.LENGTH_SHORT).show();
+                } else if (!sessionLocationOpt.isPresent()) {
+                    Toast.makeText(getContext(), R.string.group_details_session_list_new_record_warn_location_blank,
+                            Toast.LENGTH_SHORT).show();
+                } else if (!sessionTypeOpt.isPresent()) {
+                    Toast.makeText(getContext(), R.string.group_details_session_list_new_record_warn_bad_session_type_chosen,
+                            Toast.LENGTH_SHORT).show();
+                } else {
+
+                    final SessionDTO newSession = new SessionDTO()
+                            .begins(beginsTimeOpt.get())
+                            .ends(endsTimeOpt.get())
+                            .location(sessionLocationOpt.get())
+                            .type(sessionTypeOpt.get());
+
+                    createNewSession(group.getId(), newSession)
+                            .subscribe(this::appendResource);
+
+                    dialog.dismiss();
+                }
+            });
+        });
+    }
+
+
+    private Observable<SessionDTO> createNewSession(String groupId, SessionDTO newSession) {
+        return backendClient.as(GroupsApi.class)
+                .addGroupSession(groupId, newSession)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(r -> showProgressBar())
+                .doOnComplete(this::hideProgressBar);
     }
 
     private void removeSession(SessionDTO session) {

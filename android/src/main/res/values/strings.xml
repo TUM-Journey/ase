@@ -63,4 +63,14 @@
     <string name="group_details_rename_action">Rename</string>
     <string name="group_details_renaming_confirmation_toast">Group has been renamed successfully</string>
     <string name="group_details_session_label">Group session:</string>
+    <string name="group_details_session_list_new_record_popup_title">Create new session</string>
+    <string name="group_details_session_list_new_record_date">Date:</string>
+    <string name="group_details_session_list_new_record_begins_time_label">Begins:</string>
+    <string name="group_details_session_list_new_record_time_ends_label">Ends:</string>
+    <string name="group_details_session_list_new_record_location_label">Location:</string>
+    <string name="group_details_session_list_new_record_session_type_label">Type:</string>
+    <string name="group_details_session_list_new_record_warn_start_time_blank">Please check date and start time are not blank</string>
+    <string name="group_details_session_list_new_record_warn_ends_time_blank">Please check date and ends time are not blank</string>
+    <string name="group_details_session_list_new_record_warn_location_blank">Please make sure session location is not blank</string>
+    <string name="group_details_session_list_new_record_warn_bad_session_type_chosen">Please make sure a correct session type is chosen</string>
 </resources>

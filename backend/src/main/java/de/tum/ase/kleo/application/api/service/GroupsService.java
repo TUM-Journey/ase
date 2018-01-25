@@ -241,10 +241,13 @@ public class GroupsService implements GroupsApiDelegate {
         if (group == null)
             return ResponseEntity.notFound().build();
 
-        group.addSession(SessionType.valueOf(sessDto.getType().toString()),
-                sessDto.getLocation(), sessDto.getBegins(), sessDto.getEnds());
+        final SessionId newSessionId =
+                group.addSession(SessionType.valueOf(sessDto.getType().toString()),
+                    sessDto.getLocation(), sessDto.getBegins(), sessDto.getEnds());
 
-        return ResponseEntity.ok().build();
+        sessDto.setId(newSessionId.toString());
+
+        return ResponseEntity.ok(sessDto);
     }
 
     @Override

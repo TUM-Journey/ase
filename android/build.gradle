@@ -12,6 +12,8 @@ apply plugin: 'org.hidetake.swagger.generator'
 apply from: "$rootDir/build-utils.gradle"
 
 dependencies {
+    compile 'com.wdullaer:materialdatetimepicker:3.5.0'
+
     implementation deps.defs.common.apacheLang3
 
     swaggerCodegen deps.defs.common.swaggerCodegenCli

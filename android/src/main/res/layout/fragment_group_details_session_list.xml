@@ -5,6 +5,21 @@
     android:layout_height="match_parent"
     tools:context="de.tum.ase.kleo.app.group.GroupDetailsSessionListFragment">
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/group_details_session_list_new_record_btn"
+        android:layout_width="62dp"
+        android:layout_height="62dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="32dp"
+        android:alpha="0.7"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_add"
+        app:backgroundTint="@android:color/holo_green_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="@android:color/holo_green_dark" />
+
     <ProgressBar
         android:id="@+id/group_details_session_list_progressbar"
         style="?android:attr/progressBarStyle"

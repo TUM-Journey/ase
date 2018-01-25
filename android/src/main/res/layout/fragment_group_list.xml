@@ -6,7 +6,7 @@
     tools:context="de.tum.ase.kleo.app.group.GroupListFragment">
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/group_list_new_record"
+        android:id="@+id/group_list_new_record_btn"
         android:layout_width="62dp"
         android:layout_height="62dp"
         android:layout_marginBottom="32dp"
