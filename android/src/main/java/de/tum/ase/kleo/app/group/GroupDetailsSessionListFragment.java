@@ -34,8 +34,6 @@ import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<SessionDTO> {
 
-    private static final String GOTO_DATE_TIME_PICKER = "date_time_picker";
-
     public static final String ARG_BUNDLE_GROUP = "group_details";
 
     private GroupDTO group;
@@ -70,11 +68,16 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
         final FloatingActionButton createSessionFab
                 = view.findViewById(R.id.group_details_session_list_new_record_btn);
 
-        createSessionFab.setOnClickListener(l ->
-                askForNewSession()
-                        .subscribe(newSession ->
-                                createNewSession(group.getId(), newSession)
-                                        .subscribe(this::appendResource, this::showErrorMessage)));
+        if (!backendClient.principal().isTutor()) {
+            createSessionFab.setVisibility(View.INVISIBLE);
+        } else {
+            createSessionFab.setOnClickListener(l ->
+                    askForNewSession()
+                            .subscribe(newSession ->
+                                    createNewSession(group.getId(), newSession)
+                                            .subscribe(this::appendResource,
+                                                    this::showErrorMessage)));
+        }
     }
 
     @Override
@@ -104,24 +107,30 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
         sessionLocation.setText(session.getLocation());
         sessionType.setText(session.getType().toString());
 
-        sessionRemoveBtn.setOnClickListener(v -> {
-            removeResourceIf(resource -> resource.getId().equals(session.getId()));
-            removeSession(session);
-        });
-        sessionChangeLocation.setOnClickListener(v -> {
-            askForSessionLocationUpdate(session.getLocation())
-                    .subscribe(newLocation -> {
-                        updateSessionLocation(session, newLocation);
-                        sessionLocation.setText(newLocation);
-                    });
-        });
-        sessionChangeType.setOnClickListener(v -> {
-            askForSessionTypeUpdate(session.getType())
-                    .subscribe(newType -> {
-                        updateSessionType(session, newType);
-                        sessionType.setText(newType.toString());
-                    });
-        });
+        if (!backendClient.principal().isTutor()) {
+            sessionRemoveBtn.setVisibility(View.INVISIBLE);
+            sessionChangeLocation.setVisibility(View.INVISIBLE);
+            sessionChangeType.setVisibility(View.INVISIBLE);
+        } else {
+            sessionRemoveBtn.setOnClickListener(v -> {
+                removeResourceIf(resource -> resource.getId().equals(session.getId()));
+                removeSession(session);
+            });
+            sessionChangeLocation.setOnClickListener(v -> {
+                askForSessionLocationUpdate(session.getLocation())
+                        .subscribe(newLocation -> {
+                            updateSessionLocation(session, newLocation);
+                            sessionLocation.setText(newLocation);
+                        });
+            });
+            sessionChangeType.setOnClickListener(v -> {
+                askForSessionTypeUpdate(session.getType())
+                        .subscribe(newType -> {
+                            updateSessionType(session, newType);
+                            sessionType.setText(newType.toString());
+                        });
+            });
+        }
     }
 
     private Maybe<String> askForSessionLocationUpdate(String oldLocation) {

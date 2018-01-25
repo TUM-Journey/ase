@@ -74,11 +74,16 @@ public class GroupListFragment extends ResourceListLayoutFragment<GroupDTO> {
     protected void onFragmentCreated(View view, Bundle state) {
         final FloatingActionButton createNewBtn = view.findViewById(R.id.group_list_new_record_btn);
 
-        createNewBtn.setOnClickListener(l ->
-                askForNewGroupName()
-                        .subscribe(newGroupName ->
-                                createNewGroup(newGroupName)
-                                        .subscribe(this::appendResource, this::showErrorMessage)));
+        if (!backendClient.principal().isTutor()) {
+            createNewBtn.setVisibility(View.INVISIBLE);
+        } else {
+            createNewBtn.setOnClickListener(l ->
+                    askForNewGroupName()
+                            .subscribe(newGroupName ->
+                                    createNewGroup(newGroupName)
+                                            .subscribe(this::appendResource,
+                                                    this::showErrorMessage)));
+        }
     }
 
     private Maybe<String> askForNewGroupName() {
