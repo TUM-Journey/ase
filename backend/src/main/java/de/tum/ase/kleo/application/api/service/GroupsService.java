@@ -13,6 +13,8 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import de.tum.ase.kleo.application.api.GroupsApiDelegate;
 import de.tum.ase.kleo.application.api.dto.GroupDTO;
@@ -32,6 +34,9 @@ import de.tum.ase.kleo.domain.id.UserId;
 import de.tum.ase.kleo.ethereum.AttendanceTracker;
 import lombok.val;
 
+import static java.util.Objects.nonNull;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -165,6 +170,29 @@ public class GroupsService implements GroupsApiDelegate {
 
         if (groupDto.getStudentIds() != null && !groupDto.getStudentIds().isEmpty())
             group.studentIds(groupDto.getStudentIds().stream().map(UserId::of).collect(toSet()));
+
+        if (groupDto.getSessions() != null && !groupDto.getSessions().isEmpty()) {
+            val changedSessionIdToSession = groupDto.getSessions().stream()
+                    .collect(toMap(SessionDTO::getId, Function.identity()));
+
+            group.sessions().stream()
+                    .filter(s -> changedSessionIdToSession.containsKey(s.id().toString()))
+                    .forEach(sessionToUpdate -> {
+                        val updatedSession = changedSessionIdToSession
+                                .get(sessionToUpdate.id().toString());
+
+                        val newLocation = updatedSession.getLocation();
+                        if (isNotBlank(newLocation)) {
+                            group.relocateSession(sessionToUpdate.id(), newLocation);
+                        }
+
+                        val newType = updatedSession.getType();
+                        if (nonNull(newType)) {
+                            group.repurposeSession(sessionToUpdate.id(),
+                                    SessionType.valueOf(newType.name()));
+                        }
+                    });
+        }
 
         return ResponseEntity.ok(groupToDtoSerializer.toDto(group));
     }

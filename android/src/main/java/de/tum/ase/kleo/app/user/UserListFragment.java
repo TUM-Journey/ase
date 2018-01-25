@@ -1,15 +1,12 @@
 package de.tum.ase.kleo.app.user;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.client.UsersApi;
@@ -19,7 +16,6 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static java.util.Arrays.stream;
@@ -132,7 +128,7 @@ public class UserListFragment extends ResourceListLayoutFragment<UserDTO> {
                                     newUserRoles.add(userRoleChanged);
                                 }
                             })
-                    .setPositiveButton(R.string.user_list_item_roles_change_popup_title_save_changes, (dialog, which) -> {
+                    .setPositiveButton(R.string.save, (dialog, which) -> {
                         emitter.onSuccess(newUserRoles);
                     })
                     .setCancelable(false)

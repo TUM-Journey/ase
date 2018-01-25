@@ -113,6 +113,9 @@ public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragme
 
     @SuppressWarnings("unchecked")
     protected void changeResources(List<T> resources) {
+        if (resources == null || resources.isEmpty())
+            showNoResourcesNotice();
+
         final Optional<ResourceListAdapter> currentListViewAdapterOpt = getCurrentListViewAdapter();
 
         if (currentListViewAdapterOpt.isPresent()) {
@@ -123,7 +126,13 @@ public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragme
     }
 
     protected void removeResourceIf(Predicate<T> predicate) {
-        getCurrentListViewAdapter().ifPresent(a -> a.removeResourceIf(predicate));
+        getCurrentListViewAdapter().ifPresent(adapter -> {
+            adapter.removeResourceIf(predicate);
+
+            if (adapter.resources.isEmpty()) {
+                showNoResourcesNotice();
+            }
+        });
     }
 
     protected void updateResource(Consumer<T> updater) {

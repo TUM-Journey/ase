@@ -2,9 +2,7 @@ package de.tum.ase.kleo.app.group;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -16,7 +14,6 @@ import de.tum.ase.kleo.app.KleoApplication;
 import de.tum.ase.kleo.app.client.BackendClient;
 import de.tum.ase.kleo.app.client.GroupsApi;
 import de.tum.ase.kleo.app.client.dto.GroupDTO;
-import de.tum.ase.kleo.app.support.ui.LayoutFragment;
 import de.tum.ase.kleo.app.support.ui.ReactiveLayoutFragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -36,11 +33,6 @@ public class GroupDetailsFragment extends ReactiveLayoutFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        backendClient = ((KleoApplication) getActivity().getApplication()).backendClient();
-    }
-
-    @Override
-    protected void onCreateLayout(View view, Bundle savedInstanceState) {
         final Serializable rawGroup = getArguments().getSerializable(ARG_BUNDLE_GROUP);
 
         if (rawGroup == null) {
@@ -51,6 +43,7 @@ public class GroupDetailsFragment extends ReactiveLayoutFragment {
         }
 
         group = (GroupDTO) rawGroup;
+        backendClient = ((KleoApplication) getActivity().getApplication()).backendClient();
     }
 
     @Override
@@ -65,6 +58,23 @@ public class GroupDetailsFragment extends ReactiveLayoutFragment {
             groupRenameBtn.setEnabled(false);
             groupNameInput.setEnabled(false);
         }
+
+        embedGroupSessionList();
+    }
+
+    private void embedGroupSessionList() {
+        final GroupDetailsSessionListFragment groupSessionListFragment
+                = new GroupDetailsSessionListFragment();
+        final Bundle bundle = new Bundle();
+        bundle.putSerializable(GroupDetailsFragment.ARG_BUNDLE_GROUP, group);
+        groupSessionListFragment.setArguments(bundle);
+
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(
+                        android.R.animator.fade_in, android.R.animator.fade_out,
+                        android.R.animator.fade_in, android.R.animator.fade_out)
+                .replace(R.id.group_details_session_frame, groupSessionListFragment)
+                .commit();
     }
 
     private void renameGroup(String newName) {

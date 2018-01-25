@@ -2,6 +2,8 @@
     <string name="app_name">Kleo</string>
     <string name="app_name_lowercase">kleo</string>
 
+    <string name="save">Save</string>
+
     <string name="login_tum_email_label">TUM E-mail</string>
     <string name="login_password_label">Password</string>
     <string name="login_submit_btn">Login</string>
@@ -38,7 +40,6 @@
     <string name="group_ad_broadcaster_warning_choose_group_first_toast">Select group first</string>
 
     <string name="user_list_item_roles_change_popup_title">Update user roles</string>
-    <string name="user_list_item_roles_change_popup_title_save_changes">Save</string>
     <string name="user_list_item_iscurrentuser_label">(you)</string>
 
     <string name="group_ad_scanner_inprogress_notice">Scanning …</string>
@@ -54,7 +55,8 @@
 
     <string name="resource_list_layout_no_records_found_notice">No records found</string>
 
-    <string name="group_details_name">Group name:</string>
+    <string name="group_details_name_label">Group name:</string>
     <string name="group_details_rename_action">Rename</string>
     <string name="group_details_renaming_confirmation_toast">Group has been renamed successfully</string>
+    <string name="group_details_session_label">Group session:</string>
 </resources>
