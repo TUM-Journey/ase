@@ -38,7 +38,8 @@ public class LoginActivity extends Activity {
         loggingInDialog.setIndeterminate(true);
         loggingInDialog.setCanceledOnTouchOutside(false);
 
-        findViewById(R.id.login_submit_btn).setOnClickListener(v -> LoginActivity.this.authenticate());
+        findViewById(R.id.login_submit_btn)
+                .setOnClickListener(v -> LoginActivity.this.authenticate());
     }
 
     private void authenticate() {
@@ -46,9 +47,9 @@ public class LoginActivity extends Activity {
         final String password = ((EditText) findViewById(R.id.login_password_input)).getText().toString();
 
         if (isBlank(email)) {
-            Toast.makeText(getApplicationContext(), R.string.login_warning_empty_email, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.login_warning_empty_email, Toast.LENGTH_SHORT).show();
         } else if (isBlank(password)) {
-            Toast.makeText(getApplicationContext(), R.string.login_warning_empty_password, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.login_warning_empty_password, Toast.LENGTH_SHORT).show();
         } else {
             backendClient.authenticate(email, password)
                     .subscribeOn(Schedulers.io())
@@ -78,7 +79,7 @@ public class LoginActivity extends Activity {
 
     private void helloAndProceed(Principal p) {
         final String helloToastMsg = getString(R.string.main_hello_toast, p.name());
-        Toast.makeText(getApplicationContext(), helloToastMsg, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, helloToastMsg, Toast.LENGTH_SHORT).show();
 
         proceed();
     }
