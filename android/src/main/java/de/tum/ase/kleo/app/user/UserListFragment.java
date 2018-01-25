@@ -40,8 +40,7 @@ public class UserListFragment extends ResourceListLayoutFragment<UserDTO> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe((r) -> this.showProgressBar())
                 .doOnTerminate(this::hideProgressBar)
-                .doOnError(this::showErrorMessage)
-                .subscribe();
+                .subscribe(() -> {}, this::showErrorMessage);
 
         disposeOnDestroy(deleteUser);
     }
@@ -53,8 +52,7 @@ public class UserListFragment extends ResourceListLayoutFragment<UserDTO> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe((r) -> this.showProgressBar())
                 .doOnTerminate(this::hideProgressBar)
-                .doOnError(this::showErrorMessage)
-                .subscribe();
+                .subscribe(() -> {}, this::showErrorMessage);
 
         disposeOnDestroy(deleteUser);
     }

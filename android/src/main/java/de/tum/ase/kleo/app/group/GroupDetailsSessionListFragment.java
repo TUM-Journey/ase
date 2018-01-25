@@ -169,8 +169,7 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(r -> showProgressBar())
                 .doOnComplete(this::hideProgressBar)
-                .doOnError(this::showErrorMessage)
-                .subscribe();
+                .subscribe(() -> {}, this::showErrorMessage);
     }
 
     private void updateSessionLocation(SessionDTO session, String newLocation) {
@@ -198,7 +197,6 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(r -> showProgressBar())
                 .doOnComplete(this::hideProgressBar)
-                .doOnError(this::showErrorMessage)
-                .subscribe();
+                .subscribe((g) -> {}, this::showErrorMessage);
     }
 }

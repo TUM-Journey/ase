@@ -44,8 +44,7 @@ public class GroupListFragment extends ResourceListLayoutFragment<GroupDTO> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe((r) -> this.showProgressBar())
                 .doOnTerminate(this::hideProgressBar)
-                .doOnError(this::showErrorMessage)
-                .subscribe();
+                .subscribe(() -> {}, this::showErrorMessage);
 
         disposeOnDestroy(regStudentReq);
     }
@@ -57,8 +56,7 @@ public class GroupListFragment extends ResourceListLayoutFragment<GroupDTO> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe((r) -> this.showProgressBar())
                 .doOnTerminate(this::hideProgressBar)
-                .doOnError(this::showErrorMessage)
-                .subscribe();
+                .subscribe(() -> {}, this::showErrorMessage);
 
         disposeOnDestroy(deregStudentReq);
     }
@@ -69,8 +67,7 @@ public class GroupListFragment extends ResourceListLayoutFragment<GroupDTO> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe((r) -> this.showProgressBar())
-                .doOnTerminate(this::hideProgressBar)
-                .doOnError(this::showErrorMessage);
+                .doOnTerminate(this::hideProgressBar);
     }
 
     @Override
@@ -81,7 +78,7 @@ public class GroupListFragment extends ResourceListLayoutFragment<GroupDTO> {
                 askForNewGroupName()
                         .subscribe(newGroupName ->
                                 createNewGroup(newGroupName)
-                                        .subscribe(this::appendResource)));
+                                        .subscribe(this::appendResource, this::showErrorMessage)));
     }
 
     private Maybe<String> askForNewGroupName() {
