@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -27,7 +28,9 @@ import io.reactivex.schedulers.Schedulers;
 
 import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeIn;
 import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeOut;
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragment {
@@ -139,6 +142,19 @@ public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragme
         getCurrentListViewAdapter().ifPresent(a -> a.updateResource(updater));
     }
 
+    protected void appendResource(T resource) {
+        if (resource == null)
+            return;
+
+        final Optional<ResourceListAdapter> currentListViewAdapterOpt = getCurrentListViewAdapter();
+
+        if (currentListViewAdapterOpt.isPresent()) {
+            currentListViewAdapterOpt.get().appendResource(resource);
+        } else {
+            listView.setAdapter(new ResourceListAdapter(resource));
+        }
+    }
+
     protected void clearResourceList() {
         listView.setAdapter(null);
     }
@@ -186,10 +202,18 @@ public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragme
 
     private class ResourceListAdapter extends RecyclerView.Adapter<ResourceListItemHolder> {
 
-        private List<T> resources;
+        private List<T> resources = new ArrayList<>();
+
+        private ResourceListAdapter(T resource) {
+            if (resource != null) {
+                resources.add(resource);
+            }
+        }
 
         private ResourceListAdapter(List<T> resources) {
-            this.resources = defaultIfNull(resources, emptyList());
+            if (resources != null) {
+                this.resources.addAll(resources);
+            }
         }
 
         @Override
@@ -206,6 +230,11 @@ public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragme
 
         void changeResources(List<T> resources) {
             this.resources = defaultIfNull(resources, emptyList());
+            this.notifyDataSetChanged();
+        }
+
+        void appendResource(T resource) {
+            this.resources.add(resource);
             this.notifyDataSetChanged();
         }
 

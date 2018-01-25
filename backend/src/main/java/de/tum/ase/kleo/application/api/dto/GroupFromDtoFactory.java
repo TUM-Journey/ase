@@ -15,12 +15,14 @@ public class GroupFromDtoFactory {
 
         val group = new Group(groupDTO.getName());
 
-        groupDTO.getStudentIds().forEach(sId -> group.addStudent(UserId.of(sId)));
+        if (groupDTO.getStudentIds() != null && !groupDTO.getStudentIds().isEmpty())
+            groupDTO.getStudentIds().forEach(sId -> group.addStudent(UserId.of(sId)));
 
-        groupDTO.getSessions().forEach(sessDto -> {
-            group.addSession(SessionType.valueOf(sessDto.getType().toString()),
-                    sessDto.getLocation(), sessDto.getBegins(), sessDto.getEnds());
-        });
+        if (groupDTO.getSessions() != null && !groupDTO.getSessions().isEmpty())
+            groupDTO.getSessions().forEach(sessDto -> {
+                group.addSession(SessionType.valueOf(sessDto.getType().toString()),
+                        sessDto.getLocation(), sessDto.getBegins(), sessDto.getEnds());
+            });
 
         return group;
     }
