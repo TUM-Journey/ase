@@ -4,10 +4,6 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single" android:id="@+id/menu_etc_top">
-        <item
-            android:id="@+id/menu_welcome"
-            android:icon="@drawable/ic_home"
-            android:title="@string/main_menu_welcome" />
     </group>
 
     <group android:checkableBehavior="single">
