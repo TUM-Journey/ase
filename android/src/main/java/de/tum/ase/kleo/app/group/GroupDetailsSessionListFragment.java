@@ -168,7 +168,7 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
                     = asList(sessionTypesNames).indexOf(oldSessionType.getValue());
 
             new AlertDialog.Builder(getContext())
-                    .setTitle(R.string.user_list_item_roles_change_popup_title)
+                    .setTitle(R.string.group_details_session_list_change_type_popup_title)
                     .setSingleChoiceItems(sessionTypesNames, currentSessionTypeChecked,
                             (dialog, which) -> {
                                 final SessionDTO.TypeEnum newSessionType
@@ -182,7 +182,7 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
 
                                 dialog.dismiss();
                     })
-                    .setCancelable(false)
+                    .setCancelable(true)
                     .setOnDismissListener(dialog -> emitter.onComplete())
                     .show();
         });
