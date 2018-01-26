@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.tum.ase.kleo.app.group.GroupDetailsSessionListFragment">
+    tools:context="de.tum.ase.kleo.app.group.details.session.GroupDetailsSessionListFragment">
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/group_details_session_list_new_record_btn"

@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.app.group;
+package de.tum.ase.kleo.app.group.details.session;
 
 import android.app.AlertDialog;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.app.group;
+package de.tum.ase.kleo.app.group.details;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +14,7 @@ import de.tum.ase.kleo.app.KleoApplication;
 import de.tum.ase.kleo.app.client.BackendClient;
 import de.tum.ase.kleo.app.client.GroupsApi;
 import de.tum.ase.kleo.app.client.dto.GroupDTO;
+import de.tum.ase.kleo.app.group.details.session.GroupDetailsSessionListFragment;
 import de.tum.ase.kleo.app.support.ui.ReactiveLayoutFragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;

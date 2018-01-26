@@ -14,6 +14,7 @@ import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.client.GroupsApi;
 import de.tum.ase.kleo.app.client.Principal;
 import de.tum.ase.kleo.app.client.dto.GroupDTO;
+import de.tum.ase.kleo.app.group.details.GroupDetailsFragment;
 import de.tum.ase.kleo.app.support.ui.ResourceListLayoutFragment;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
