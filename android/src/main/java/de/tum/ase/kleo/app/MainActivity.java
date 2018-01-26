@@ -2,6 +2,7 @@ package de.tum.ase.kleo.app;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -26,6 +27,7 @@ import de.tum.ase.kleo.app.user.UserAttendanceListFragment;
 import de.tum.ase.kleo.app.user.UserListFragment;
 
 import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         // Set default view content to welcome text
-        setContent(new WelcomeFragment());
+        setContent(new WelcomeFragment(), null);
     }
 
     @Override
@@ -132,14 +134,21 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setContent(Fragment fragment) {
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
+        setContent(fragment, GOTO_MAIN_NAVIGATE_BACK_STACK);
+    }
+
+    private void setContent(Fragment fragment, String backStackName) {
+        final FragmentTransaction pageTx = getFragmentManager().beginTransaction()
                 .setCustomAnimations(
                         android.R.animator.fade_in, android.R.animator.fade_out,
                         android.R.animator.fade_in, android.R.animator.fade_out)
-                .replace(R.id.main_container, fragment)
-                .addToBackStack(GOTO_MAIN_NAVIGATE_BACK_STACK)
-                .commit();
+                .replace(R.id.main_container, fragment);
+
+        if (!isBlank(backStackName)) {
+            pageTx.addToBackStack(backStackName);
+        }
+
+        pageTx.commit();
     }
 
     private void setupFragmentManagerBackStack(NavigationView navigationView) {
