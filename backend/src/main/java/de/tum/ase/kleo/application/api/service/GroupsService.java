@@ -270,14 +270,24 @@ public class GroupsService implements GroupsApiDelegate {
     @Override
     @Transactional
     @PreAuthorize("hasRole('TUTOR')")
-    public ResponseEntity<Void> rescheduleGroupSession(String groupIdOrCodeRaw, String sessionIdRaw, SessionDTO sessDto) {
+    public ResponseEntity<Void> updateGroupSession(String groupIdOrCodeRaw, String sessionIdRaw, SessionDTO sessDto) {
         val sessionId = SessionId.of(sessionIdRaw);
 
         val group = groupRepository.fetchGroupByIdOrCode(groupIdOrCodeRaw);
         if (group == null)
             return ResponseEntity.notFound().build();
 
-        group.rescheduleSession(sessionId, sessDto.getBegins(), sessDto.getEnds());
+        if (sessDto.getBegins() != null && sessDto.getEnds() != null) {
+            group.rescheduleSession(sessionId, sessDto.getBegins(), sessDto.getEnds());
+        }
+
+        if (sessDto.getLocation() != null) {
+            group.relocateSession(sessionId, sessDto.getLocation());
+        }
+
+        if (sessDto.getType() != null) {
+            group.repurposeSession(sessionId, SessionType.valueOf(sessDto.getType().toString()));
+        }
 
         return ResponseEntity.ok().build();
     }

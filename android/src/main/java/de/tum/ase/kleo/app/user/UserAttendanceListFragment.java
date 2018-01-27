@@ -30,7 +30,7 @@ public class UserAttendanceListFragment extends ResourceListLayoutFragment<Atten
     }
 
     @Override
-    protected void populateListItem(View view, AttendanceDTO attendance) {
+    protected void populateListItem(View view, AttendanceDTO attendance, int position) {
         final TextView name = view.findViewById(R.id.group_attendance_list_item_name_txt);
         final TextView date = view.findViewById(R.id.group_attendance_list_item_date_txt);
         final TextView sessionType = view.findViewById(R.id.group_attendance_list_item_session_type_txt);

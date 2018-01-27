@@ -118,7 +118,7 @@ public class GroupListFragment extends ResourceListLayoutFragment<GroupDTO> {
     }
 
     @Override
-    protected void populateListItem(View view, GroupDTO group) {
+    protected void populateListItem(View view, GroupDTO group, int position) {
         TextView name = view.findViewById(R.id.group_list_item_name_txt);
         TextView studentsCount = view.findViewById(R.id.group_list_item_student_count_txt);
         Switch registerSwitch = view.findViewById(R.id.group_list_item_registration_switch);
@@ -151,7 +151,7 @@ public class GroupListFragment extends ResourceListLayoutFragment<GroupDTO> {
     private void openGroupDetailsFragment(GroupDTO group) {
         final GroupDetailsFragment groupDetailsFragment = new GroupDetailsFragment();
         final Bundle bundle = new Bundle();
-        bundle.putSerializable(GroupDetailsFragment.ARG_BUNDLE_GROUP, group);
+        bundle.putString(GroupDetailsFragment.ARG_BUNDLE_GROUP_ID, group.getId());
         groupDetailsFragment.setArguments(bundle);
 
         getFragmentManager().beginTransaction()

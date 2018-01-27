@@ -380,7 +380,7 @@ paths:
     put:
       tags:
         - groups
-      operationId: rescheduleGroupSession
+      operationId: updateGroupSession
       security:
         - OAuth2Password: []
       parameters:

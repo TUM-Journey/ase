@@ -7,8 +7,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.Serializable;
-
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.KleoApplication;
 import de.tum.ase.kleo.app.client.BackendClient;
@@ -22,10 +20,10 @@ import io.reactivex.schedulers.Schedulers;
 
 public class GroupDetailsFragment extends ReactiveLayoutFragment {
 
-    public static final String ARG_BUNDLE_GROUP = "group_details";
+    public static final String ARG_BUNDLE_GROUP_ID = "group_details_id";
 
     private BackendClient backendClient;
-    private GroupDTO group;
+    private String groupId;
 
     public GroupDetailsFragment() {
         super(R.layout.fragment_group_details);
@@ -34,16 +32,12 @@ public class GroupDetailsFragment extends ReactiveLayoutFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final Serializable rawGroup = getArguments().getSerializable(ARG_BUNDLE_GROUP);
 
-        if (rawGroup == null) {
-            throw new IllegalStateException("GroupDetailsSessionListFragment requires group arg");
-        } else if (!GroupDTO.class.equals(rawGroup.getClass())) {
-            throw new IllegalStateException("GroupDetailsSessionListFragment 'group' arg is not " +
-                    "of GroupDTO type");
+        groupId = getArguments().getString(ARG_BUNDLE_GROUP_ID);
+        if (groupId == null) {
+            throw new IllegalStateException("GroupDetailsSessionListFragment requires group id arg");
         }
 
-        group = (GroupDTO) rawGroup;
         backendClient = ((KleoApplication) getActivity().getApplication()).backendClient();
     }
 
@@ -52,22 +46,29 @@ public class GroupDetailsFragment extends ReactiveLayoutFragment {
         final EditText groupNameInput = view.findViewById(R.id.group_details_name_input);
         final Button groupRenameBtn = view.findViewById(R.id.group_details_rename_btn);
 
-        groupNameInput.setText(group.getName());
-        if (backendClient.principal().isTutor()) {
-            groupRenameBtn.setOnClickListener(l -> renameGroup(groupNameInput.getText().toString()));
-        } else {
-            groupRenameBtn.setEnabled(false);
-            groupNameInput.setEnabled(false);
-        }
+        backendClient.as(GroupsApi.class).getGroup(groupId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(group -> {
+                    groupNameInput.setText(group.getName());
 
-        embedGroupSessionList();
+                    if (backendClient.principal().isTutor()) {
+                        groupRenameBtn.setOnClickListener(l
+                                -> renameGroup(group, groupNameInput.getText().toString()));
+                    } else {
+                        groupRenameBtn.setEnabled(false);
+                        groupNameInput.setEnabled(false);
+                    }
+
+                    embedGroupSessionList();
+                });
     }
 
     private void embedGroupSessionList() {
         final GroupDetailsSessionListFragment groupSessionListFragment
                 = new GroupDetailsSessionListFragment();
         final Bundle bundle = new Bundle();
-        bundle.putSerializable(GroupDetailsSessionListFragment.ARG_BUNDLE_GROUP, group);
+        bundle.putString(GroupDetailsSessionListFragment.ARG_BUNDLE_GROUP_ID, groupId);
         groupSessionListFragment.setArguments(bundle);
 
         getFragmentManager().beginTransaction()
@@ -78,7 +79,7 @@ public class GroupDetailsFragment extends ReactiveLayoutFragment {
                 .commit();
     }
 
-    private void renameGroup(String newName) {
+    private void renameGroup(GroupDTO group, String newName) {
         group.setName(newName);
         final Disposable disposable = backendClient.as(GroupsApi.class)
                 .updateGroup(group.getId(), group)

@@ -68,7 +68,7 @@ public class UserListFragment extends ResourceListLayoutFragment<UserDTO> {
     }
 
     @Override
-    protected void populateListItem(View view, UserDTO user) {
+    protected void populateListItem(View view, UserDTO user, int position) {
         final TextView name = view.findViewById(R.id.user_list_item_user_name_txt);
         final TextView isCurrentUserLabel = view.findViewById(R.id.user_list_item_user_is_current_label_txt);
         final TextView role = view.findViewById(R.id.user_list_item_user_role_txt);

@@ -93,7 +93,7 @@ public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragme
 
     protected abstract Observable<List<T>> fetchResources();
 
-    protected abstract void populateListItem(View view, T resource);
+    protected abstract void populateListItem(View view, T resource, int position);
 
     protected void populateResourceList() {
         final Disposable disposable = fetchResources()
@@ -138,6 +138,10 @@ public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragme
 
     protected void updateResource(Consumer<T> updater) {
         getCurrentListViewAdapter().ifPresent(a -> a.updateResource(updater));
+    }
+
+    private void updateResource(int pos, T newValue) {
+        getCurrentListViewAdapter().ifPresent(a -> a.updateResource(pos, newValue));
     }
 
     protected void appendResource(T resource) {
@@ -223,7 +227,7 @@ public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragme
 
         @Override
         public void onBindViewHolder(ResourceListItemHolder holder, int position) {
-            populateListItem(holder.itemView, resources.get(position));
+            populateListItem(holder.itemView, resources.get(position), position);
         }
 
         void changeResources(List<T> resources) {
@@ -244,6 +248,11 @@ public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragme
 
         void updateResource(Consumer<T> updater) {
             this.resources.forEach(updater);
+            this.notifyDataSetChanged();
+        }
+
+        void updateResource(int pos, T newValue) {
+            this.resources.set(pos, newValue);
             this.notifyDataSetChanged();
         }
 

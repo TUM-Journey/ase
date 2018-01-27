@@ -9,7 +9,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +16,9 @@ import java.util.Optional;
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.KleoApplication;
 import de.tum.ase.kleo.app.client.GroupsApi;
-import de.tum.ase.kleo.app.client.dto.GroupDTO;
 import de.tum.ase.kleo.app.client.dto.SessionDTO;
 import de.tum.ase.kleo.app.support.ResourceListLayoutFragment;
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -34,9 +33,9 @@ import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<SessionDTO> {
 
-    public static final String ARG_BUNDLE_GROUP = "group_details";
+    public static final String ARG_BUNDLE_GROUP_ID = "group_details_sessions_id";
 
-    private GroupDTO group;
+    private String groupId;
 
     public GroupDetailsSessionListFragment() {
         super(R.layout.fragment_group_details_session_list,
@@ -50,16 +49,11 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final Serializable rawGroup = getArguments().getSerializable(ARG_BUNDLE_GROUP);
-
-        if (rawGroup == null) {
-            throw new IllegalStateException("GroupDetailsSessionListFragment requires group arg");
-        } else if (!GroupDTO.class.equals(rawGroup.getClass())) {
-            throw new IllegalStateException("GroupDetailsSessionListFragment 'group' arg is not " +
-                    "of GroupDTO type");
+        groupId = getArguments().getString(ARG_BUNDLE_GROUP_ID);
+        if (groupId == null) {
+            throw new IllegalStateException("GroupDetailsSessionListFragment requires group id arg");
         }
 
-        group = (GroupDTO) rawGroup;
         backendClient = ((KleoApplication) getActivity().getApplication()).backendClient();
     }
 
@@ -74,7 +68,7 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
             createSessionFab.setOnClickListener(l ->
                     askForNewSession()
                             .subscribe(newSession ->
-                                    createNewSession(group.getId(), newSession)
+                                    createNewSession(newSession)
                                             .subscribe(this::appendResource,
                                                     this::showErrorMessage)));
         }
@@ -82,11 +76,14 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
 
     @Override
     protected Observable<List<SessionDTO>> fetchResources() {
-        return Observable.just(defaultIfNull(group.getSessions(), emptyList()));
+        return backendClient.as(GroupsApi.class).getGroup(groupId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(group -> defaultIfNull(group.getSessions(), emptyList()));
     }
 
     @Override
-    protected void populateListItem(View view, SessionDTO session) {
+    protected void populateListItem(View view, SessionDTO session, int position) {
         final TextView sessionTime =
                 view.findViewById(R.id.group_details_session_list_item_interval_txt);
         final TextView sessionLocation =
@@ -113,21 +110,30 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
             sessionChangeType.setVisibility(View.INVISIBLE);
         } else {
             sessionRemoveBtn.setOnClickListener(v -> {
-                removeResourceIf(resource -> resource.getId().equals(session.getId()));
-                removeSession(session);
+                removeSession(session.getId())
+                        .subscribe(() ->
+                                removeResourceIf(resource
+                                        -> resource.getId().equals(session.getId())),
+                                this::showErrorMessage);
             });
             sessionChangeLocation.setOnClickListener(v -> {
                 askForSessionLocationUpdate(session.getLocation())
                         .subscribe(newLocation -> {
-                            updateSessionLocation(session, newLocation);
-                            sessionLocation.setText(newLocation);
+                            updateSessionLocation(session.getId(), newLocation)
+                                    .subscribe(() -> {
+                                        sessionLocation.setText(newLocation);
+                                        session.setLocation(newLocation);
+                                    }, this::showErrorMessage);
                         });
             });
             sessionChangeType.setOnClickListener(v -> {
                 askForSessionTypeUpdate(session.getType())
                         .subscribe(newType -> {
-                            updateSessionType(session, newType);
-                            sessionType.setText(newType.toString());
+                            updateSessionType(session.getId(), newType)
+                                    .subscribe(() -> {
+                                        sessionType.setText(newType.toString());
+                                        session.setType(newType);
+                                    }, this::showErrorMessage);
                         });
             });
         }
@@ -236,8 +242,7 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
                             .location(sessionLocationOpt.get())
                             .type(sessionTypeOpt.get());
 
-                    createNewSession(group.getId(), newSession)
-                            .subscribe(this::appendResource);
+                    createNewSession(newSession).subscribe(this::appendResource);
 
                     dialog.dismiss();
                 }
@@ -246,7 +251,7 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
     }
 
 
-    private Observable<SessionDTO> createNewSession(String groupId, SessionDTO newSession) {
+    private Observable<SessionDTO> createNewSession(SessionDTO newSession) {
         return backendClient.as(GroupsApi.class)
                 .addGroupSession(groupId, newSession)
                 .subscribeOn(Schedulers.io())
@@ -255,42 +260,30 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
                 .doOnComplete(this::hideProgressBar);
     }
 
-    private void removeSession(SessionDTO session) {
-        group.getSessions().removeIf(s -> s.getId().equals(session.getId()));
-        backendClient.as(GroupsApi.class)
-                .deleteGroupSession(group.getId(), session.getId())
+    private Completable removeSession(String sessionId) {
+        return backendClient.as(GroupsApi.class)
+                .deleteGroupSession(groupId, sessionId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(r -> showProgressBar())
-                .doOnComplete(this::hideProgressBar)
-                .subscribe(() -> {}, this::showErrorMessage);
+                .doOnComplete(this::hideProgressBar);
     }
 
-    private void updateSessionLocation(SessionDTO session, String newLocation) {
-        group.getSessions().stream()
-                .filter(s -> s.getId().equals(session.getId()))
-                .findAny().ifPresent(sessionToUpdate -> {
-                    sessionToUpdate.setLocation(newLocation);
-                    syncGroupWithBackend();
-        });
-    }
-
-    private void updateSessionType(SessionDTO session, SessionDTO.TypeEnum newSessionType) {
-        group.getSessions().stream()
-                .filter(s -> s.getId().equals(session.getId()))
-                .findAny().ifPresent(sessionToUpdate -> {
-                    sessionToUpdate.setType(newSessionType);
-                    syncGroupWithBackend();
-        });
-    }
-
-    private void syncGroupWithBackend() {
-        backendClient.as(GroupsApi.class)
-                .updateGroup(group.getId(), group)
+    private Completable updateSessionLocation(String sessionId, String newLocation) {
+        return backendClient.as(GroupsApi.class)
+                .updateGroupSession(groupId, sessionId, new SessionDTO().location(newLocation))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(r -> showProgressBar())
-                .doOnComplete(this::hideProgressBar)
-                .subscribe((g) -> {}, this::showErrorMessage);
+                .doOnComplete(this::hideProgressBar);
+    }
+
+    private Completable updateSessionType(String sessionId, SessionDTO.TypeEnum newSessionType) {
+        return backendClient.as(GroupsApi.class)
+                .updateGroupSession(groupId, sessionId, new SessionDTO().type(newSessionType))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(r -> showProgressBar())
+                .doOnComplete(this::hideProgressBar);
     }
 }
