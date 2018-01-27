@@ -19,7 +19,7 @@ import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.Advertisemen
 import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.BackendHandshakeSupplier;
 import de.tum.ase.kleo.app.group.attendance.advertisement.handshake.HandshakeServer;
 import de.tum.ase.kleo.app.support.ui.ArrayAdapterItem;
-import de.tum.ase.kleo.app.support.ui.ReactiveLayoutFragment;
+import de.tum.ase.kleo.app.support.ReactiveLayoutFragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;

@@ -8,9 +8,8 @@ import java.util.List;
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.client.StudentsApi;
 import de.tum.ase.kleo.app.client.dto.AttendanceDTO;
-import de.tum.ase.kleo.app.support.ui.ResourceListLayoutFragment;
+import de.tum.ase.kleo.app.support.ResourceListLayoutFragment;
 import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
 
 import static de.tum.ase.kleo.app.support.DateTimeFormatters.simpleDateTime;
 

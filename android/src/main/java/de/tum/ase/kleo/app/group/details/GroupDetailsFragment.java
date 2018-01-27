@@ -15,7 +15,7 @@ import de.tum.ase.kleo.app.client.BackendClient;
 import de.tum.ase.kleo.app.client.GroupsApi;
 import de.tum.ase.kleo.app.client.dto.GroupDTO;
 import de.tum.ase.kleo.app.group.details.session.GroupDetailsSessionListFragment;
-import de.tum.ase.kleo.app.support.ui.ReactiveLayoutFragment;
+import de.tum.ase.kleo.app.support.ReactiveLayoutFragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;

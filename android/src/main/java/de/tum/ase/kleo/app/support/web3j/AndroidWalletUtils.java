@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.app.support.ethereum;
+package de.tum.ase.kleo.app.support.web3j;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;

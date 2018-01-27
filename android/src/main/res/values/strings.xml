@@ -46,8 +46,9 @@
     <string name="user_list_item_roles_change_popup_title">Update user roles</string>
     <string name="user_list_item_iscurrentuser_label">(you)</string>
 
-    <string name="group_ad_scanner_inprogress_notice">Scanning …</string>
+    <string name="group_ad_scanner_toggle_notice">Click to start scanning for groups nearby:</string>
     <string name="group_ad_scanner_item_warning_attend_not_registered_toast">You must be registered first to attend this group</string>
+    <string name="group_ad_scanner_item_joined_welcome_notice">Nice to have you! Your attendance has been recorded!</string>
 
     <string name="group_attendance_verifier_tx_time_notice">* please bear in mind, that it may take up to 5 minutes to record an attendance to the blockchain</string>
     <string name="group_attendance_verifier_explanation">To enable transparency, every attendance record in Kleo is replicated to Ethereum blockchain, so that every attendance record can be verified without relying on trust.</string>

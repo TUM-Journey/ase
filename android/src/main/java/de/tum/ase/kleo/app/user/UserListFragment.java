@@ -11,7 +11,7 @@ import java.util.List;
 import de.tum.ase.kleo.android.R;
 import de.tum.ase.kleo.app.client.UsersApi;
 import de.tum.ase.kleo.app.client.dto.UserDTO;
-import de.tum.ase.kleo.app.support.ui.ResourceListLayoutFragment;
+import de.tum.ase.kleo.app.support.ResourceListLayoutFragment;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;

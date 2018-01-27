@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.app.support.ui;
+package de.tum.ase.kleo.app.support;
 
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -28,9 +28,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeIn;
 import static de.tum.ase.kleo.app.support.ui.ProgressBars.fadeOut;
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragment {

@@ -6,38 +6,68 @@
     tools:context="de.tum.ase.kleo.app.group.attendance.advertisement.GroupAdvertisementScannerFragment"
     tools:layout_editor_absoluteY="81dp">
 
-    <ImageView
-        android:id="@+id/group_ad_scanner_radar_img"
-        android:layout_width="80dp"
-        android:layout_height="71dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/antenna_listen"
+    <ProgressBar
+        android:id="@+id/group_ad_scanner_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/group_ad_scanner_list_label_txt"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="@string/group_ad_scanner_inprogress_notice"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/group_ad_scanner_list_view"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/group_ad_scanner_radar_img"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/group_ad_scanner_toggle_notice"
+            tools:layout_editor_absoluteX="107dp"
+            tools:layout_editor_absoluteY="22dp" />
+
+        <ToggleButton
+            android:id="@+id/group_ad_scanner_toggle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-4dp"
+            tools:layout_editor_absoluteX="103dp"
+            tools:layout_editor_absoluteY="41dp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/group_ad_scanner_radar_img"
+        android:layout_width="70dp"
+        android:layout_height="68dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/antenna_listen"
+        app:layout_constraintBottom_toTopOf="@+id/group_ad_scanner_list_view"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/group_ad_scanner_radar_img" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/group_ad_scanner_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
         android:scrollbars="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/group_ad_scanner_list_label_txt"
+        app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/fragment_group_advertisement_scanner_item" />
 
 </android.support.constraint.ConstraintLayout>

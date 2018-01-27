@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.app.support.ui;
+package de.tum.ase.kleo.app.support;
 
 import android.app.Fragment;
 import android.os.Bundle;

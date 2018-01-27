@@ -39,14 +39,14 @@ import de.tum.ase.kleo.app.client.dto.GroupDTO;
 import de.tum.ase.kleo.app.client.dto.SessionDTO;
 import de.tum.ase.kleo.app.client.dto.UserDTO;
 import de.tum.ase.kleo.app.support.ui.ArrayAdapterItem;
-import de.tum.ase.kleo.app.support.ui.ReactiveLayoutFragment;
+import de.tum.ase.kleo.app.support.ReactiveLayoutFragment;
 import de.tum.ase.kleo.ethereum.AttendanceTracker;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static de.tum.ase.kleo.app.support.DateTimeFormatters.simpleTime;
-import static de.tum.ase.kleo.app.support.ethereum.AndroidWalletUtils.loadCredentials;
+import static de.tum.ase.kleo.app.support.web3j.AndroidWalletUtils.loadCredentials;
 import static de.tum.ase.kleo.app.support.ui.ArrayAdapterItem.getSelectedItemValue;
 import static java.util.stream.Collectors.toList;
 

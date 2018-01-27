@@ -1,4 +1,4 @@
-package de.tum.ase.kleo.app.support.ui;
+package de.tum.ase.kleo.app.support;
 
 import android.support.annotation.LayoutRes;
 
