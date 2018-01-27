@@ -64,6 +64,7 @@
     <string name="group_details_rename_action">Rename</string>
     <string name="group_details_renaming_confirmation_toast">Group has been renamed successfully</string>
     <string name="group_details_session_label">Group session:</string>
+    <string name="group_details_session_list_change_location_popup_title">Change session location</string>
     <string name="group_details_session_list_change_type_popup_title">Change session type</string>
     <string name="group_details_session_list_new_record_popup_title">Create new session</string>
     <string name="group_details_session_list_new_record_date">Date:</string>

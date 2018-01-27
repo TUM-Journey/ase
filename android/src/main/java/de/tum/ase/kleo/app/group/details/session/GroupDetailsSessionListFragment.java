@@ -139,7 +139,7 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
             alertLocationInput.setText(oldLocation);
 
             new AlertDialog.Builder(getContext())
-                    .setTitle(R.string.user_list_item_roles_change_popup_title)
+                    .setTitle(R.string.group_details_session_list_change_location_popup_title)
                     .setView(alertLocationInput)
                     .setPositiveButton(R.string.save, (dialog, which) -> {
                         final String newLocation = alertLocationInput.getText().toString();
@@ -152,7 +152,7 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
 
                         dialog.dismiss();
                     })
-                    .setCancelable(false)
+                    .setCancelable(true)
                     .setOnDismissListener(dialog -> emitter.onComplete())
                     .show();
         });
