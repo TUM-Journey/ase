@@ -90,6 +90,7 @@ public class UserListFragment extends ResourceListLayoutFragment<UserDTO> {
                             .subscribe(newRolesEnums -> {
                                 updateUserRoles(user.getId(), newRolesEnums);
                                 role.setText(rolesToCsv(newRolesEnums));
+                                user.setRoles(newRolesEnums);
                             }));
 
             removeButton.setOnClickListener(v -> {
