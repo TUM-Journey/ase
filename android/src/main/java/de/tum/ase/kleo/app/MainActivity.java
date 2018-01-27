@@ -25,9 +25,6 @@ import de.tum.ase.kleo.app.user.UserAttendanceListFragment;
 import de.tum.ase.kleo.app.user.UserListFragment;
 import io.reactivex.Completable;
 
-import static de.tum.ase.kleo.app.MainMenu.Page;
-import static java.lang.String.format;
-
 public class MainActivity extends AppCompatActivity {
 
     private BackendClient backendClient;
@@ -88,29 +85,30 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private MainMenu setupNavigationViewMenu(NavigationView navigationView) {
-        return new MainMenu.Builder()
-                .defaultPage(Page().from(new WelcomeFragment()).noBackStack())
-                .use(getFragmentManager())
-                .use(navigationView)
+    private MenuPageNavigation setupNavigationViewMenu(NavigationView navigationView) {
+        return new MenuPageNavigation.Builder()
+                .defaultPage(new WelcomeFragment())
+                .withFragmentContainer(R.id.main_container)
+                .withFragmentManager(getFragmentManager())
+                .withNavigationView(navigationView)
                 .setOnClickPageChange(
                         R.id.menu_group_advertisement_scanner,
-                        Page().from(new GroupAdvertisementScannerFragment()).defaultBackStack())
+                        new GroupAdvertisementScannerFragment())
                 .setOnClickPageChange(
                         R.id.menu_group_list,
-                        Page().from(new GroupListFragment()).defaultBackStack())
+                        new GroupListFragment())
                 .setOnClickPageChange(
                         R.id.menu_attendance_blockchain,
-                        Page().from(new GroupAttendanceVerifierFragment()).defaultBackStack())
+                        new GroupAttendanceVerifierFragment())
                 .setOnClickPageChange(
                         R.id.menu_user_attendance,
-                        Page().from(new UserAttendanceListFragment()).defaultBackStack())
+                        new UserAttendanceListFragment())
                 .setOnClickPageChange(
                         R.id.menu_group_advertisement_broadcaster,
-                        Page().from(new GroupAdvertisementBroadcasterFragment()).defaultBackStack())
+                        new GroupAdvertisementBroadcasterFragment())
                 .setOnClickPageChange(
                         R.id.menu_user_list,
-                        Page().from(new UserListFragment()).defaultBackStack())
+                        new UserListFragment())
                 .setOnClickAction(
                         R.id.menu_logout, () -> {
                             backendClient.logout();

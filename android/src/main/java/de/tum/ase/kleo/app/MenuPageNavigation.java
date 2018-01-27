@@ -6,29 +6,31 @@ import android.app.FragmentTransaction;
 import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
 import android.util.SparseArray;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.function.Function;
 
-import de.tum.ase.kleo.android.R;
 import io.reactivex.Completable;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
-public class MainMenu implements NavigationView.OnNavigationItemSelectedListener {
+public class MenuPageNavigation implements NavigationView.OnNavigationItemSelectedListener {
 
+    private final static String MENU_BACK_STACK_NAME = "main-menu-back-stack";
+
+    private final @IdRes int fragmentContainer;
     private final FragmentManager fragmentManager;
-    private final SparseArray<Page> pages;
+    private final SparseArray<Fragment> pages;
     private final SparseArray<Runnable> actions;
     private final NavigationView navigationView;
 
     private final Function<MenuItem, Completable> doBeforeTrigger;
     private final Function<MenuItem, Completable> doAfterTrigger;
 
-    private @IdRes int currentMenuItemId;
-
-    private MainMenu(Builder builder) {
+    private MenuPageNavigation(Builder builder) {
+        this.fragmentContainer = builder.fragmentContainer;
         this.fragmentManager = builder.fragmentManager;
         this.pages = builder.pages;
         this.actions = builder.actions;
@@ -37,11 +39,10 @@ public class MainMenu implements NavigationView.OnNavigationItemSelectedListener
         this.navigationView = builder.navigationView;
 
         navigationView.setNavigationItemSelectedListener(this);
-        fragmentManager.addOnBackStackChangedListener(()
-                -> setNavigationViewCheckedItem(currentMenuItemId));
+        fragmentManager.addOnBackStackChangedListener(this::syncMenuItemAndCurrentFragment);
 
         if (builder.defaultPage != null) {
-            switchFragment(builder.defaultPage.fragment, builder.defaultPage.backStackName);
+            switchFragment(builder.defaultPage, null);
         }
     }
 
@@ -50,13 +51,11 @@ public class MainMenu implements NavigationView.OnNavigationItemSelectedListener
         doBeforeTrigger.apply(menuItem)
                 .doOnComplete(() -> {
                     final int menuItemId = menuItem.getItemId();
-                    final Page nextPage = pages.get(menuItemId);
+                    final Fragment nextPage = pages.get(menuItemId);
                     final Runnable action = actions.get(menuItemId);
 
                     if (nextPage != null) {
-                        switchFragment(nextPage.fragment, nextPage.backStackName);
-
-                        currentMenuItemId = menuItemId;
+                        switchFragment(nextPage, MENU_BACK_STACK_NAME);
                     } else if (action != null) {
                         action.run();
                     }
@@ -70,13 +69,49 @@ public class MainMenu implements NavigationView.OnNavigationItemSelectedListener
                 .setCustomAnimations(
                         android.R.animator.fade_in, android.R.animator.fade_out,
                         android.R.animator.fade_in, android.R.animator.fade_out)
-                .replace(R.id.main_container, fragment);
+                .replace(fragmentContainer, fragment);
 
         if (!isBlank(backStackName)) {
             pageTx.addToBackStack(backStackName);
         }
 
         pageTx.commit();
+    }
+
+    private void syncMenuItemAndCurrentFragment() {
+        final Fragment currentFragment = findCurrentFragment();
+        if (currentFragment == null) {
+            uncheckAllNavigationViewItems();
+            return;
+        }
+
+        final Integer currentMenuItem = findMenuItemByFragment(currentFragment.getClass());
+        if (currentMenuItem == null) {
+            uncheckAllNavigationViewItems();
+            return;
+        }
+
+        setNavigationViewCheckedItem(currentMenuItem);
+    }
+
+    private @IdRes Integer findMenuItemByFragment(Class<?> fragmentType) {
+        Integer menuItemId = null;
+
+        for(int i = 0; i < pages.size(); i++) {
+            int pageMenuItemId = pages.keyAt(i);
+            Fragment pageFragment = pages.get(pageMenuItemId);
+
+            if (pageFragment.getClass().equals(fragmentType)) {
+                menuItemId = pageMenuItemId;
+                break;
+            }
+        }
+
+        return menuItemId;
+    }
+
+    private Fragment findCurrentFragment() {
+        return fragmentManager.findFragmentById(fragmentContainer);
     }
 
     private void setNavigationViewCheckedItem(@IdRes int menuItemId) {
@@ -87,43 +122,48 @@ public class MainMenu implements NavigationView.OnNavigationItemSelectedListener
         navigationView.setCheckedItem(menuItemId);
     }
 
+    private void uncheckAllNavigationViewItems() {
+        final Menu navigationViewMenu = navigationView.getMenu();
+        for (int i = 0; i < navigationViewMenu.size(); i++) {
+            navigationViewMenu.getItem(i).setChecked(false);
+        }
+    }
+
     public static final class Builder {
+        private int fragmentContainer;
         private FragmentManager fragmentManager;
         private NavigationView navigationView;
 
-        private Page defaultPage;
-        private SparseArray<Page> pages = new SparseArray<>();
+        private Fragment defaultPage;
+        private SparseArray<Fragment> pages = new SparseArray<>();
         private SparseArray<Runnable> actions = new SparseArray<>();
 
         private Function<MenuItem, Completable> doBeforeTrigger = (i) -> Completable.complete();
         private Function<MenuItem, Completable> doAfterTrigger = (i) -> Completable.complete();
 
-        public Builder defaultPage(Page page) {
+        public Builder defaultPage(Fragment page) {
             this.defaultPage = page;
             return this;
         }
 
-        public Builder defaultPage(Page.Builder pageBuilder) {
-            return defaultPage(pageBuilder.build());
+        public Builder withFragmentContainer(int fragmentContainer) {
+            this.fragmentContainer = fragmentContainer;
+            return this;
         }
 
-        public Builder use(FragmentManager fragmentManager) {
+        public Builder withFragmentManager(FragmentManager fragmentManager) {
             this.fragmentManager = fragmentManager;
             return this;
         }
 
-        public Builder use(NavigationView navigationView) {
+        public Builder withNavigationView(NavigationView navigationView) {
             this.navigationView = navigationView;
             return this;
         }
 
-        public Builder setOnClickPageChange(@IdRes int menuItem, Page page) {
+        public Builder setOnClickPageChange(@IdRes int menuItem, Fragment page) {
             pages.put(menuItem, page);
             return this;
-        }
-
-        public Builder setOnClickPageChange(@IdRes int menuItem, Page.Builder  pageBuilder) {
-            return setOnClickPageChange(menuItem, pageBuilder.build());
         }
 
         public Builder setOnClickAction(@IdRes int menuItem, Runnable action) {
@@ -141,51 +181,8 @@ public class MainMenu implements NavigationView.OnNavigationItemSelectedListener
             return this;
         }
 
-        public MainMenu build() {
-            return new MainMenu(this);
-        }
-    }
-
-    public static Page.Builder Page() {
-        return new Page.Builder();
-    }
-
-    public static final class Page {
-        private final Fragment fragment;
-        private final String backStackName;
-
-        private Page(Fragment fragment, String backStackName) {
-            this.fragment = notNull(fragment);
-            this.backStackName = backStackName;
-        }
-
-        public static class Builder {
-            private Fragment fragment;
-            private String backStackName;
-
-            public Builder from(Fragment fragment) {
-                this.fragment = fragment;
-                return this;
-            }
-
-            public Builder noBackStack() {
-                this.backStackName = null;
-                return this;
-            }
-
-            public Builder defaultBackStack() {
-                this.backStackName = fragment.getClass().getName();
-                return this;
-            }
-
-            public Builder backStack(String name) {
-                this.backStackName = name;
-                return this;
-            }
-
-            public Page build() {
-                return new Page(fragment, backStackName);
-            }
+        public MenuPageNavigation build() {
+            return new MenuPageNavigation(this);
         }
     }
 }

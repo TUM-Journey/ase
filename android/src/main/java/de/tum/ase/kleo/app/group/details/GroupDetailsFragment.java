@@ -67,7 +67,7 @@ public class GroupDetailsFragment extends ReactiveLayoutFragment {
         final GroupDetailsSessionListFragment groupSessionListFragment
                 = new GroupDetailsSessionListFragment();
         final Bundle bundle = new Bundle();
-        bundle.putSerializable(GroupDetailsFragment.ARG_BUNDLE_GROUP, group);
+        bundle.putSerializable(GroupDetailsSessionListFragment.ARG_BUNDLE_GROUP, group);
         groupSessionListFragment.setArguments(bundle);
 
         getFragmentManager().beginTransaction()
