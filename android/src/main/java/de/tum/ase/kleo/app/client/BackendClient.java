@@ -23,7 +23,7 @@ import static org.apache.oltu.oauth2.client.request.OAuthClientRequest.tokenLoca
 public class BackendClient {
 
     private static final String OAUTH_TOKEN_ENDPOINT = "oauth/token";
-    private static final Duration DEFAULT_OAUTH_TIMEOUT = Duration.ofSeconds(15);
+    private static final Duration DEFAULT_OAUTH_TIMEOUT = Duration.ofSeconds(25);
 
     private final ApiClient apiClient;
     private final String basePath;
