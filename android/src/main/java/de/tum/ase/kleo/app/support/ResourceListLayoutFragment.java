@@ -140,7 +140,7 @@ public abstract class ResourceListLayoutFragment<T> extends ReactiveLayoutFragme
         getCurrentListViewAdapter().ifPresent(a -> a.updateResource(updater));
     }
 
-    private void updateResource(int pos, T newValue) {
+    protected void updateResource(int pos, T newValue) {
         getCurrentListViewAdapter().ifPresent(a -> a.updateResource(pos, newValue));
     }
 

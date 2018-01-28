@@ -365,7 +365,7 @@ paths:
             $ref: '#/definitions/SessionDTO'
       responses:
         201:
-          description: A Group created
+          description: A Session created
           schema:
             $ref: '#/definitions/SessionDTO'
         400:
@@ -399,6 +399,8 @@ paths:
       responses:
         200:
           description: Session has been updated to the Group successfully
+          schema:
+            $ref: '#/definitions/SessionDTO'
         500:
           description: Internal server error, please contact support
           schema:

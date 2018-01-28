@@ -130,6 +130,10 @@ public class Group {
         return sessions.stream().filter(s -> s.id().equals(sessionId)).findAny();
     }
 
+    public void unschedule() {
+        sessions.clear();
+    }
+
     public void repurposeSession(SessionId sessionId, SessionType sessionType) {
         session(sessionId)
                 .orElseThrow(() -> new IllegalArgumentException("No session found by sessionId given"))

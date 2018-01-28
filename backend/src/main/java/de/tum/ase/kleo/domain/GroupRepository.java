@@ -19,19 +19,33 @@ public interface GroupRepository extends CrudRepository<Group, GroupId> {
 
     List<Group> findAllByAttendancesStudentId(UserId userId);
 
-    default Group fetchGroupByIdOrCode(String groupIdOrCode) {
+    default boolean existsByIdOrCode(String groupIdOrCode) {
+        return findOneByIdOrCode(groupIdOrCode).isPresent();
+    }
+
+    default Optional<Group> findOneByIdOrCode(String groupIdOrCode) {
         val groupId = GroupId.of(groupIdOrCode);
 
         val groupById = findOne(groupId);
         if (groupById != null)
-            return groupById;
+            return Optional.of(groupById);
 
         val groupCode = GroupCode.fromString(groupIdOrCode);
 
         val groupByCode = findOneByCode(groupCode);
         if (groupByCode != null)
-            return groupByCode;
+            return Optional.of(groupByCode);
 
-        return null;
+        return Optional.empty();
+    }
+
+    default boolean deleteByIdOrCode(String groupIdOrCode) {
+        final Optional<Group> groupOpt = findOneByIdOrCode(groupIdOrCode);
+
+        if (!groupOpt.isPresent())
+            return false;
+
+        groupOpt.ifPresent(group -> delete(group.id()));
+        return true;
     }
 }

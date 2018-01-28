@@ -120,9 +120,8 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
                 askForSessionLocationUpdate(session.getLocation())
                         .subscribe(newLocation -> {
                             updateSessionLocation(session.getId(), newLocation)
-                                    .subscribe(() -> {
-                                        sessionLocation.setText(newLocation);
-                                        session.setLocation(newLocation);
+                                    .subscribe((updatedSession) -> {
+                                        updateResource(position, updatedSession);
                                     }, this::showErrorMessage);
                         });
             });
@@ -130,9 +129,8 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
                 askForSessionTypeUpdate(session.getType())
                         .subscribe(newType -> {
                             updateSessionType(session.getId(), newType)
-                                    .subscribe(() -> {
-                                        sessionType.setText(newType.toString());
-                                        session.setType(newType);
+                                    .subscribe((updatedSession) -> {
+                                        updateResource(position, updatedSession);
                                     }, this::showErrorMessage);
                         });
             });
@@ -269,7 +267,7 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
                 .doOnComplete(this::hideProgressBar);
     }
 
-    private Completable updateSessionLocation(String sessionId, String newLocation) {
+    private Observable<SessionDTO> updateSessionLocation(String sessionId, String newLocation) {
         return backendClient.as(GroupsApi.class)
                 .updateGroupSession(groupId, sessionId, new SessionDTO().location(newLocation))
                 .subscribeOn(Schedulers.io())
@@ -278,7 +276,7 @@ public class GroupDetailsSessionListFragment extends ResourceListLayoutFragment<
                 .doOnComplete(this::hideProgressBar);
     }
 
-    private Completable updateSessionType(String sessionId, SessionDTO.TypeEnum newSessionType) {
+    private Observable<SessionDTO> updateSessionType(String sessionId, SessionDTO.TypeEnum newSessionType) {
         return backendClient.as(GroupsApi.class)
                 .updateGroupSession(groupId, sessionId, new SessionDTO().type(newSessionType))
                 .subscribeOn(Schedulers.io())

@@ -29,6 +29,10 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    public boolean userExists(UserId userId) {
+        return userRepository.exists(userId);
+    }
+
     public Optional<User> getUser(UserId userId) {
         val user = userRepository.findOne(userId);
         return Optional.ofNullable(user);
@@ -36,6 +40,11 @@ public class UserService {
     
     public Stream<User> getUsers() {
         val users = userRepository.findAll();
+        return stream(users.spliterator(), false);
+    }
+
+    public Stream<User> getUsers(Iterable<UserId> userIds) {
+        val users = userRepository.findAll(userIds);
         return stream(users.spliterator(), false);
     }
     
