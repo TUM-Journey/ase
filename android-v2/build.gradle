@@ -1,0 +1,100 @@
+buildscript {
+    dependencies {
+        classpath plgs.defs.android.androidTools
+        classpath plgs.defs.common.swaggerCodegen
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'org.hidetake.swagger.generator'
+
+android {
+    buildToolsVersion config.android.buildToolsVersion
+    compileSdkVersion config.android.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility config.compiler.sourceCompatibility
+        targetCompatibility config.compiler.targetCompatibility
+    }
+
+    defaultConfig {
+        applicationId "eu.socialedge.edu.kleo"
+        minSdkVersion config.android.minSdkVersion
+        targetSdkVersion config.android.targetSdkVersion
+
+        versionCode 1
+        versionName "1.0"
+    }
+
+    flavorDimensions "default"
+    productFlavors {
+        prod {
+            buildConfigField 'String', 'BACKEND_BASE_URL', '"http://kleo.herokuapp.com:8080/api/"'
+            buildConfigField 'String', 'BACKEND_CLIENT_ID', '"kleo-client"'
+            buildConfigField 'String', 'BACKEND_CLIENT_SECRET', '""'
+        }
+
+        dev {
+            buildConfigField 'String', 'BACKEND_BASE_URL', "\"http://localhost:8080/api/\""
+            buildConfigField 'String', 'BACKEND_CLIENT_ID', '"kleo-client"'
+            buildConfigField 'String', 'BACKEND_CLIENT_SECRET', '""'
+        }
+    }
+}
+
+dependencies {
+    implementation deps.defs.common.apacheLang3
+    implementation deps.defs.android.rxAndroidJava
+
+
+    implementation deps.defs.android.dagger
+    annotationProcessor deps.defs.android.daggerCompiler
+    implementation deps.defs.android.butterknife
+    annotationProcessor deps.defs.android.butterknifeCompiler
+
+    implementation deps.defs.android.appcompat
+    implementation deps.defs.android.support
+    implementation deps.defs.android.supportDesign
+    implementation deps.defs.android.constraintLayout
+
+    swaggerCodegen deps.defs.common.swaggerCodegenCli
+    implementation deps.defs.android.swaggerAnnotations
+    implementation deps.defs.android.retrofit
+    implementation deps.defs.android.rxAndroidJava
+    implementation (deps.defs.android.oltuOAuth2) {
+        exclude group: 'org.apache.oltu.oauth2', module: 'org.apache.oltu.oauth2.common'
+    }
+    implementation deps.defs.android.gsonFire
+    implementation deps.defs.android.jwtDecode
+
+    testImplementation deps.defs.common.junit
+    testImplementation deps.defs.common.assertj
+    testImplementation deps.defs.common.mockito
+
+    compileOnly deps.defs.common.lombok
+    annotationProcessor deps.defs.common.lombok
+}
+
+def OPENAPI_SOURCE = "$rootDir/kleo-api-v5.yaml"
+
+swaggerSources {
+    kleo {
+        inputFile = file(OPENAPI_SOURCE)
+        code {
+            language = 'java'
+            configFile = file('swagger.json')
+        }
+    }
+}
+
+swaggerSources.kleo.code.doLast {
+    delete fileTree(dir: "$buildDir/swagger-code-kleo").exclude("src/")
+}
+
+android.sourceSets.main.java.srcDirs += file("$buildDir/swagger-code-kleo/src/main/java")
+
+afterEvaluate {
+    android.applicationVariants.all { variant ->
+        variant.javaCompiler.dependsOn(swaggerSources.kleo.code)
+    }
+}

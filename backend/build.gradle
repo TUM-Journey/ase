@@ -20,8 +20,8 @@ targetCompatibility = configs.compiler.targetCompatibility
 dependencies {
     compile deps.defs.common.apacheLang3
 
-    compileOnly deps.defs.backend.lombok
-    testCompileOnly deps.defs.backend.lombok
+    compileOnly deps.defs.common.lombok
+    testCompileOnly deps.defs.common.lombok
     swaggerCodegen deps.defs.common.swaggerCodegenCli
 
     compile deps.defs.backend.jpaApi

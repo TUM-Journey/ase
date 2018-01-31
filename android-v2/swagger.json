@@ -1,0 +1,11 @@
+{
+  "modelPackage": "de.tum.ase.kleo.app.client.dto",
+  "invokerPackage": "de.tum.ase.kleo.app.client.invoker",
+  "apiPackage": "de.tum.ase.kleo.app.client",
+  "basePackage": "de.tum.ase.kleo.app.client",
+  "library": "retrofit2",
+  "dateLibrary": "java8",
+  "useRxJava2": true,
+  "serializableModel": true,
+  "hideGenerationTimestamp": true
+}

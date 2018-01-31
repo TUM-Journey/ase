@@ -12,12 +12,16 @@ ext {
             junit: '4.+',
             assertj: '3.8.+',
             mockito: '2.12.+',
+
+            lombok: '1.16.+',
         ],
         android: [
+            dagger: '2.14.1',
             appcompat: '26.1.0',
             support: '26.1.0',
             supportDesign: '26.1.0',
             constraintLayout: '1.0.2',
+            butterknife: '8.8.1',
 
             playServicesAuth: '9.8.0',
 
@@ -48,8 +52,6 @@ ext {
 
             swaggerSpringfox: '2.7.0',
             swaggerCodegenCli: '2.3.1-SNAPSHOT',
-
-            lombok: '1.16.+',
         ]
     ]
 
@@ -65,12 +67,24 @@ ext {
             junit: "junit:junit:${deps.vers.common.junit}",
             assertj: "org.assertj:assertj-core:${deps.vers.common.assertj}",
             mockito: "org.mockito:mockito-core:${deps.vers.common.mockito}",
+
+            lombok: "org.projectlombok:lombok:${deps.vers.common.lombok}",
         ],
         android: [
+            dagger: [
+                "com.google.dagger:dagger:${deps.vers.android.dagger}",
+                "com.google.dagger:dagger-android:${deps.vers.android.dagger}",
+            ],
+            daggerCompiler: [
+                "com.google.dagger:dagger-compiler:${deps.vers.android.dagger}",
+                "com.google.dagger:dagger-android-processor:${deps.vers.android.dagger}",
+            ],
             appcompat: "com.android.support:appcompat-v7:${deps.vers.android.appcompat}",
             support: "com.android.support:support-v4:${deps.vers.android.support}",
             supportDesign: "com.android.support:design:${deps.vers.android.supportDesign}",
             constraintLayout: "com.android.support.constraint:constraint-layout:${deps.vers.android.constraintLayout}",
+            butterknife: "com.jakewharton:butterknife:${deps.vers.android.butterknife}",
+            butterknifeCompiler: "com.jakewharton:butterknife-compiler:${deps.vers.android.butterknife}",
             playServicesAuth: "com.google.android.gms:play-services-auth:${deps.vers.android.playServicesAuth}",
             swaggerAnnotations: "io.swagger:swagger-annotations:${deps.vers.android.swaggerAnnotations}",
             retrofit: [
@@ -113,8 +127,6 @@ ext {
             htmlUnit: "net.sourceforge.htmlunit:htmlunit:${deps.vers.backend.htmlunit}",
 
             swaggerSpringfox: "io.springfox:springfox-swagger2:${deps.vers.backend.swaggerSpringfox}",
-
-            lombok: "org.projectlombok:lombok:${deps.vers.backend.lombok}",
         ]
     ]
 
