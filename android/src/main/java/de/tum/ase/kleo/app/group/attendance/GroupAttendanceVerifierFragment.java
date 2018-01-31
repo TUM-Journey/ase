@@ -254,7 +254,7 @@ public class GroupAttendanceVerifierFragment extends ReactiveLayoutFragment {
                         } else {
                             showSessionIsNotValidResult();
                         }
-                    });
+                    }, this::showError);
         } catch (FileNotFoundException e) {
             Toast.makeText(getContext(), "Invalid path to wallet file", Toast.LENGTH_LONG).show();
         } catch (IOException e) {
