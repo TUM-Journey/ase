@@ -1,6 +1,8 @@
 package de.tum.ase.kleo.application.service;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,7 @@ import de.tum.ase.kleo.domain.SessionType;
 import de.tum.ase.kleo.domain.User;
 import de.tum.ase.kleo.domain.id.SessionId;
 import de.tum.ase.kleo.domain.id.UserId;
+import de.tum.ase.kleo.ethereum.AttendanceTracker;
 import lombok.val;
 
 import static java.util.stream.StreamSupport.stream;
@@ -29,18 +32,24 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Transactional(readOnly = true)
 public class GroupService {
 
+    private final Logger logger = LoggerFactory.getLogger(GroupService.class);
+
     private final GroupRepository groupRepository;
     private final UserService userService;
 
     private final PassTokenizer passTokenizer;
     private final PassDetokenizer passDetokenizer;
 
+    private final AttendanceTracker attendanceTracker;
+
     public GroupService(GroupRepository groupRepository, UserService userService,
-                        PassTokenizer passTokenizer, PassDetokenizer passDetokenizer) {
+                        PassTokenizer passTokenizer, PassDetokenizer passDetokenizer,
+                        AttendanceTracker attendanceTracker) {
         this.groupRepository = groupRepository;
         this.userService = userService;
         this.passTokenizer = passTokenizer;
         this.passDetokenizer = passDetokenizer;
+        this.attendanceTracker = attendanceTracker;
     }
 
     public boolean groupExists(String groupIdOrCode) {
@@ -136,7 +145,16 @@ public class GroupService {
                 -> new RecordNotFoundException("Unknown group id or code", Group.class));
 
         final Pass pass = passDetokenizer.detokenize(passCode);
-        group.attend(pass);
+        val attendanceRecord = group.attend(pass);
+
+        val futureTxReceipt = attendanceTracker.recordAttendance(
+                attendanceRecord.sessionId().toString(),
+                attendanceRecord.studentId().toString()).sendAsync();
+
+        futureTxReceipt.thenAccept((txReceipt) -> {
+            logger.info("Attendance has been recorded to the blockchain." +
+                    "TxHash = {}", txReceipt.getTransactionHash());
+        });
     }
 
     @Transactional
